@@ -15,7 +15,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,'public')));
 
 const mongoose = require('mongoose');
-const users=require('./models/user')
+const users=require('./models/user.js')
 const Schema = mongoose.Schema;
 
 
@@ -55,8 +55,16 @@ app.get("/register",(req,res)=>
 app.post("/register/new",async (req,res)=>
 {
     let {firstname,lastname,email,password}=req.body;
-    await users.create({firstname,lastname,email,password});
-    res.redirect("/signin");
+    let obj=users.findOne({firstname,lastname,email,password})
+    if(!obj)
+    {
+        await users.create({firstname,lastname,email,password});
+        res.redirect("/signin");
+    }
+    else{
+        console.log("User already exits.Try with another");
+    }
+    
 })
 
 app.get("/signin",(req,res)=>
