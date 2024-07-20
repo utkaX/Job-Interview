@@ -20,13 +20,8 @@ async function main() {
 const insertData = async ()=>
     {
         await user.deleteMany({});
-        await user.insertMany( {
-            firstname:"Utsav",
-            lastname:"kaneriya",
-            email:"kane@gmail.com",
-            password:"1234"
-        });
-        console.log(dbdata.data);
+        await user.insertMany(dbdata.data);
+        console.log("added succesfully...");
     }
 
 insertData();

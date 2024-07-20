@@ -1,33 +1,24 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-// Define the user schema
 const userSchema = new Schema({
-    firstName: {
+    firstname: {
         type: String,
-        required: true,
-        trim: true
+        required: [true, 'First name is required']
     },
-    lastName: {
+    lastname: {
         type: String,
-        required: true,
-        trim: true
+        required: [true, 'Last name is required']
     },
     email: {
         type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        lowercase: true,
-        match: [/.+\@.+\..+/, 'Please fill a valid email address']
+        required: [true, 'Email is required'],
+        unique: true
     },
     password: {
         type: String,
-        required: true
+        required: [true, 'Password is required']
     }
 });
 
-// Create the User model
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);
