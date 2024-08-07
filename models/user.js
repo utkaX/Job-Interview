@@ -2,23 +2,22 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    firstname: {
-        type: String,
-        required: [true, 'First name is required']
+  email: { 
+    type: String,
+     required: true, 
+     unique: true
+     },
+  password: { 
+    type: String,
+     required: true 
     },
-    lastname: {
-        type: String,
-        required: [true, 'Last name is required']
+  role: {
+     type: String, 
+     enum: ['job_seeker', 'employer'], 
+     required: true 
     },
-    email: {
-        type: String,
-        required: [true, 'Email is required'],
-        unique: true
-    },
-    password: {
-        type: String,
-        required: [true, 'Password is required']
-    }
-});
+  profilePicture: String, // URL to profile picture
+  lastLogin: Date // Last login time
+}, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);
