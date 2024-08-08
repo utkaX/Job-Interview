@@ -4,6 +4,7 @@ const app = express();
 const port = 8080;
 let methodOverride = require("method-override");
 let engine = require("ejs-mate");
+
 const path = require("path");
 
 app.engine("ejs", engine);
@@ -64,35 +65,24 @@ app.post("/register/new", async (req, res) => {
     console.log("user exist");
       return res.status(400);
     }
-    const role = roles;
-    const user = new users({ email, password, role });
-    user.save();
-    res.redirect("/signin");
-  } catch (error) {
-    console.error("Error during registration:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+
 
 app.get("/signin",(req,res)=>
 {
     res.render("pages/index.ejs");
 })
 
-// app.post("/signin",async(req,res)=>
-// {
-//     let{email,password}=req.body;
-//     let obj=await users.findOne({email,password});
-//     if(obj)
-//     {
-//         res.redirect('/dashboard');
-//     }
-//     else{
-//         console.log("User not found");
-//     }
-// })
 
-// app.get('/dashboard',(req,res)=>
-// {
-//     res.render("pages/dashboard.ejs");
-// })
+app.post("/signin",async(req,res)=>
+{
+    let{email,password}=req.body;
+    let obj=await users.findOne({email,password});
+    if(obj)
+    {
+        res.redirect('/dashboard');
+    }
+    else{
+        console.log("User not found");
+    }
+})
+
