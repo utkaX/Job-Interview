@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 let user = require("../models/user.js");
 let notification = require("../models/notification.js");
+let jobType=require("../models/jobtype.js");
 
 let dbdata = require("./data.js");
 // let notificationData = require("./notificationData.js");
@@ -21,36 +22,36 @@ async function main() {
 }
 
 const insertData = async () => {
-    await user.deleteMany({});
-    await user.insertMany(dbdata.data);
+    // await user.deleteMany({});
+    await jobType.insertMany(dbdata.data);
     console.log("added succesfully...");
-    user1=await user.find({"firstname" :"Utsav"});
-    console.log(user1);
+    // user1=await user.find({"firstname" :"Utsav"});
+    // console.log(user1);
 }
 
 insertData();
 
 
 
-const insertNotificationData = async () => {
-    user1=await user.find({"firstname" :"Utsav"});
-    console.log(user1);
-            const notificationData = {
-                "userId": user1.firstname,
-                "message": "New job posting available",
-                "timestamp": "2022-02-15T14:30:00.000Z",
-                "isRead": false,
-                "alert": false,
-                "priority": "low",
-                "category": "application",
-                "jobType":"630a12345678901234567890", // references JobType model
-                "__v": 0
-            };
+// const insertNotificationData = async () => {
+//     user1=await user.find({"firstname" :"Utsav"});
+//     console.log(user1);
+//             const notificationData = {
+//                 "userId": user1.firstname,
+//                 "message": "New job posting available",
+//                 "timestamp": "2022-02-15T14:30:00.000Z",
+//                 "isRead": false,
+//                 "alert": false,
+//                 "priority": "low",
+//                 "category": "application",
+//                 "jobType":"630a12345678901234567890", // references JobType model
+//                 "__v": 0
+//             };
 
-            await notification.create(notificationData);
+//             await notification.create(notificationData);
         
 
- }
+//  }
 
 
-insertNotificationData();
+// insertNotificationData();
