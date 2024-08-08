@@ -24,12 +24,12 @@ const notificationSchema = new Schema({
     alert: {
         type: Boolean,
         default: false
-    }, // Indicates whether the notification should trigger an alert
+    },
     priority: {
         type: String,
         enum: ['low', 'medium', 'high'],
         default: 'low'
-    }, // Priority level
+    }, 
     category: {
         type: String
     }, // Category of notification (e.g., "application", "interview", "system")
