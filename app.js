@@ -4,7 +4,7 @@ const app=express();
 const port=8080;
 let methodOverride = require('method-override')
 let engine = require('ejs-mate');
-const path = require("path");  
+const path = require("path");
 
 
 app.engine('ejs', engine);
@@ -64,7 +64,13 @@ app.post("/register/new",async (req,res)=>
     else{
         console.log("User already exits.Try with another");
     }
-    
+
+})
+
+
+app.get("/",()=>
+{
+  response.write("hello");
 })
 
 app.get("/signin",(req,res)=>
