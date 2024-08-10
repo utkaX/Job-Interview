@@ -1,13 +1,64 @@
-const userList=[
-    {
-        "firstname":"Utsav",
-        "lastname":"kaneriya",
-        "email":"kane@gmail.com",
-        "password":"1234"
-    }
-]
-
-module.exports={data:userList};
+const jobTypes = [
+    { title: 'Software Engineer', description: 'Responsible for developing software solutions.' },
+    { title: 'Data Scientist', description: 'Analyzes and interprets complex data.' },
+    { title: 'Product Manager', description: 'Oversees product development and strategy.' },
+    { title: 'UX Designer', description: 'Focuses on user experience and interface design.' },
+    { title: 'Marketing Specialist', description: 'Develops and implements marketing strategies.' },
+    { title: 'Sales Representative', description: 'Handles sales and customer relations.' },
+    // Add additional job types here
+    // Ensure there are 50 unique job types
+    { title: 'HR Manager', description: 'Manages human resources and employee relations.' },
+    { title: 'Accountant', description: 'Manages financial records and reporting.' },
+    { title: 'Customer Support Specialist', description: 'Provides support to customers and resolves issues.' },
+    { title: 'Graphic Designer', description: 'Creates visual content and designs.' },
+    { title: 'Network Administrator', description: 'Manages and maintains network systems.' },
+    { title: 'Business Analyst', description: 'Analyzes business processes and recommends improvements.' },
+    { title: 'Content Writer', description: 'Creates written content for various platforms.' },
+    { title: 'Web Developer', description: 'Develops and maintains websites and web applications.' },
+    { title: 'Database Administrator', description: 'Manages and maintains databases.' },
+    { title: 'Project Manager', description: 'Plans and oversees projects from inception to completion.' },
+    { title: 'Systems Analyst', description: 'Analyzes and improves IT systems.' },
+    { title: 'Legal Advisor', description: 'Provides legal guidance and support.' },
+    { title: 'Executive Assistant', description: 'Supports senior executives with administrative tasks.' },
+    { title: 'Social Media Manager', description: 'Manages social media accounts and campaigns.' },
+    { title: 'IT Support Specialist', description: 'Provides technical support and troubleshooting.' },
+    { title: 'Operations Manager', description: 'Oversees daily operations and processes.' },
+    { title: 'Quality Assurance Specialist', description: 'Ensures product quality and compliance.' },
+    { title: 'Supply Chain Manager', description: 'Manages supply chain operations and logistics.' },
+    { title: 'Recruiter', description: 'Handles recruitment and hiring processes.' },
+    { title: 'Financial Analyst', description: 'Analyzes financial data and trends.' },
+    { title: 'Training Coordinator', description: 'Organizes and manages training programs.' },
+    { title: 'Product Designer', description: 'Designs and develops new products.' },
+    { title: 'Customer Success Manager', description: 'Ensures customer satisfaction and success.' },
+    { title: 'Event Coordinator', description: 'Plans and organizes events and functions.' },
+    { title: 'Research Scientist', description: 'Conducts scientific research and experiments.' },
+    { title: 'Administrative Assistant', description: 'Provides administrative support and coordination.' },
+    { title: 'Business Development Manager', description: 'Focuses on business growth and partnerships.' },
+    { title: 'Technical Writer', description: 'Creates technical documentation and manuals.' },
+    { title: 'Software Tester', description: 'Tests software for bugs and issues.' },
+    { title: 'Digital Marketer', description: 'Develops and executes digital marketing campaigns.' },
+    { title: 'Investment Banker', description: 'Advises on financial investments and transactions.' },
+    { title: 'Systems Engineer', description: 'Designs and manages complex systems and infrastructures.' },
+    { title: 'Environmental Scientist', description: 'Studies and works on environmental issues.' },
+    { title: 'Public Relations Specialist', description: 'Manages and promotes public image and relations.' },
+    { title: 'Healthcare Administrator', description: 'Manages healthcare facilities and services.' },
+    { title: 'Content Strategist', description: 'Develops content strategies and plans.' },
+    { title: 'Account Manager', description: 'Handles client accounts and relationships.' },
+    { title: 'Construction Manager', description: 'Oversees construction projects and teams.' },
+    { title: 'Legal Assistant', description: 'Supports legal professionals with administrative tasks.' },
+    { title: 'Architect', description: 'Designs and plans building structures.' },
+    { title: 'Civil Engineer', description: 'Works on infrastructure and construction projects.' },
+    { title: 'Travel Consultant', description: 'Provides travel advice and booking services.' },
+    { title: 'Librarian', description: 'Manages library collections and services.' },
+    { title: 'Healthcare Consultant', description: 'Advises on healthcare practices and improvements.' },
+    { title: 'Public Health Specialist', description: 'Works on public health initiatives and programs.' },
+    { title: 'Real Estate Agent', description: 'Assists with buying and selling properties.' },
+    { title: 'Customer Experience Manager', description: 'Enhances overall customer experience.' },
+    { title: 'Telecommunications Specialist', description: 'Manages communication systems and technologies.' },
+    { title: 'Food Scientist', description: 'Studies food production and safety.' },
+    { title: 'Mechanical Engineer', description: 'Designs and tests mechanical systems and devices.' }
+  ];
+module.exports={data:jobTypes};
 
 
 

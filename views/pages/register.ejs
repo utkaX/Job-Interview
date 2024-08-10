@@ -10,18 +10,18 @@
     <div class="container">
     <form action="register/new" method="post">
         <h2>Register</h2>
-        <label for="firstname">First Name:</label>
-        <input type="text" id="firstname" name="firstname" required>
-        <br><br>
-        <label for="lastname">Last Name:</label>
-        <input type="text" id="lastname" name="lastname" required>
-        <br><br>
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
         <br><br>
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
         <br><br>
+          <label for="roles">Role:</label>
+          <select id="roles" name="roles">
+              <option value="job_seeker" selected>Job Seeker</option>
+              <option value="employer">Emoployeer</option>
+          </select>
+          <br><br>
         <input type="submit" value="Register">
         <p>Already have an account? <a href="http://localhost:8080/signin">Sign In</a></p>
       </form>
