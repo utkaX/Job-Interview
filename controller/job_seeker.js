@@ -12,9 +12,19 @@ exports.addjobseeker = async (req, res) => {
           
            });
 
-        res.status(200).send("Your data was added successfully.");
+        res.status(200).send("data add thai gayo che");
     } catch (error) {
         console.log(error);
         res.status(500).send("An error occurred.");
+    }
+};
+
+exports.getAllJobSeekers = async (req, res) => {
+    try {
+        const jobSeekers = await JobSeeker.find();
+        res.status(200).json(jobSeekers);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("error che bhai.");
     }
 };

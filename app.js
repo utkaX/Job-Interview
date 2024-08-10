@@ -34,7 +34,10 @@ async function main() {
 }
 
 const jobseekerrouter = require("./routes/job_seeker.js");
-app.use("/api/v1", jobseekerrouter); // Corrected route path
+app.use("/api/v1", jobseekerrouter); 
+
+const userfetch = require("./routes/user.js");
+app.use("/api/v1", userfetch); 
 
 app.use("/api/v1", (req, res) => {
     res.send("hello kem che bhai!!");
