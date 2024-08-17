@@ -35,14 +35,9 @@ async function main() {
 }
 
 
-app.use("/api/v1", (req, res) => {
-    res.send("hello kem che bhai!!");
-});
 
-const { createUser,getAllUser,getUserById,updateUser,deleteUser } = require('./controller/usercontroller.js');
-app.use("/user",createUser)
-app.use("/users",getAllUser)
-app.use("/",getUserById)
+const userRoutes  = require('./routes/user');
+app.use("/users",userRoutes)
 
 // app.get("/user",(req,res)=>
 // {

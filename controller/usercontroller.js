@@ -36,9 +36,9 @@ exports.getAllUser = async (req, res) => {
 
 //get user by id
 // Get user by ID
-exports.getUserById = async (req, res) => {
+exports.getUserByEmail = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id); // Find user by ID
+        const user = await User.findOne({ email: req.params.email }); // Find user by email
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
