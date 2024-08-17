@@ -50,17 +50,21 @@ exports.getUserByEmail = async (req, res) => {
 
 
 //update user
-exports.updateUser = async (req, res) => {
+exports.updateUser= async (req, res) => {
     try {
         const { email, password, role, profilePicture } = req.body;
-        let user = await User.findById(req.params.id);
+
+        // Find user by email
+        let user = await User.findOne({ email: req.params.email });
         if (!user) return res.status(404).json({ error: 'User not found' });
 
+        // Update fields if they are provided in the request body
         if (email) user.email = email;
         if (password) user.password = password; // Password will be hashed by the pre-save hook
         if (role) user.role = role;
         if (profilePicture) user.profilePicture = profilePicture;
 
+        // Save the updated user
         await user.save();
         res.status(200).json(user);
     } catch (error) {
@@ -69,11 +73,14 @@ exports.updateUser = async (req, res) => {
 };
 
 
+
 //Delete user
 exports.deleteUser = async (req, res) => {
     try {
-        const user = await User.findByIdAndDelete(req.params.id);
+        // Find and delete the user by email
+        const user = await User.findOneAndDelete({ email: req.params.email });
         if (!user) return res.status(404).json({ error: 'User not found' });
+
         res.status(200).json({ message: 'User deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
