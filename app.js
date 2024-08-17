@@ -14,6 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const mongoose = require('mongoose');
 const users = require('./models/user.js');
+const user = require('./models/user.js');
 const Schema = mongoose.Schema;
 
 app.use(express.json());
@@ -33,17 +34,15 @@ async function main() {
     await mongoose.connect('mongodb://127.0.0.1:27017/job_interview');
 }
 
-const jobseekerrouter = require("./routes/job_seeker.js");
-app.use("/api/v1", jobseekerrouter); 
-
-const userfetch = require("./routes/user.js");
-app.use("/api/v1", userfetch); 
 
 app.use("/api/v1", (req, res) => {
     res.send("hello kem che bhai!!");
 });
 
-
+const { createUser,getAllUser,getUserById,updateUser,deleteUser } = require('./controller/usercontroller.js');
+app.use("/user",createUser)
+app.use("/users",getAllUser)
+app.use("/",getUserById)
 
 // app.get("/user",(req,res)=>
 // {

@@ -2,10 +2,28 @@ const { response } = require("express");
 const User = require("../models/user");
 
 
+
+exports.createUser =
+    async (req, res) => {
+        try {
+            
+            const { email, password, role, profilePicture } = req.body;
+            const user = new User({ email, password, role, profilePicture });
+            await user.save();       
+            console.log("user route");
+
+            res.status(201).json(user);
+        } catch (error) {
+            res.status(400).json({ error: error.message });
+        }
+    };
+
+
 //Read user
 exports.getAllUser = async (req, res) => {
     try {
         const users = await User.find();
+        console.log(users);
         res.status(200).json(users);
     } catch (error) {
         console.log(error);
@@ -15,31 +33,20 @@ exports.getAllUser = async (req, res) => {
 
 
 //create user
-exports.createUser =
-    async (req, res) => {
-        try {
-            const { email, password, role, profilePicture } = req.body;
-            const user = new User({ email, password, role, profilePicture });
-            await user.save();
-            res.status(201).json(user);
-            response.render("views/pages/createUser.ejs");
-        } catch (error) {
-            res.status(400).json({ error: error.message });
-        }
-    };
-
 
 //get user by id
+// Get user by ID
 exports.getUserById = async (req, res) => {
     try {
-        const jobSeeker = await JobSeeker.findById(req.params.id).populate('userId').populate('savedJobs').populate('appliedJobs.jobId');
-        if (!jobSeeker) return res.status(404).json({ error: 'JobSeeker not found' });
-        res.status(200).json(jobSeeker);
+        const user = await User.findById(req.params.id); // Find user by ID
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.status(200).json(user);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-
-}
+};
 
 
 //update user
