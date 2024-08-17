@@ -5,14 +5,14 @@ const router = express.Router();
 const{
     createEmployee,
     getAllEmployee,
-    getEmployee,
+    getEmployerByCompanyName,
     updateEmployee,
     deleteEmployee}=require("../controller/employer")
 
 
-router.post("/createEmployee",createEmployee)
-router.get("/getAllEmployee",getAllEmployee)
-router.get("/getEmployee/:id",getEmployee)
+router.post("/",createEmployee)
+router.get("/",getAllEmployee)
+router.get("/:companyName",getEmployerByCompanyName)
 router.put("/updateEmployee/:id",updateEmployee)
 router.delete("/deleteEmployee/:id",deleteEmployee)
 

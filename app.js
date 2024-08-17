@@ -36,52 +36,31 @@ async function main() {
 
 
 
-const userRoutes  = require('./routes/user');
+const userRoutes = require('./routes/user');
 app.use("/users",userRoutes)
 
-// app.get("/user",(req,res)=>
-// {
-//     res.send("hii");
-// })
+const jobRoutes=require('./routes/job');
+app.use("/jobs",jobRoutes)
 
-app.get("/register", (req, res) => {
-  console.log("hii");
-  res.render("pages/register.ejs");
-});
+const employeeRoute=require('./routes/employer');
+app.use("/employee",employeeRoute)
 
-app.post("/register/new", async (req, res) => {
-  try {
-    let { email, password, roles } = req.body;
-    // const role =document.getElementById("roles");
-    console.log(email);
-    const existUser =await users.findOne({ email });
-    if (existUser) {
-    //   console.alert("User already exist.");
-    console.log("user exist");
-      return res.status(400);
-    }
-  }
-finally{
-  console.log("No error");
-}
-});
+const interviewRoute=require('./routes/interview');
+app.user("/interview",interviewRoute)
 
-app.get("/signin",(req,res)=>
-{
-    res.render("pages/index.ejs");
-})
+const jobSeekerRoute=require('./routes/job_seeker');
+app.user("/jobSeeker",jobSeekerRoute)
 
+const appliedJobRoute=require('./routes/applied_job');
+app.use("/appliedJob",appliedJobRoute)
 
-app.post("/signin",async(req,res)=>
-{
-    let{email,password}=req.body;
-    let obj=await users.findOne({email,password});
-    if(obj)
-    {
-        res.redirect('/dashboard');
-    }
-    else{
-        console.log("User not found");
-    }
-})
+const companyRoute=require('./routes/company');
+app.use("/company",companyRoute)
+
+const eventRoute=require('./routes/event');
+app.use("/event",eventRoute)
+
+const notificationRoute=require('./routes/notification');
+app.use("/notification",notificationRoute)
+
 
