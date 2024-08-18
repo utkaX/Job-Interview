@@ -37,51 +37,8 @@ async function main() {
 
 
 const userRoutes  = require('./routes/user');
+const auth  = require('./routes/Auth.js');
 app.use("/users",userRoutes)
+app.use("/auth",auth)
 
-// app.get("/user",(req,res)=>
-// {
-//     res.send("hii");
-// })
-
-app.get("/register", (req, res) => {
-  console.log("hii");
-  res.render("pages/register.ejs");
-});
-
-app.post("/register/new", async (req, res) => {
-  try {
-    let { email, password, roles } = req.body;
-    // const role =document.getElementById("roles");
-    console.log(email);
-    const existUser =await users.findOne({ email });
-    if (existUser) {
-    //   console.alert("User already exist.");
-    console.log("user exist");
-      return res.status(400);
-    }
-  }
-finally{
-  console.log("No error");
-}
-});
-
-app.get("/signin",(req,res)=>
-{
-    res.render("pages/index.ejs");
-})
-
-
-app.post("/signin",async(req,res)=>
-{
-    let{email,password}=req.body;
-    let obj=await users.findOne({email,password});
-    if(obj)
-    {
-        res.redirect('/dashboard');
-    }
-    else{
-        console.log("User not found");
-    }
-})
 
