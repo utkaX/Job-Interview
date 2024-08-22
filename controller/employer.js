@@ -1,4 +1,4 @@
-const JobSeeker = require("../models/employer"); // Changed to 'JobSeeker' to match the model name
+const Employer = require("../models/employer"); // Changed to 'JobSeeker' to match the model name
 const { response } = require("express");
 
 exports.createEmployee=async (req, res) => {
@@ -20,15 +20,19 @@ exports.getAllEmployee=async (req, res) => {
     }
 }
 
-exports.getEmployee=async (req, res) => {
+exports.getEmployerByCompanyName = async (req, res) => {
     try {
-        const employer = await Employer.findById(req.params.id).populate('userId').populate('jobsPosted');
+        const { companyName } = req.params; // Extract companyName from request parameters
+        
+        // Find the employer by companyName
+        const employer = await Employer.findOne({ companyName });
         if (!employer) return res.status(404).json({ error: 'Employer not found' });
+
         res.status(200).json(employer);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-}
+};
 
 
 exports.updateEmployee= async (req, res) => {

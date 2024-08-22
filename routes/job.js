@@ -5,16 +5,16 @@ const router = express.Router();
 const{
     createJob,
     getAllJob,
-    getJobById,
-    updateJob,
-    deleteJob}=require("../controller/job")
+    updateJobByTitle,
+    deleteJobByTitle,
+    getJobByTitle}=require("../controller/job")
 
 
-router.post("/createJob",createJob)
-router.get("/getAllJob",getAllJob)
-router.get("/getJob/:id",getJobById)
-router.put("/updateJob/:id",updateJob)
-router.delete("/deleteJob/:id",deleteJob)
+router.post("/",createJob)
+router.get("/",getAllJob)
+router.get("/:title",getJobByTitle)
+router.put("/:title",updateJobByTitle)
+router.delete("/:title",deleteJobByTitle)
 
 
 module.exports=router
