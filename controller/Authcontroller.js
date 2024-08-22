@@ -54,7 +54,8 @@ exports.login = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
-
+    // console.log(user.password);
+    user.toObject();
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -68,14 +69,16 @@ exports.login = async (req, res) => {
       role: user.role,
     };
 
-    if (await bcrypt.compare(password, user.password)) {
+    if (!(await bcrypt.compare(password, user.password))) {
       let token = jwt.sign(payload, "kaan", {
         expiresIn: "2h",
       });
 
-      console.log(user);
+      // console.log(user);
+
       user.token = token;
       user.password = undefined;
+
       console.log(user);
       const options = {
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
