@@ -1,4 +1,4 @@
-const JobSeeker = require("../models/jobseeker"); // Changed to 'JobSeeker' to match the model name
+const JobSeeker = require("../models/jobseeker"); 
 const { response } = require("express");
 
 

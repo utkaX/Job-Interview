@@ -34,7 +34,7 @@ async function main() {
 
 
 const userRoutes  = require('./routes/user');
-const auth  = require('./routes/Auth.js');
+const auth  = require('./routes/test.js');
 app.use("/users",userRoutes)
 app.use("/auth",auth)
 
