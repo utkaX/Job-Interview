@@ -4,7 +4,8 @@ const authController = require("../controller/Auth");
 const resetPassword = require("../controller/ResetPassword");
 
 // Route for sending OTP
-router.post("/sendOTP", authController.sendOTP);
+router.post("/sendOTP", authController.sendOTP); 
+router.post('/verify', authController.verifyOtp);   
 
 // Route for signing up
 router.post("/signup", authController.signup);

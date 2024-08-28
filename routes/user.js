@@ -13,4 +13,6 @@ router.get("/", getAllUser);//read all the users
 router.put("/:email",updateUser);//update user
 router.delete("/:email",deleteUser);//delete user
 
+
+
 module.exports = router;

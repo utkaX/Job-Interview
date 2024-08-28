@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 8080;
+const cors=require("cors")
 
 let methodOverride = require('method-override');
 const path = require("path");
@@ -14,6 +15,16 @@ const user = require('./models/user.js');
 const Schema = mongoose.Schema;
 
 app.use(express.json());
+
+
+const corsOptions={
+    origin:"http://localhost:5173",
+    methods:"GET,PUT,POST,DELETE,PATCH,HEAD",
+    credentials:true,
+}
+
+app.use(cors(corsOptions))
+
 
 app.listen(port, () => {
     console.log("Connected successfully...");
@@ -34,33 +45,35 @@ async function main() {
 
 
 const userRoutes  = require('./routes/user');
+app.use("/users",userRoutes);
+
+
 const auth  = require('./routes/test.js');
-app.use("/users",userRoutes)
 app.use("/auth",auth)
 
 
-// const jobRoutes=require('./routes/job');
-// app.use("/jobs",jobRoutes)
+const jobRoutes=require('./routes/job');
+app.use("/jobs",jobRoutes)
 
-// const employeeRoute=require('./routes/employer');
-// app.use("/employee",employeeRoute)
+const employeeRoute=require('./routes/employer');
+app.use("/employee",employeeRoute)
 
-// const interviewRoute=require('./routes/interview.js');
-// app.user("/interview",interviewRoute)
+const interviewRoute=require('./routes/interview.js');
+app.use("/interview",interviewRoute)
 
-// const jobSeekerRoute=require('./routes/job_seeker');
-// app.user("/jobSeeker",jobSeekerRoute)
+const jobSeekerRoute=require('./routes/job_seeker');
+app.use("/jobSeeker",jobSeekerRoute)
 
-// const appliedJobRoute=require('./routes/applied_job');
-// app.use("/appliedJob",appliedJobRoute)
+const appliedJobRoute=require('./routes/applied_job');
+app.use("/appliedJob",appliedJobRoute)
 
-// const companyRoute=require('./routes/company');
-// app.use("/company",companyRoute)
+const companyRoute=require('./routes/company');
+app.use("/company",companyRoute)
 
-// const eventRoute=require('./routes/event');
-// app.use("/event",eventRoute)
+const eventRoute=require('./routes/event');
+app.use("/event",eventRoute)
 
-// const notificationRoute=require('./routes/notification');
-// app.use("/notification",notificationRoute)
+const notificationRoute=require('./routes/notification');
+app.use("/notification",notificationRoute)
 
 

@@ -176,6 +176,24 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.verifyOtp = async (req, res) => {
+  try {
+      const { email, otp } = req.body;
+      const otpRecord = await OTP.findOne({ email, otp, used: false });
+
+      if (!otpRecord) {
+          return res.status(400).json({ error: 'Invalid OTP or OTP expired' });
+      }
+
+      otpRecord.used = true;
+      await otpRecord.save();
+
+      // Optionally, you can now create the user or perform other actions
+      res.status(200).json({ message: 'OTP verified successfully' });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+};
 
 exports.changePassword = async (req, res) => {
     try {
