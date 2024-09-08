@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Assuming you're using React Router for navigation
 import '../css/login.css'; // Import the CSS file
 
 function Login() {
@@ -6,9 +7,14 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false); // State for loading indication
+  const navigate = useNavigate(); // React Router hook for navigation
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError(''); // Clear previous errors
+    setSuccess('');
+    setLoading(true); // Start loading
 
     try {
       const response = await fetch('http://localhost:5000/auth/login', {
@@ -25,8 +31,11 @@ function Login() {
       }
 
       setSuccess('Login successful! Redirecting...');
-      // Redirect logic here if needed
+      setLoading(false); // Stop loading
+      // Redirect logic here
+      navigate('/dashboard'); // Replace '/dashboard' with your actual path
     } catch (error) {
+      setLoading(false); // Stop loading
       setError(error.message);
     }
   };
@@ -42,7 +51,10 @@ function Login() {
             id="email"
             className="form-input"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError(''); // Reset error when user types
+            }}
             required
           />
         </div>
@@ -53,11 +65,16 @@ function Login() {
             id="password"
             className="form-input"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError(''); // Reset error when user types
+            }}
             required
           />
         </div>
-        <button type="submit" className="form-button">Log In</button>
+        <button type="submit" className="form-button" disabled={loading}>
+          {loading ? 'Logging in...' : 'Log In'}
+        </button>
         {error && <div className="form-message error">{error}</div>}
         {success && <div className="form-message success">{success}</div>}
       </form>

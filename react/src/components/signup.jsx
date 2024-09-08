@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/signup.css';
 
@@ -8,12 +8,34 @@ function Signup() {
   const [role, setRole] = useState('job_seeker');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 8; // Example: Minimum 8 characters
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Email and Password Validation
+    if (!validateEmail(email)) {
+      setError('Invalid email format');
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
+
     try {
+      setIsLoading(true); // Start loading
       const response = await fetch('http://localhost:8080/auth/sendOTP', {
         method: 'POST',
         headers: {
@@ -31,6 +53,8 @@ function Signup() {
       navigate('/verify-otp', { state: { email, password, role } });
     } catch (error) {
       setError(error.message);
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -73,7 +97,9 @@ function Signup() {
             <option value="employer">Employer</option>
           </select>
         </div>
-        <button type="submit" className="form-button">Sign Up</button>
+        <button type="submit" className="form-button" disabled={isLoading}>
+          {isLoading ? 'Sending...' : 'Sign Up'}
+        </button>
         {error && <div className="form-message error">{error}</div>}
         {success && <div className="form-message success">{success}</div>}
       </form>
