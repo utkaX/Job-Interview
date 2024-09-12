@@ -1,48 +1,60 @@
-const JobSeeker = require("../models/company"); // Changed to 'JobSeeker' to match the model name
+const Company = require("../models/company"); // Changed to 'JobSeeker' to match the model name
 const { response } = require("express");
 
 
-exports.createCompany=async (req, res) => {
+exports.createCompany = async (req, res) => {
     try {
-        const company = new Company(req.body);
-        await company.save();
-        res.status(201).json(company);
+
+      if (Array.isArray(req.body)) {
+       
+        const savedCompanies = await Company.insertMany(req.body);
+        res.status(201).json(savedCompanies);
+      } else {
+     
+        const newCompany = new Company(req.body);
+        const savedCompany = await newCompany.save();
+        res.status(201).json(savedCompany);
+      }
     } catch (error) {
-        res.status(400).json({ error: error.message });
+      res.status(400).json({ message: 'Error creating companies', error });
     }
-}
+  };
 
 
-exports.getAllCompany=async (req, res) => {
+exports.getAllCompanies = async (req, res) => {
     try {
-        const companies = await Company.find();
-        res.status(200).json(companies);
+      const companies = await Company.find();
+      res.status(200).json(companies);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+      res.status(400).json({ message: 'Error fetching companies', error });
     }
-}
+  };
 
 
-exports.getCompany=async (req, res) => {
+exports.getCompanyById = async (req, res) => {
     try {
-        const company = await Company.findById(req.params.id);
-        if (!company) return res.status(404).json({ error: 'Company not found' });
-        res.status(200).json(company);
+      const company = await Company.findById(req.params.id);
+      if (!company) {
+        return res.status(404).json({ message: 'Company not found' });
+      }
+      res.status(200).json(company);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+      res.status(400).json({ message: 'Error fetching company', error });
     }
-}
+  };
 
 
-exports.updateCompany=async (req, res) => {
+exports.updateCompany = async (req, res) => {
     try {
-        const company = await Company.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!company) return res.status(404).json({ error: 'Company not found' });
-        res.status(200).json(company);
+      const updatedCompany = await Company.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      if (!updatedCompany) {
+        return res.status(404).json({ message: 'Company not found' });
+      }
+      res.status(200).json(updatedCompany);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+      res.status(400).json({ message: 'Error updating company', error });
     }
-}
+  };
 
 
 exports.deleteCompany=async (req, res) => {

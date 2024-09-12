@@ -58,13 +58,10 @@ app.use("/jobs",jobRoutes)
 const employeeRoute=require('./routes/employer');
 app.use("/employee",employeeRoute)
 
-const interviewRoute=require('./routes/interview.js');
-app.use("/interview",interviewRoute)
-
-const jobSeekerRoute=require('./routes/job_seeker');
+const jobSeekerRoute=require('./routes/job_seeker.js');
 app.use("/jobSeeker",jobSeekerRoute)
 
-const appliedJobRoute=require('./routes/applied_job');
+const appliedJobRoute=require('./routes/applied_job.js');
 app.use("/appliedJob",appliedJobRoute)
 
 const companyRoute=require('./routes/company');
@@ -72,6 +69,10 @@ app.use("/company",companyRoute)
 
 const eventRoute=require('./routes/event');
 app.use("/event",eventRoute)
+
+
+const interviewRoute=require('./routes/interview');
+app.use("/interview",interviewRoute)
 
 const notificationRoute=require('./routes/notification');
 app.use("/notification",notificationRoute)

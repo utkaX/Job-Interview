@@ -7,11 +7,11 @@ const {
     deleteUser, 
     getUserByEmail} = require("../controller/usercontroller");
 
-router.post("/", createUser);//create user
-router.get("/:email",getUserByEmail);//get user by id
-router.get("/", getAllUser);//read all the users
-router.put("/:email",updateUser);//update user
-router.delete("/:email",deleteUser);//delete user
+router.post("/addUser", createUser);//create user
+router.get("/getUserByEmail/:email",getUserByEmail);//get user by id
+router.get("/getAllUser/", getAllUser);//read all the users
+router.put("/updateUserByEmail/:email",updateUser);//update user
+router.delete("/deleteUserByEmail/:email",deleteUser);//delete user
 
 
 

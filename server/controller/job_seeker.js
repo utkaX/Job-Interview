@@ -2,62 +2,58 @@ const JobSeeker = require("../models/jobseeker");
 const { response } = require("express");
 
 
-exports.addjobseeker = async (req, res) => {
+exports.createJobSeeker = async (req, res) => {
     try {
-        const { userId, firstname, lastname, bio } = req.body;
-
-        const response = await JobSeeker.create({ 
-            "userId": userId,
-            "firstName": firstname,
-            "lastName": lastname,
-            "bio": bio
-          
-           });
-
-        res.status(200).send("data add thai gayo che");
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("An error occurred.");
+        const newJobSeeker = new JobSeeker(req.body);
+        const savedJobSeeker = await newJobSeeker.save();
+        res.status(201).json(savedJobSeeker);
+    } catch (err) {
+        res.status(500).json({ message: 'Error creating job seeker', error: err.message });
     }
 };
 
 exports.getAllJobSeekers = async (req, res) => {
     try {
-        const jobSeekers = await JobSeeker.find();
+        const jobSeekers = await JobSeeker.find(); // Fetch all job seekers from the database
         res.status(200).json(jobSeekers);
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("error che bhai.");
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching job seekers', error: err.message });
     }
 };
 
 
-exports.getJobSeekerById=async (req, res) => {
+exports.getJobSeekerById = async (req, res) => {
     try {
-        const jobSeeker = await JobSeeker.findById(req.params.id).populate('userId').populate('savedJobs').populate('appliedJobs.jobId');
-        if (!jobSeeker) return res.status(404).json({ error: 'JobSeeker not found' });
+        const jobSeeker = await JobSeeker.findById(req.params.id);
+        if (!jobSeeker) return res.status(404).json({ message: 'Job seeker not found' });
         res.status(200).json(jobSeeker);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    } catch (err) {
+        res.status(500).json({ message: 'Error fetching job seeker', error: err.message });
     }
 };
 
-exports.updateJobSeeker=async (req, res) => {
+// Update a job seeker by ID
+exports.updateJobSeekerById = async (req, res) => {
     try {
-        const jobSeeker = await JobSeeker.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!jobSeeker) return res.status(404).json({ error: 'JobSeeker not found' });
-        res.status(200).json(jobSeeker);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
+        const updatedJobSeeker = await JobSeeker.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true, runValidators: true } // Options: `new` returns the updated document, `runValidators` validates the update
+        );
+        if (!updatedJobSeeker) return res.status(404).json({ message: 'Job seeker not found' });
+        res.status(200).json(updatedJobSeeker);
+    } catch (err) {
+        res.status(500).json({ message: 'Error updating job seeker', error: err.message });
     }
 };
 
-exports.deleteJobSeeker= async (req, res) => {
+
+exports.deleteJobSeeker = async (req, res) => {
     try {
-        const jobSeeker = await JobSeeker.findByIdAndDelete(req.params.id);
-        if (!jobSeeker) return res.status(404).json({ error: 'JobSeeker not found' });
-        res.status(200).json({ message: 'JobSeeker deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+        const deletedJobSeeker = await JobSeeker.findByIdAndDelete(req.params.id);
+        if (!deletedJobSeeker) return res.status(404).json({ message: 'Job Seeker not found' });
+        res.status(200).json({ message: 'Job Seeker deleted successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Error deleting job seeker', error: err.message });
     }
 };

@@ -1,61 +1,56 @@
-const JobSeeker = require("../models/appliedJob"); // Changed to 'JobSeeker' to match the model name
+const AppliedJob = require("../models/appliedJob"); 
 const { response } = require("express");
 
 
-exports.createApplyJob= async (req, res) => {
+exports.createAppliedJob = async (req, res) => {
     try {
-        const appliedJob = new AppliedJob(req.body);
-        await appliedJob.save();
-        res.status(201).json(appliedJob);
+      const newAppliedJob = new AppliedJob(req.body);
+      const savedAppliedJob = await newAppliedJob.save();
+      res.status(201).json(savedAppliedJob);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+      res.status(400).json({ message: 'Error creating job application', error });
     }
-}
+  };
 
-
-exports.getAllAppliedJob=async (req, res) => {
+exports.getAllAppliedJobs = async (req, res) => {
     try {
-        const appliedJobs = await AppliedJob.find()
-            .populate('jobSeekerId')
-            .populate('jobId');
-        res.status(200).json(appliedJobs);
+      const appliedJobs = await AppliedJob.find();
+      res.status(200).json(appliedJobs);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+      res.status(500).json({ message: 'Error fetching job applications', error });
     }
-}
+  };
 
 
-exports.getAppliedJob=async (req, res) => {
+exports.getAppliedJobById = async (req, res) => {
     try {
-        const appliedJob = await AppliedJob.findById(req.params.id)
-            .populate('jobSeekerId')
-            .populate('jobId');
-        if (!appliedJob) return res.status(404).json({ error: 'AppliedJob not found' });
-        res.status(200).json(appliedJob);
+      const appliedJob = await AppliedJob.findById(req.params.id);
+      if (!appliedJob) return res.status(404).json({ message: 'AppliedJob not found' });
+      res.status(200).json(appliedJob);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+      res.status(500).json({ message: 'Error fetching job application', error });
     }
-}
+  };
 
 
-exports.updateAppliedJob=async (req, res) => {
+exports.updateAppliedJob = async (req, res) => {
     try {
-        const appliedJob = await AppliedJob.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!appliedJob) return res.status(404).json({ error: 'AppliedJob not found' });
-        res.status(200).json(appliedJob);
+      const updatedAppliedJob = await AppliedJob.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      //console.log(updatedAppliedJob)
+      if (!updatedAppliedJob) return res.status(404).json({ message: 'AppliedJob not found' });
+      res.status(200).json(updatedAppliedJob);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+      res.status(400).json({ message: 'Error updating job application', error });
     }
-}
+  };
 
 
-
-exports.deleteAppliedJob= async (req, res) => {
+exports.deleteAppliedJob = async (req, res) => {
     try {
-        const appliedJob = await AppliedJob.findByIdAndDelete(req.params.id);
-        if (!appliedJob) return res.status(404).json({ error: 'AppliedJob not found' });
-        res.status(200).json({ message: 'AppliedJob deleted successfully' });
+      const deletedAppliedJob = await AppliedJob.findByIdAndDelete(req.params.id);
+      if (!deletedAppliedJob) return res.status(404).json({ message: 'AppliedJob not found' });
+      res.status(200).json({ message: 'AppliedJob deleted successfully' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+      res.status(500).json({ message: 'Error deleting job application', error });
     }
-}
+  };
