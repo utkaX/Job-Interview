@@ -1,10 +1,8 @@
-import {} from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Signup from './components/signup';
-import Login from './components/login';
-import OtpVerification from './components/verifyOtp';
+import Signup from './auth/signup';
+import Login from './auth/login';
+import OtpVerification from './auth/verifyOtp';
 import Dashboard from './components/Dashboard';
-
 
 function App() {
   return (
@@ -13,8 +11,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-otp" element={<OtpVerification />} />
-        <Route path="/login" element={<Login />} />
-        {/* Add more routes here */}
+        <Route path="/login" element={<Login />} /> 
       </Routes>
     </Router>
   );

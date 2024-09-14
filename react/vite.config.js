@@ -6,6 +6,9 @@ export default defineConfig({
   plugins: [react()],
   server: {
     hot: true,
+    proxy:{
+      '/api':'http://localhost:8080'
+    }
   },
   build: {
     rollupOptions: {

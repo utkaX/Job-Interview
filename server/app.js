@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const port = 8080;
 const cors=require("cors")
+const cookieParser = require('cookie-parser');
 
 let methodOverride = require('method-override');
 const path = require("path");
@@ -15,7 +16,7 @@ const user = require('./models/user.js');
 const Schema = mongoose.Schema;
 
 app.use(express.json());
-
+app.use(cookieParser());
 
 const corsOptions={
     origin:"http://localhost:5173",
