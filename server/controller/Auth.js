@@ -243,3 +243,37 @@ exports.changePassword = async (req, res) => {
     });
   }
 };
+
+// Example backend code for token verification
+exports.verifyToken = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: "No token provided",
+      });
+    }
+
+    const decoded = jwt.verify(token, "kaan"); // Replace "kaan" with your actual secret key
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    res.status(403).json({
+      success: false,
+      message: "Token verification failed",
+    });
+  }
+};
+

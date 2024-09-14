@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext"; // Adjust the path as needed
+import { getCookie } from "../utils/cookie"; // Adjust the path as needed
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -9,7 +10,38 @@ function Login() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { updateAuth } = useAuth();
+
+  useEffect(() => {
+    // Check for existing token in cookies
+    const token = getCookie("jobcookie");
+    if (token) {
+      // If token exists, attempt login with token
+      handleTokenLogin(token);
+    }
+  }, []);
+
+  const handleTokenLogin = async (token) => {
+    try {
+      const response = await fetch("http://localhost:8080/auth/verify-token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Token verification failed");
+      }
+      updateAuth(data.user, token); // Set both user and token
+      navigate("/dashboard"); // Redirect to dashboard after successful login
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,7 +65,7 @@ function Login() {
       }
 
       setSuccess("Login successful!");
-      setUser(data.user); // Assuming `data.user` contains user data
+      updateAuth(data.user, data.token); // Set both user and token
       setTimeout(() => {
         navigate("/dashboard"); // Redirect to dashboard after successful login
       }, 2000);

@@ -31,15 +31,22 @@ function OtpVerification() {
         body: JSON.stringify({ email, password, role, otp }),
       });
 
+      const data = await response.json(); // Parse the response data
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to verify OTP");
+        throw new Error(data.message || "Failed to verify OTP");
       }
 
-      setSuccess("OTP verified successfully! Account created.");
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000); // Delay before redirecting to login
+      setSuccess("OTP verified successfully!");
+
+      // Redirect based on user role
+      if (data.user.role === "employer") {
+        navigate("/add-company"); // Redirect to add company page for employer
+      } else if (data.user.role === "job-seeker") {
+        navigate("/add-profile"); // Redirect to add profile page for job seeker
+      } else {
+        navigate("/dashboard"); // Default redirection if role is not recognized
+      }
     } catch (error) {
       setError(error.message);
     } finally {
