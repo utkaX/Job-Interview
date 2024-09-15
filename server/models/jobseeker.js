@@ -62,8 +62,6 @@ const jobSeekerSchema = new Schema({
   experience: [experienceSchema],
   education: [educationSchema],
   location: String,
-  desiredJobType: String,
-  desiredLocations: [String],
   savedJobs: [{ type: Schema.Types.ObjectId, ref: 'Job' }],
   appliedJobs: [{
     jobId: { 

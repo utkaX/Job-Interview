@@ -70,6 +70,7 @@ const Signup = () => {
           console.log("otp send successfully");
           navigate("/verify-otp", {
             state: {
+              name :formData.name,
               email: formData.email,
               password: formData.password,
               role: formData.role,

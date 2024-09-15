@@ -9,7 +9,7 @@ function OtpVerification() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { email, password, role } = location.state || {};
+  const { name, email, password, role } = location.state || {};
 
   // Redirect to signup if no state is passed
   if (!email || !password || !role) {
@@ -40,10 +40,14 @@ function OtpVerification() {
       setSuccess("OTP verified successfully!");
 
       // Redirect based on user role
-      if (data.user.role === "employer") {
+      if (role === "employer") {
         navigate("/add-company"); // Redirect to add company page for employer
-      } else if (data.user.role === "job-seeker") {
-        navigate("/add-profile"); // Redirect to add profile page for job seeker
+      } else if (role === "job_seeker") {
+        navigate("/add-profile", {
+          state: {
+            name: name,
+          },
+        }); // Redirect to add profile page for job seeker
       } else {
         navigate("/dashboard"); // Default redirection if role is not recognized
       }
