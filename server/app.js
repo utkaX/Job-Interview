@@ -56,6 +56,9 @@ app.use("/auth",auth)
 const jobRoutes=require('./routes/job');
 app.use("/jobs",jobRoutes)
 
+
+
+
 const employeeRoute=require('./routes/employer');
 app.use("/employee",employeeRoute)
 

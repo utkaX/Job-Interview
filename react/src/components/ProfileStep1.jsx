@@ -3,13 +3,11 @@ import React, { useState, useEffect } from "react";
 const ProfileStep1 = ({ formData, setFormData, nextStep }) => {
   const [profilePreview, setProfilePreview] = useState(null);
 
-  // Generate profile picture URL based on the first and last name
   const getAvatarUrl = (firstName, lastName) => {
     const fullName = `${firstName || ""}+${lastName || ""}`;
     return `https://ui-avatars.com/api/?name=${fullName}&background=0D8ABC&color=fff`;
   };
 
-  // Set profile picture URL when formData is updated
   useEffect(() => {
     if (formData.firstName || formData.lastName) {
       const avatarUrl = getAvatarUrl(formData.firstName, formData.lastName);
@@ -31,7 +29,6 @@ const ProfileStep1 = ({ formData, setFormData, nextStep }) => {
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
-      {/* Profile Picture Section */}
       <div className="flex justify-center mb-6">
         {profilePreview ? (
           <img
@@ -48,7 +45,6 @@ const ProfileStep1 = ({ formData, setFormData, nextStep }) => {
         )}
       </div>
 
-      {/* Upload Profile Picture */}
       <div className="mb-6 text-center">
         <input
           type="file"
@@ -63,7 +59,6 @@ const ProfileStep1 = ({ formData, setFormData, nextStep }) => {
         />
       </div>
 
-      {/* Personal Details Form */}
       <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
         Personal Details
       </h2>

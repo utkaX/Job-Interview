@@ -62,30 +62,9 @@ const jobSeekerSchema = new Schema({
   experience: [experienceSchema],
   education: [educationSchema],
   location: String,
-  savedJobs: [{ type: Schema.Types.ObjectId, ref: 'Job' }],
-  appliedJobs: [{
-    jobId: { 
-        type: Schema.Types.ObjectId,
-         ref: 'Job'
-         },
-    status: {
-         type: String, enum: ['applied', 'shortlisted', 'rejected', 'selected'], 
-         default: 'applied'
-         },
-    appliedDate: {
-         type: Date, 
-         default: Date.now 
-        },
-    coverLetter: String, // Cover letter submitted with the application
-
-    source: String, // Source where the job seeker found the job posting
-    notes: String, // Additional notes or comments from the employer
-    reviewDate: Date // Date when the application was reviewed
-  }],
-  profilePicture: String, // URL to profile picture
-  availability: String, // Current job availability status
+  profilePicture: String,
   preferredJobLocations: [String], // Preferred job locations
-  jobTypePreferences: [{ type: Schema.Types.ObjectId, ref: 'JobType' }] // Preferred job types
+  jobTypePreferences: Object
 }, { timestamps: true });
 
 module.exports = mongoose.model('JobSeeker', jobSeekerSchema);
