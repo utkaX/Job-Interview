@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+/* eslint-disable react/prop-types */
+import { useState, useEffect } from "react";
 
 const ProfileStep1 = ({ formData, setFormData, nextStep }) => {
   const [profilePreview, setProfilePreview] = useState(null);
@@ -38,6 +39,7 @@ const ProfileStep1 = ({ formData, setFormData, nextStep }) => {
           />
         ) : (
           <div className="w-24 h-24 rounded-full bg-blue-500 flex items-center justify-center text-white text-3xl font-bold">
+            
             {formData.firstName
               ? formData.firstName.charAt(0).toUpperCase()
               : "P"}

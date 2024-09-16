@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import  { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import ProfileStep1 from "./ProfileStep1";
 import ProfileStep2 from "./ProfileStep2";

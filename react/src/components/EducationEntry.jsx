@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 
+// eslint-disable-next-line react/prop-types
 const EducationEntry = ({ education = {}, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
     schoolName: education.schoolName || "",

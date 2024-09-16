@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { IoIosRemoveCircle } from "react-icons/io";
 
+// eslint-disable-next-line react/prop-types
 const ProfileStep4 = ({ formData, setFormData, prevStep, handleSubmit }) => {
+  // eslint-disable-next-line react/prop-types
   const [jobPreferences, setJobPreferences] = useState(formData.jobTypePreferences || []);
   
   const jobTypes = ["Developer", "Designer", "Manager", "Tester", "Analyst"]; // Example job types

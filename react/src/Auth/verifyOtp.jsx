@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Import AuthContext hook
+import { useAuth } from "../context/authContext"; // Import AuthContext hook
 
 function OtpVerification() {
   const [otp, setOtp] = useState("");

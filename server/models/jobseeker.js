@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const User= require("./user")
 
 const experienceSchema = new Schema({
   companyName: { 
@@ -19,6 +20,10 @@ const experienceSchema = new Schema({
  },
   description: String
 }, { _id: false });
+
+
+
+
 
 const educationSchema = new Schema({
   schoolName: { 
@@ -41,6 +46,9 @@ const educationSchema = new Schema({
     type: Date 
 }
 }, { _id: false });
+
+
+
 
 const jobSeekerSchema = new Schema({
   user: { 
