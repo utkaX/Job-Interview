@@ -3,7 +3,7 @@ const OTP = require("../models/Otp");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt");
 let jwt = require("jsonwebtoken");
-const { mailSender } = require('../utils/mailSender');
+const { mailSender } = require("../utils/mailSender");
 
 exports.sendOTP = async (req, res) => {
   try {
@@ -14,12 +14,15 @@ exports.sendOTP = async (req, res) => {
         message: "Email is required",
       });
     }
-    const checkUserpresent = User.findOne({ email });
 
-    if (!checkUserpresent) {
+    // Await the result of User.findOne
+    const checkUserpresent = await User.findOne({ email });
+    console.log(checkUserpresent);
+
+    if (checkUserpresent) {
       return res.status(401).json({
         success: false,
-        message: "User is already registred",
+        message: "User is already registered",
       });
     }
 
@@ -35,7 +38,7 @@ exports.sendOTP = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "OTP send successfully",
+      message: "OTP sent successfully",
       otp,
     });
   } catch (error) {
@@ -46,6 +49,7 @@ exports.sendOTP = async (req, res) => {
     });
   }
 };
+
 
 exports.signup = async (req, res) => {
   try {
@@ -69,7 +73,6 @@ exports.signup = async (req, res) => {
     const recentOtp = await OTP.findOne({ email })
       .sort({ createdAt: -1 })
       .limit(1);
-    console.log(recentOtp.otp);
     if (recentOtp.length === 0) {
       return res.status(400).json({
         success: false,
@@ -81,23 +84,12 @@ exports.signup = async (req, res) => {
         message: "Invaild OTP",
       });
     }
-
-    let hashedPassword;
-    try {
-      hashedPassword = await bcrypt.hash(password, 10);
-    } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: "Error in password hashing",
-      });
-    }
-    console.log(hashedPassword);
-
     const newUser = await User.create({
       email,
-      password: hashedPassword,
+      password,
       role,
     });
+    await newUser.save();
     console.log(newUser);
 
     recentOtp.used = true;
@@ -145,12 +137,9 @@ exports.login = async (req, res) => {
         expiresIn: "2h",
       });
 
-      // console.log(user);
-
       user.token = token;
       user.password = undefined;
 
-      console.log(user);
       const options = {
         expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
         httpOnly: true,
@@ -178,76 +167,113 @@ exports.login = async (req, res) => {
 
 exports.verifyOtp = async (req, res) => {
   try {
-      const { email, otp } = req.body;
-      const otpRecord = await OTP.findOne({ email, otp, used: false });
+    const { email, otp } = req.body;
+    const otpRecord = await OTP.findOne({ email, otp, used: false });
 
-      if (!otpRecord) {
-          return res.status(400).json({ error: 'Invalid OTP or OTP expired' });
-      }
+    if (!otpRecord) {
+      return res.status(400).json({ error: "Invalid OTP or OTP expired" });
+    }
 
-      otpRecord.used = true;
-      await otpRecord.save();
+    otpRecord.used = true;
+    await otpRecord.save();
 
-      // Optionally, you can now create the user or perform other actions
-      res.status(200).json({ message: 'OTP verified successfully' });
+    // Optionally, you can now create the user or perform other actions
+    res.status(200).json({ message: "OTP verified successfully" });
   } catch (error) {
-      res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
 exports.changePassword = async (req, res) => {
-    try {
-        const { email, oldPassword, newPassword, confirmPassword } = req.body;
+  try {
+    const { email, oldPassword, newPassword, confirmPassword } = req.body;
 
-        if (!email || !oldPassword || !newPassword || !confirmPassword) {
-            return res.status(400).json({
-                success: false,
-                message: "Please fill all the details carefully",
-            });
-        }
-
-        if (newPassword !== confirmPassword) {
-            return res.status(400).json({
-                success: false,
-                message: "New password and confirm password do not match",
-            });
-        }
-
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: "User not found",
-            });
-        }
-        
-        const isMatch = await bcrypt.compare(oldPassword, user.password);
-
-        if (!isMatch) {
-            return res.status(400).json({
-                success: false,
-                message: "Old password is incorrect",
-            });
-        }
-
-        const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-        user.password = hashedPassword;
-        await user.save();
-
-        await mailSender(email, "Password Changed", "Your password has been changed successfully.");
-
-        res.status(200).json({
-            success: true,
-            message: "Password changed successfully",
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            success: false,
-            message: "An error occurred while changing the password",
-        });
+    if (!email || !oldPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all the details carefully",
+      });
     }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "New password and confirm password do not match",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Old password is incorrect",
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    await mailSender(
+      email,
+      "Password Changed",
+      "Your password has been changed successfully."
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while changing the password",
+    });
+  }
+};
+
+// Example backend code for token verification
+exports.verifyToken = async (req, res) => {
+  try {
+    const { token } = req.body;
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: "No token provided",
+      });
+    }
+
+    const decoded = jwt.verify(token, "kaan"); // Replace "kaan" with your actual secret key
+    const user = await User.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    res.status(403).json({
+      success: false,
+      message: "Token verification failed",
+    });
+  }
 };
 

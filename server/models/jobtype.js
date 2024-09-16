@@ -6,8 +6,8 @@ const jobTypeSchema = new Schema({
     type: String,
      required: true, 
      unique: true
-     }, // Title of the job type
-  description: String // Description of the job type
+     },
+  description: String 
 }, { timestamps: true });
 
 module.exports = mongoose.model('JobType', jobTypeSchema);

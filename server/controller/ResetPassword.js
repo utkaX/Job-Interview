@@ -68,7 +68,6 @@ exports.resetPassword = async (req, res) => {
       });
     }
 
-    // Validate password and confirm password match
     if (password !== confirmPassword) {
       return res.status(400).json({
         success: false,
@@ -76,10 +75,9 @@ exports.resetPassword = async (req, res) => {
       });
     }
 
-    // Find user by token and check if token is not expired
     const user = await User.findOne({
       resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() }, // Token should be valid and not expired
+      resetPasswordExpires: { $gt: Date.now() }, 
     });
 
     if (!user) {
@@ -89,16 +87,14 @@ exports.resetPassword = async (req, res) => {
       });
     }
 
-    // Hash the new password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Update user's password and remove reset token and expiry
     await User.findOneAndUpdate(
       { resetPasswordToken: token },
       {
         password: hashedPassword,
-        resetPasswordToken: null, // Clear the token
-        resetPasswordExpires: null, // Clear the expiry time
+        resetPasswordToken: null, 
+        resetPasswordExpires: null, 
       },
       { new: true }
     );
