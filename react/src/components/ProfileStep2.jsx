@@ -25,22 +25,22 @@ const ProfileStep2 = ({ formData, setFormData, nextStep, prevStep }) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+    <div className="max-w-3xl mx-auto p-6 bg-gray-50 mt-8">
+      {/* Added mt-8 for top margin */}
+      <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
         Step 2: Education Details
       </h2>
-
       <div className="space-y-4">
         {/* Display each education entry */}
         {educationEntries.map((education, index) => (
           <div
             key={index}
-            className="relative bg-gray-100 p-4 rounded-lg shadow-sm"
+            className="relative bg-white p-4 rounded-lg shadow-md"
           >
             <EducationEntry education={education} />
             <button
               type="button"
-              className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full shadow-md hover:bg-red-700"
+              className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full shadow-md hover:bg-red-600"
               onClick={() => handleRemoveEducation(index)}
             >
               <span className="sr-only">Remove</span>
@@ -62,16 +62,14 @@ const ProfileStep2 = ({ formData, setFormData, nextStep, prevStep }) => {
           </div>
         ))}
       </div>
-
       {/* Button to add new education */}
       <button
         type="button"
-        className="bg-blue-600 text-white py-2 px-4 rounded-lg mt-6 hover:bg-blue-700 transition"
+        className="bg-teal-600 text-white font-bold py-2 px-6 rounded-lg mt-6 hover:bg-teal-700 transition"
         onClick={() => setShowNewEducation(true)}
       >
         Add New Education
       </button>
-
       {/* Conditional rendering of the new education form */}
       {showNewEducation && (
         <div className="mt-6">
@@ -81,22 +79,21 @@ const ProfileStep2 = ({ formData, setFormData, nextStep, prevStep }) => {
           />
         </div>
       )}
-
       {/* Navigation buttons */}
       <div className="flex justify-between mt-8">
         <button
           type="button"
-          className="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+          className="bg-gray-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-gray-700 transition"
           onClick={prevStep}
         >
           Back
         </button>
         <button
           type="button"
-          className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition"
           onClick={nextStep}
         >
-          Next
+          Next &gt;
         </button>
       </div>
     </div>

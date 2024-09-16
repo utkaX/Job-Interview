@@ -29,23 +29,24 @@ const ProfileStep1 = ({ formData, setFormData, nextStep }) => {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-md">
-      <div className="flex justify-center mb-6">
-        {profilePreview ? (
-          <img
-            src={profilePreview}
-            alt="Profile Preview"
-            className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
-          />
-        ) : (
-          <div className="w-24 h-24 rounded-full bg-blue-500 flex items-center justify-center text-white text-3xl font-bold">
-            
-            {formData.firstName
-              ? formData.firstName.charAt(0).toUpperCase()
-              : "P"}
-          </div>
-        )}
-      </div>
+    <div className="max-w-lg mx-auto p-6 rounded-lg mt-8">
+    <h1 className="text-3xl font-semibold text-center mb-6">Step 1: Personal Details</h1>
+    
+    <div className="flex justify-center mb-6">
+      {profilePreview ? (
+        <img
+          src={profilePreview}
+          alt="Profile Preview"
+          className="w-24 h-24 rounded-full object-cover border-2 border-gray-300"
+        />
+      ) : (
+        <div className="w-24 h-24 rounded-full bg-blue-500 flex items-center justify-center text-white text-3xl font-bold">
+          {formData.firstName ? formData.firstName.charAt(0).toUpperCase() : "P"}
+        </div>
+      )}
+    </div>
+    
+  
 
       <div className="mb-6 text-center">
         <input
@@ -60,36 +61,37 @@ const ProfileStep1 = ({ formData, setFormData, nextStep }) => {
             hover:file:bg-blue-100"
         />
       </div>
-
-      <h2 className="text-2xl font-semibold mb-6 text-center text-gray-800">
-        Personal Details
-      </h2>
       <form>
-        <div className="mb-6">
-          <label className="block text-gray-600 mb-2">First Name</label>
-          <input
-            type="text"
-            value={formData.firstName}
-            onChange={(e) =>
-              setFormData({ ...formData, firstName: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter your first name"
-          />
-        </div>
+      <div className="mb-6 flex">
+  <div className="w-1/2 pr-2">
+    <label className="block text-gray-600 mb-2">First Name</label>
+    <input
+      type="text"
+      value={formData.firstName}
+      onChange={(e) =>
+        setFormData({ ...formData, firstName: e.target.value })
+      }
+      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      placeholder="Enter your first name"
+    />
+  </div>
 
-        <div className="mb-6">
-          <label className="block text-gray-600 mb-2">Last Name</label>
-          <input
-            type="text"
-            value={formData.lastName}
-            onChange={(e) =>
-              setFormData({ ...formData, lastName: e.target.value })
-            }
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            placeholder="Enter your last name"
-          />
-        </div>
+  <div className="w-1/2 pl-2">
+    <label className="block text-gray-600 mb-2">Last Name</label>
+    <input
+      type="text"
+      value={formData.lastName}
+      onChange={(e) =>
+        setFormData({ ...formData, lastName: e.target.value })
+      }
+      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+      placeholder="Enter your last name"
+    />
+  </div>
+</div>
+
+
+        
 
         <div className="mb-6">
           <label className="block text-gray-600 mb-2">Bio</label>
@@ -129,15 +131,18 @@ const ProfileStep1 = ({ formData, setFormData, nextStep }) => {
           />
         </div>
 
-        <div className="flex justify-between">
-          <button
-            type="button"
-            onClick={nextStep}
-            className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition"
-          >
-            Next
-          </button>
-        </div>
+        <div className="flex justify-end">
+  <button
+    type="button"
+    onClick={nextStep}
+    className="text-blue-600 font-bold py-2 px-6 rounded-lg hover:text-blue-700 transition"
+  >
+    Next &gt;
+  </button>
+</div>
+
+
+
       </form>
     </div>
   );

@@ -41,8 +41,8 @@ const ProfileStep3 = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+    <div className="max-w-3xl mx-auto p-6 bg-gray-50 ">
+      <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
         Step 3: Experience Details
       </h2>
 
@@ -51,7 +51,7 @@ const ProfileStep3 = ({
         {experienceEntries.map((experience, index) => (
           <div
             key={experience.id || index}
-            className="relative bg-gray-100 p-4 rounded-lg shadow-sm"
+            className="relative bg-white p-4 rounded-lg shadow-md"
           >
             <ExperienceEntry
               experience={experience}
@@ -62,7 +62,7 @@ const ProfileStep3 = ({
             />
             <button
               type="button"
-              className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full shadow-md hover:bg-red-700 transition"
+              className="absolute top- right-2 bg-red-500 text-white p-2 rounded-full shadow-md hover:bg-red-600 transition"
               onClick={() => handleRemoveExperience(index)}
             >
               <span className="sr-only">Remove</span>
@@ -89,7 +89,7 @@ const ProfileStep3 = ({
       <button
         type="button"
         onClick={() => setShowNewExperience(true)}
-        className="bg-green-600 text-white py-2 px-4 rounded-lg mt-6 hover:bg-green-700 transition"
+        className="bg-teal-600 text-white py-2 px-4 rounded-lg mt-6 hover:bg-teal-700 transition"
       >
         Add New Experience
       </button>
@@ -109,7 +109,7 @@ const ProfileStep3 = ({
         <button
           type="button"
           onClick={prevStep}
-          className="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+          className="bg-gray-700 text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition"
         >
           Back
         </button>
