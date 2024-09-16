@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 
 // eslint-disable-next-line react/prop-types
 const EducationEntry = ({ education = {}, onSubmit, onCancel }) => {
@@ -26,8 +26,8 @@ const EducationEntry = ({ education = {}, onSubmit, onCancel }) => {
   };
 
   return (
-    <div className="border p-4 mb-4">
-      <h3 className="text-xl font-semibold mb-2">Education Entry</h3>
+    <div className="mb-4">
+      {/* School Name */}
       <div className="mb-4">
         <label className="block">School Name</label>
         <input
@@ -38,46 +38,56 @@ const EducationEntry = ({ education = {}, onSubmit, onCancel }) => {
           className="border p-2 w-full"
         />
       </div>
-      <div className="mb-4">
-        <label className="block">Degree</label>
-        <input
-          type="text"
-          name="degree"
-          value={formData.degree}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
+
+      {/* Degree and Field of Study in one line */}
+      <div className="flex gap-4 mb-4">
+        <div className="w-1/2">
+          <label className="block">Degree</label>
+          <input
+            type="text"
+            name="degree"
+            value={formData.degree}
+            onChange={handleChange}
+            className="border p-2 w-full"
+          />
+        </div>
+        <div className="w-1/2">
+          <label className="block">Field of Study</label>
+          <input
+            type="text"
+            name="fieldOfStudy"
+            value={formData.fieldOfStudy}
+            onChange={handleChange}
+            className="border p-2 w-full"
+          />
+        </div>
       </div>
-      <div className="mb-4">
-        <label className="block">Field of Study</label>
-        <input
-          type="text"
-          name="fieldOfStudy"
-          value={formData.fieldOfStudy}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
+
+      {/* Start Date and End Date in one line */}
+      <div className="flex gap-4 mb-4">
+        <div className="w-1/2">
+          <label className="block">Start Date</label>
+          <input
+            type="date"
+            name="startDate"
+            value={formData.startDate}
+            onChange={handleChange}
+            className="border p-2 w-full"
+          />
+        </div>
+        <div className="w-1/2">
+          <label className="block">End Date</label>
+          <input
+            type="date"
+            name="endDate"
+            value={formData.endDate}
+            onChange={handleChange}
+            className="border p-2 w-full"
+          />
+        </div>
       </div>
-      <div className="mb-4">
-        <label className="block">Start Date</label>
-        <input
-          type="date"
-          name="startDate"
-          value={formData.startDate}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block">End Date</label>
-        <input
-          type="date"
-          name="endDate"
-          value={formData.endDate}
-          onChange={handleChange}
-          className="border p-2 w-full"
-        />
-      </div>
+
+      {/* Action Buttons */}
       <button
         type="button"
         className="bg-green-500 text-white p-2 rounded mr-2"
