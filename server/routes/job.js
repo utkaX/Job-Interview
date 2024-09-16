@@ -10,11 +10,11 @@ const{
     getJobByTitle}=require("../controller/job")
 
 
-router.post("/",createJob)
-router.get("/",getAllJob)
-router.get("/:title",getJobByTitle)
-router.put("/:title",updateJobByTitle)
-router.delete("/:title",deleteJobByTitle)
+router.post("/addJob",createJob)
+router.get("/getAllJob",getAllJob)
+router.get("/getJobByTitle/:title",getJobByTitle)
+router.put("/updateJobById/:title",updateJobByTitle)
+router.delete("/deleteJob/:title",deleteJobByTitle)
 
 
 module.exports=router

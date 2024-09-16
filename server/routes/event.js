@@ -5,16 +5,16 @@ const router = express.Router();
 const{
     createEvent,
     getAllEvent,
-    getEvent,
-    updateEvent,
-    deleteEvent}=require("../controller/event")
+    getEventById,
+    updateEventById,
+    deleteEventById}=require("../controller/event")
 
 
 router.post("/createEvent",createEvent)
 router.get("/getAllEvent",getAllEvent)
-router.get("/getEvent/:id",getEvent)
-router.put("/updateEvent/:id",updateEvent)
-router.delete("/deleteEvent/:id",deleteEvent)
+router.get("/getEvent/:id",getEventById)
+router.put("/updateEvent/:id",updateEventById)
+router.delete("/deleteEvent/:id",deleteEventById)
 
 
 module.exports=router

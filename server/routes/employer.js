@@ -10,11 +10,11 @@ const{
     deleteEmployee}=require("../controller/employer")
 
 
-router.post("/",createEmployee)
-router.get("/",getAllEmployee)
-router.get("/:companyName",getEmployerByCompanyName)
+router.post("/addEmployee",createEmployee)
+router.get("/getAllEmployee",getAllEmployee)
+router.get("getEmployeeByCompanyName/:companyName",getEmployerByCompanyName)
 router.put("/updateEmployee/:id",updateEmployee)
-router.delete("/deleteEmployee/:id",deleteEmployee)
+router.delete("/deleteEmployeeById/:id",deleteEmployee)
 
 
 module.exports=router
