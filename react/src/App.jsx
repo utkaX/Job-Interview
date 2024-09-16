@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Signup from './components/signup';
 import Login from './components/login';
 import OtpVerification from './components/verifyOtp';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/Home/Dashboard';
 
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-otp" element={<OtpVerification />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard/>}/>
         {/* Add more routes here */}
       </Routes>
     </Router>

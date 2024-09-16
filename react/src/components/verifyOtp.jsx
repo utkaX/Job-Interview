@@ -1,6 +1,6 @@
 import  { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../css/otp.css';
+// import '../css/otp.css';
 
 function OtpVerification() {
   const [otp, setOtp] = useState('');
