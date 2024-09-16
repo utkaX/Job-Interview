@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // Import AuthContext hook
 
 function OtpVerification() {
   const [otp, setOtp] = useState("");
@@ -8,19 +9,19 @@ function OtpVerification() {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { updateAuth } = useAuth(); // Use updateAuth to update the auth context
 
   const { name, email, password, role } = location.state || {};
 
-  // Redirect to signup if no state is passed
   if (!email || !password || !role) {
     navigate("/signup");
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(""); // Reset error before retrying
+    setError("");
     setSuccess("");
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       const response = await fetch("http://localhost:8080/auth/signup", {
@@ -30,31 +31,42 @@ function OtpVerification() {
         },
         body: JSON.stringify({ email, password, role, otp }),
       });
-
-      const data = await response.json(); // Parse the response data
-
+      console.log("signup req send");
+      const data = await response.json();
+      console.log(data);
       if (!response.ok) {
         throw new Error(data.message || "Failed to verify OTP");
       }
 
       setSuccess("OTP verified successfully!");
 
-      // Redirect based on user role
+      const loginResponse = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const loginData = await loginResponse.json();
+      console.log(loginData);
+      if (!loginResponse.ok) {
+        throw new Error(loginData.message || "Auto-login failed");
+      }
+
+      updateAuth(loginData.user, loginData.token);
+
       if (role === "employer") {
-        navigate("/add-company"); // Redirect to add company page for employer
+        navigate("/add-company");
       } else if (role === "job_seeker") {
-        navigate("/add-profile", {
-          state: {
-            name: name,
-          },
-        }); // Redirect to add profile page for job seeker
+        navigate("/add-profile", { state: { name } });
       } else {
-        navigate("/dashboard"); // Default redirection if role is not recognized
+        navigate("/dashboard");
       }
     } catch (error) {
       setError(error.message);
     } finally {
-      setLoading(false); // Stop loading after request
+      setLoading(false);
     }
   };
 
