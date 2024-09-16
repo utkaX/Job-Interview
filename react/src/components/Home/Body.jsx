@@ -1,7 +1,7 @@
 
 const Body = () => {
   return (
-    <div></div>
+    <div className="h-full"></div>
   )
 }
 
