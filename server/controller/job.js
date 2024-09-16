@@ -3,11 +3,19 @@ const { response } = require("express");
 
 
 
-exports.createJob=async (req, res) => {
+exports.createJobs = async (req, res) => {
     try {
-        const job = new Job(req.body);
-        await job.save();
-        res.status(201).json(job);
+        // Check if the request body is an array or a single job
+        if (Array.isArray(req.body)) {
+            // Handle multiple jobs
+            const jobs = await Job.insertMany(req.body);
+            res.status(201).json(jobs);
+        } else {
+            // Handle a single job
+            const job = new Job(req.body);
+            await job.save();
+            res.status(201).json(job);
+        }
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

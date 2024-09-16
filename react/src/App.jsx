@@ -7,7 +7,7 @@ import OtpVerification from "./auth/verifyOtp";
 import AddProfile from "./components/AddProfile";
 
 function App() {
-  console.log(AddProfile);
+  // console.log(AddProfile);
   return (
     <Router>
       <Routes>

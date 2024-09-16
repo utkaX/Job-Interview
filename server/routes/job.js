@@ -3,14 +3,14 @@ const router = express.Router();
 
 
 const{
-    createJob,
+    createJobs,
     getAllJob,
     updateJobByTitle,
     deleteJobByTitle,
     getJobByTitle}=require("../controller/job")
 
 
-router.post("/addJob",createJob)
+router.post("/addJob",createJobs)
 router.get("/getAllJob",getAllJob)
 router.get("/getJobByTitle/:title",getJobByTitle)
 router.put("/updateJobById/:title",updateJobByTitle)
