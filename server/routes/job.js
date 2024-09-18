@@ -7,12 +7,12 @@ const{
     getAllJob,
     updateJobByTitle,
     deleteJobByTitle,
-    getJobByTitle}=require("../controller/job")
+    getJobById}=require("../controller/job")
 
 
 router.post("/addJob",createJobs)
 router.get("/getAllJob",getAllJob)
-router.get("/getJobByTitle/:title",getJobByTitle)
+router.get("/getJobById/:id",getJobById)
 router.put("/updateJobById/:title",updateJobByTitle)
 router.delete("/deleteJob/:title",deleteJobByTitle)
 
