@@ -31,10 +31,9 @@ exports.getAllJob= async (req, res) => {
 };
 
 
-
-exports.getJobByTitle = async (req, res) => {
+exports.getJobById = async (req, res) => {
     try {
-        const job = await Job.findOne({ title: req.params.title });
+        const job = await Job.findById(req.params.id);
         if (!job) return res.status(404).json({ error: 'Job not found' });
         res.status(200).json(job);
     } catch (error) {
