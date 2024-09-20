@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 const Signup = () => {
@@ -65,12 +65,14 @@ const Signup = () => {
           },
           body: JSON.stringify({ email: formData.email }),
         });
+        console.log(response);
+
         const data = await response.json();
         if (data.success) {
           console.log("otp send successfully");
           navigate("/verify-otp", {
             state: {
-              name :formData.name,
+              name: formData.name,
               email: formData.email,
               password: formData.password,
               role: formData.role,
@@ -234,7 +236,7 @@ const Signup = () => {
               to="/login"
               className="text-blue-600 hover:underline font-semibold"
             >
-              Log  In
+              Log In
             </Link>
           </p>
         </div>
