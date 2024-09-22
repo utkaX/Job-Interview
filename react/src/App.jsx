@@ -13,7 +13,6 @@ import JobDetails from './components/Home/JobDetails';
 function App() {
   return (
     <Router>
-      <Navbar />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path='/Notifications' element={<Notifications />} />

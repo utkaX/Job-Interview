@@ -3,6 +3,3 @@
 @tailwind utilities;
 
 
-.navButton{
-    @apply hover:text-gray-300 text-xl 
-}
