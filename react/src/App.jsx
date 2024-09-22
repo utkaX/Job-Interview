@@ -9,6 +9,7 @@ import Notifications from './components/Home/Notifications';
 import Footer from './components/Home/Footer';
 import Navbar from './components/Home/Navbar';
 import JobDetails from './components/Home/JobDetails';
+import ApplyJob from './components/Home/ApplyJob';
 
 function App() {
   // console.log(AddProfile);
@@ -17,15 +18,14 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Dashboard />} />
-          {/* <Route path='/Notifications' element={<Notifications/>} /> */}
-        {/* </Route> */}
         <Route path='/Notifications' element={<Notifications/>} />
         <Route path="/add-profile" element={<AddProfile />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/verify-otp" element={<OtpVerification />} />
         <Route path="/login" element={<Login />} />
         <Route path="/JobDetails/:JobId" element={<JobDetails />} />
-        {/* Add more routes here */}
+        <Route path="/JobDetails/:JobId/ApplyJob" element={<ApplyJob />} />
+            
       </Routes>
       <Footer/>
      

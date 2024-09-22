@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer id="about-section" className="bg-gray-800 text-white py-8">
+    <footer id="about-section" className="bg-gray-800  text-white py-8">
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-between">
           {/* About Us */}
@@ -12,7 +12,7 @@ const Footer = () => {
           </div>
 
           {/* Contact */}
-          <div className="w-full md:w-1/4 mb-4 md:mb-0">
+          <div className="w-full md:w-1/4 mb-4 md:mb-0 ">
             <h3 className="text-lg font-semibold mb-2">Contact</h3>
             <ul className="text-sm">
               <li>Email: support@careercraft.com</li>

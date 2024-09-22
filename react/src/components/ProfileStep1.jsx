@@ -140,10 +140,7 @@ const ProfileStep1 = ({ formData, setFormData, nextStep }) => {
     Next &gt;
   </button>
 </div>
-
-
-
-      </form>
+</form>
     </div>
   );
 };

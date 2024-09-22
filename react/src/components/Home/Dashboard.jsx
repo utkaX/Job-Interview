@@ -1,4 +1,3 @@
-// src/components/Dashboard.jsx
 import { useEffect, useState } from "react";
 import JobCard from "./JobCard";
 import Shimmer from "./Shimmer";
@@ -8,7 +7,8 @@ import ImageSlider from "./ImageSlider"; // Import ImageSlider
 const Dashboard = () => {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
-  const [searchText, setSearchText] = useState("");
+  const [searchTitle, setSearchTitle] = useState("");
+  const [searchLocation, setSearchLocation] = useState("");
   const [images, setImages] = useState([
     "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -32,10 +32,9 @@ const Dashboard = () => {
   };
 
   const handleSearch = () => {
-    const filtered = jobs.filter(
-      (job) =>
-        job.title.toLowerCase().includes(searchText.toLowerCase()) ||
-        job.location.toLowerCase().includes(searchText.toLowerCase())
+    const filtered = jobs.filter((job) =>
+      (searchTitle ? job.title.toLowerCase().includes(searchTitle.toLowerCase()) : true) &&
+      (searchLocation ? job.location.toLowerCase().includes(searchLocation.toLowerCase()) : true)
     );
     setFilteredJobs(filtered);
   };
@@ -57,14 +56,24 @@ const Dashboard = () => {
       <div className="w-full mb-6">
         <ImageSlider images={images} />
       </div>
-      <div className="search-container mb-6 mx-12 flex items-center my-10">
+      <div className="search-container mb-6 mx-12 flex items-center my-10 space-x-4">
+        {/* Search by Job Title */}
         <input
           type="text"
-          placeholder="Search by Job Title or Location..."
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
+          placeholder="Search by Job Title..."
+          value={searchTitle}
+          onChange={(e) => setSearchTitle(e.target.value)}
           className="px-4 py-2 flex-grow rounded-l-lg border border-gray-300 focus:outline-none focus:border-blue-500"
         />
+        {/* Search by Location */}
+        <input
+          type="text"
+          placeholder="Search by Location..."
+          value={searchLocation}
+          onChange={(e) => setSearchLocation(e.target.value)}
+          className="px-4 py-2 flex-grow rounded-l-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+        />
+        {/* Search Button */}
         <button
           type="button"
           onClick={handleSearch}
@@ -89,7 +98,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-
-
-
