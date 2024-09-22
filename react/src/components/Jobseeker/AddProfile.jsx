@@ -1,18 +1,20 @@
 import  { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "../../context/authContext"; 
+
 import ProfileStep1 from "./ProfileStep1";
 import ProfileStep2 from "./ProfileStep2";
 import ProfileStep3 from "./ProfileStep3";
 import ProfileStep4 from "./ProfileStep4";
-import { useAuth } from "../context/authContext"; // Import useAuth for accessing the user
+
+
+
 
 const AddProfile = () => {
   const location = useLocation();
   const { name } = location.state || {};
 
-  // Access user from AuthContext
   const { user } = useAuth();
-  console.log(user);
 
   const splitName = (fullName) => {
     const nameParts = fullName.trim().split(" ");

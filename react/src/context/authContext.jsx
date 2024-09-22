@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState('');
 
+  console.log(user)
   const updateAuth = (user, token) => {
     setUser(user);
     setToken(token);

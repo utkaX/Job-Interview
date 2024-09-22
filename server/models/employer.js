@@ -19,7 +19,7 @@ const employerSchema = new Schema(
     jobsPosted: [{ type: Schema.Types.ObjectId, ref: "Job" }],
     contactEmail: String,
     contactPhone: String,
-    logo: String, // URL or reference to company logo
+    logo: String,
     socialMediaLinks: {
       linkedin: String,
       twitter: String,

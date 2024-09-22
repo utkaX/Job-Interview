@@ -9,7 +9,7 @@ function OtpVerification() {
   const [loading, setLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { updateAuth } = useAuth(); // Use updateAuth to update the auth context
+  const { updateAuth } = useAuth(); 
 
   const { name, email, password, role } = location.state || {};
 
@@ -57,7 +57,7 @@ function OtpVerification() {
       updateAuth(loginData.user, loginData.token);
 
       if (role === "employer") {
-        navigate("/add-company");
+        navigate("/employee-profile", { state: { name } });
       } else if (role === "job_seeker") {
         navigate("/add-profile", { state: { name } });
       } else {
