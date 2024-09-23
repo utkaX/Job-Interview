@@ -21,6 +21,7 @@ const Dashboard = () => {
           {/* Add other components or content here */}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

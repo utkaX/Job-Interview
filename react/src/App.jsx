@@ -20,6 +20,8 @@ import PostJob from "./components/Employer/PostJob";
 import { useAuth } from "./context/authContext";
 import { Navigate } from "react-router-dom";
 import ProtectedRoute from "./Protected";
+import ManageJobs from "./components/Employer/ManageJobs";
+import Sidebar from "./components/Employer/Sidebar";
 
 
 function App() {
@@ -36,9 +38,17 @@ function App() {
     "/employee-dashboard"
   ];
 
+  const sideBar=[
+    "/signup",
+    "/login",
+    "/verify-otp",
+    "/employee-dashboard"
+  ]
+
   return (
     <>
       {!hideNavAndFooter.includes(location.pathname) && <Navbar />}
+
 
       <Routes>
         <Route path="/signup" element={<Signup />} />
@@ -59,9 +69,18 @@ function App() {
         {/* Protected Routes for Employer */}
         {isEmployer && (
           <>
-            <Route path="/PostJob" element={<ProtectedRoute><PostJob /></ProtectedRoute>} />
+          {/* { <Sidebar/>} */}
+            {/* <Route path="/PostJob" element={<ProtectedRoute><PostJob /></ProtectedRoute>} />
             <Route path="/employee-dashboard" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
             <Route path="/employee-profile" element={<ProtectedRoute><CompanyProfile /></ProtectedRoute>} />
+            <Route path="/manage-jobs" element={<ProtectedRoute><ManageJobs /></ProtectedRoute>}/> */}
+
+          
+              <Route path="/PostJob" element={<PostJob />} />
+              <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+              <Route path="/employee-profile" element={<CompanyProfile />} />
+              <Route path="/manage-jobs" element={<ManageJobs />} />
+           
           </>
         )}
 
