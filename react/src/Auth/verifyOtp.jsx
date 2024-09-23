@@ -57,9 +57,9 @@ function OtpVerification() {
       updateAuth(loginData.user, loginData.token);
 
       if (role === "employer") {
-        navigate("/employee-profile", { state: { name } });
+        navigate("/employee-dashboard", { state: { name } });
       } else if (role === "job_seeker") {
-        navigate("/add-profile", { state: { name } });
+        navigate("/", { state: { name } });
       } else {
         navigate("/dashboard");
       }

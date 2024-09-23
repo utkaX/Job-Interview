@@ -65,9 +65,10 @@ function Login() {
       }
 
       setSuccess("Login successful!");
+      console.log(data)
       updateAuth(data.user, data.token); // Set both user and token
       setTimeout(() => {
-        navigate("/employee-profile"); // Redirect to dashboard after successful login
+        navigate("/employee-dashboard"); // Redirect to dashboard after successful login
       }, 2000);
     } catch (error) {
       setError(error.message);

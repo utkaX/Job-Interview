@@ -39,7 +39,7 @@ main().then(() => {
 });
 
 async function main() {
-    await mongoose.connect('mongodb://127.0.0.1:27017/job_interview');
+    await mongoose.connect('mongodb+srv://gurjarkaran03022004:uiMrlvFtyky53Uog@career-craft.yxphn.mongodb.net/job-interview');
 }
 
 
@@ -56,9 +56,6 @@ app.use("/auth",auth)
 const jobRoutes=require('./routes/job');
 app.use("/jobs",jobRoutes)
 
-
-
-
 const employeeRoute=require('./routes/employer');
 app.use("/employee",employeeRoute)
 
@@ -74,11 +71,12 @@ app.use("/company",companyRoute)
 const eventRoute=require('./routes/event');
 app.use("/event",eventRoute)
 
-
 const interviewRoute=require('./routes/interview');
 app.use("/interview",interviewRoute)
 
 const notificationRoute=require('./routes/notification');
 app.use("/notification",notificationRoute)
 
+const jobTypeRoute=require('./routes/job_type');
+app.use("/jobtype",jobTypeRoute)
 
