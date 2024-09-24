@@ -65,16 +65,19 @@ function Login() {
       }
 
       setSuccess("Login successful!");
-      console.log(data)
       updateAuth(data.user, data.token); // Set both user and token
       setTimeout(() => {
         navigate("/employee-dashboard"); // Redirect to dashboard after successful login
-      }, 2000);
+      }, 0);
     } catch (error) {
       setError(error.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSignupRedirect = () => {
+    navigate("/signup");
   };
 
   return (
@@ -150,6 +153,20 @@ function Login() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        {/* Signup Redirect */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Don't have an account?{" "}
+            <button
+              type="button"
+              onClick={handleSignupRedirect}
+              className="text-blue-600 hover:text-blue-800"
+            >
+              Sign up
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );

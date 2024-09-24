@@ -5,7 +5,7 @@ const router = express.Router();
 const{
     createJobs,
     getAllJob,
-    updateJobByTitle,
+    updateJobById,
     deleteJobByTitle,
     getJobById}=require("../controller/job")
 
@@ -13,7 +13,7 @@ const{
 router.post("/addJob",createJobs)
 router.get("/getAllJob",getAllJob)
 router.get("/getJobById/:id",getJobById)
-router.put("/updateJobById/:title",updateJobByTitle)
+router.put("/updateJobById/:id",updateJobById)
 router.delete("/deleteJob/:title",deleteJobByTitle)
 
 

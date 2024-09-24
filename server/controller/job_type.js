@@ -32,6 +32,23 @@ exports.createJobType = async (req, res) => {
   }
 };
 
+
+exports.getJobTypeById = async (req, res) => {
+  try {
+    const { id } = req.params; // Get the job type ID from the request params
+    const jobType = await JobType.findById(id); // Find job type by ID
+    if (!jobType) {
+      return res.status(404).json({ message: "Job type not found" });
+    }
+    return res.status(200).json(jobType);
+  } catch (error) {
+    console.error("Error fetching job type by ID:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+
 exports.getJobTypeByTitle = async (req, res) => {
   try {
     const { title } = req.params; // Get the title from the request params
