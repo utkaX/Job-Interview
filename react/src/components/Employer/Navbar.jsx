@@ -43,8 +43,8 @@ const Navbar = () => {
             </button>
           </li>
           <li>
-            <Link to="#profile" className="navButton text-lg font-semibold">
-              <Profile/>
+            <Link to="/employee-profile" className="navButton text-lg font-semibold">
+              Profile
             </Link>
           </li>
         </ul>

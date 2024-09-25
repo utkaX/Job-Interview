@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import Sidebar from "./Sidebar";
 
 export default function CompanyProfile() {
   const location = useLocation();
-  const { name } = location.state || {};
   const { user } = useAuth(); // Assuming user has the ID
 
   const [formData, setFormData] = useState({
-    userId:user._id,
+    userId: user._id,
     companyName: "",
     companyDescription: "",
     companyWebsite: "",
@@ -55,8 +55,7 @@ export default function CompanyProfile() {
         const data = await response.json();
         console.log("Employer added:", data);
         alert("Employer profile added successfully!");
-        Navigate("/employee-dashboard")
-        // Optionally reset the form or redirect
+        Navigate("/employee-dashboard");
       } else {
         const errorData = await response.json();
         console.error("Error adding employer:", errorData);
@@ -69,132 +68,139 @@ export default function CompanyProfile() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 max-w-md mx-auto">
-      <div className="mb-4">
-        <label className="block text-gray-700">Company Name</label>
-        <input
-          type="text"
-          name="companyName"
-          value={formData.companyName}
-          onChange={handleChange}
-          required
-          className="border p-2 rounded w-full"
-        />
-      </div>
+    <div className="flex">
+      <Sidebar />
+      <div className="flex-1 p-8 bg-gray-100">
+        <h2 className="text-2xl font-semibold mb-6 text-center">Company Profile</h2>
+        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto">
+          
+          {/* General Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-gray-700 font-medium">Company Name</label>
+              <input
+                type="text"
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleChange}
+                required
+                className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700">Company Description</label>
-        <textarea
-          name="companyDescription"
-          value={formData.companyDescription}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        />
-      </div>
+            <div>
+              <label className="block text-gray-700 font-medium">Industry</label>
+              <input
+                type="text"
+                name="industry"
+                value={formData.industry}
+                onChange={handleChange}
+                className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700">Company Website</label>
-        <input
-          type="url"
-          name="companyWebsite"
-          value={formData.companyWebsite}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        />
-      </div>
+            <div>
+              <label className="block text-gray-700 font-medium">Company Website</label>
+              <input
+                type="url"
+                name="companyWebsite"
+                value={formData.companyWebsite}
+                onChange={handleChange}
+                className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700">Location</label>
-        <input
-          type="text"
-          name="location"
-          value={formData.location}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        />
-      </div>
+            <div>
+              <label className="block text-gray-700 font-medium">Location</label>
+              <input
+                type="text"
+                name="location"
+                value={formData.location}
+                onChange={handleChange}
+                className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700">Industry</label>
-        <input
-          type="text"
-          name="industry"
-          value={formData.industry}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        />
-      </div>
+          {/* Description */}
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium">Company Description</label>
+            <textarea
+              name="companyDescription"
+              value={formData.companyDescription}
+              onChange={handleChange}
+              className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="4"
+            />
+          </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700">Contact Email</label>
-        <input
-          type="email"
-          name="contactEmail"
-          value={formData.contactEmail}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        />
-      </div>
+          {/* Contact Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-gray-700 font-medium">Contact Email</label>
+              <input
+                type="email"
+                name="contactEmail"
+                value={formData.contactEmail}
+                onChange={handleChange}
+                className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700">Contact Phone</label>
-        <input
-          type="tel"
-          name="contactPhone"
-          value={formData.contactPhone}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        />
-      </div>
+            <div>
+              <label className="block text-gray-700 font-medium">Contact Phone</label>
+              <input
+                type="tel"
+                name="contactPhone"
+                value={formData.contactPhone}
+                onChange={handleChange}
+                className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700">Logo URL</label>
-        <input
-          type="text"
-          name="logo"
-          value={formData.logo}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        />
-      </div>
+          {/* Social Media Links */}
+          <div className="mb-6">
+            <h3 className="font-bold mb-2">Social Media Links</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {["linkedin", "twitter", "facebook"].map((platform) => (
+                <div key={platform}>
+                  <label className="block text-gray-700 font-medium">
+                    {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                  </label>
+                  <input
+                    type="text"
+                    name={platform}
+                    value={formData.socialMediaLinks[platform]}
+                    onChange={handleChange}
+                    className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
 
-      <h3 className="font-bold mb-2">Social Media Links</h3>
-      <div className="mb-4">
-        <label className="block text-gray-700">LinkedIn</label>
-        <input
-          type="text"
-          name="linkedin"
-          value={formData.socialMediaLinks.linkedin}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        />
-      </div>
+          {/* Logo */}
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium">Logo URL</label>
+            <input
+              type="text"
+              name="logo"
+              value={formData.logo}
+              onChange={handleChange}
+              className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
 
-      <div className="mb-4">
-        <label className="block text-gray-700">Twitter</label>
-        <input
-          type="text"
-          name="twitter"
-          value={formData.socialMediaLinks.twitter}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        />
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="bg-blue-500 text-white font-bold py-3 rounded w-full hover:bg-blue-600 transition duration-200"
+          >
+            Add Employer
+          </button>
+        </form>
       </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Facebook</label>
-        <input
-          type="text"
-          name="facebook"
-          value={formData.socialMediaLinks.facebook}
-          onChange={handleChange}
-          className="border p-2 rounded w-full"
-        />
-      </div>
-
-      <button type="submit" className="bg-blue-500 text-white font-bold py-2 px-4 rounded">
-        Add Employer
-      </button>
-    </form>
+    </div>
   );
 }

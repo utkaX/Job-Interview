@@ -43,24 +43,25 @@ exports.getJobById = async (req, res) => {
 
 
 
-exports.updateJobByTitle = async (req, res) => {
+exports.updateJobById = async (req, res) => {
     try {
-        const { title } = req.params; // Extract title from request parameters
+        const { id } = req.params; // Extract ID from request parameters
         const updateData = req.body; // Data to update
 
-        // Find and update the job by title
-        const job = await Job.findOneAndUpdate({ title }, updateData, {
-            new: true,
-            runValidators: true
+        // Find and update the job by ID
+        const job = await Job.findByIdAndUpdate(id, updateData, {
+            new: true, // Return the updated document
+            runValidators: true // Run validation on update
         });
 
         if (!job) return res.status(404).json({ error: 'Job not found' });
 
-        res.status(200).json(job);
+        res.status(200).json(job); // Return the updated job
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error: error.message }); // Handle any errors
     }
 };
+
 
 exports.deleteJobByTitle = async (req, res) => {
     try {

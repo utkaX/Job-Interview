@@ -29,13 +29,19 @@ function Login() {
       if (!loginResponse.ok) {
         throw new Error(loginData.message || "Auto-login failed");
       }
+
       updateAuth(loginData.user, loginData.token);
       navigate("/");
+
     } catch (error) {
       setError(error.message); // Set the error message
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSignupRedirect = () => {
+    navigate("/signup");
   };
 
   return (
@@ -102,6 +108,20 @@ function Login() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
+
+        {/* Signup Redirect */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-600">
+            Don't have an account?{" "}
+            <button
+              type="button"
+              onClick={handleSignupRedirect}
+              className="text-blue-600 hover:text-blue-800"
+            >
+              Sign up
+            </button>
+          </p>
+        </div>
       </div>
     </div>
   );
