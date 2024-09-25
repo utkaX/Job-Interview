@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import Sidebar from "./Sidebar";
@@ -7,6 +7,7 @@ export default function CompanyProfile() {
   const location = useLocation();
   const { user } = useAuth(); // Assuming user has the ID
 
+  // Initialize form state
   const [formData, setFormData] = useState({
     userId: user._id,
     companyName: "",
@@ -24,6 +25,7 @@ export default function CompanyProfile() {
     },
   });
 
+  // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name in formData.socialMediaLinks) {
@@ -39,6 +41,7 @@ export default function CompanyProfile() {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -55,6 +58,10 @@ export default function CompanyProfile() {
         const data = await response.json();
         console.log("Employer added:", data);
         alert("Employer profile added successfully!");
+
+        // Store flag in localStorage to prevent future prompts
+        localStorage.setItem("profileCompleted", "true");
+
         Navigate("/employee-dashboard");
       } else {
         const errorData = await response.json();
@@ -66,6 +73,22 @@ export default function CompanyProfile() {
       alert("Something went wrong. Please try again later.");
     }
   };
+
+  // Effect to handle the prompt every 10 minutes
+  useEffect(() => {
+    // Check if the profile is already completed
+    const profileCompleted = localStorage.getItem("profileCompleted");
+
+    if (!profileCompleted) {
+      // If profile is not complete, set an interval for 10 minutes (600,000 ms)
+      const promptInterval = setInterval(() => {
+        alert("Please complete your company profile!");
+      }, 600000); // 10 minutes = 600,000 ms
+
+      // Clear interval when component unmounts or profile is completed
+      return () => clearInterval(promptInterval);
+    }
+  }, []); // Empty dependency array ensures this effect runs only once
 
   return (
     <div className="flex">

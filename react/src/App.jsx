@@ -12,6 +12,7 @@ import AddProfile from "./components/Jobseeker/AddProfile";
 import Notifications from "./components/Home/Notifications";
 import Footer from "./components/Home/Footer";
 import Navbar from "./components/Home/Navbar";
+import EmployerNavbar from './components/Employer/Navbar';
 import JobDetails from "./components/Home/JobDetails";
 import ApplyJob from "./components/Home/ApplyJob";
 import CompanyProfile from "./components/Employer/CompanyProfile";
@@ -54,6 +55,10 @@ function App() {
   return (
     <>
       {!hideNavAndFooter.includes(location.pathname) && <Navbar />}
+      <>
+          {isJobSeeker && <Navbar />}
+          {isEmployer && <EmployerNavbar />}
+        </>
 
 
       <Routes>
@@ -99,7 +104,7 @@ function App() {
               <Route path="/employee-profile" element={<CompanyProfile />} />
               <Route path="/manage-jobs" element={<ManageJobs />} />
               <Route path="/job/:id" element={<JobCardDetails />} />
-           
+
           </>
         )}
 
