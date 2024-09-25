@@ -1,29 +1,17 @@
 import { useEffect, useState } from "react";
 import JobCard from "./JobCard";
-import Shimmer from "./Shimmer";
+import Shimmer from "./Shimmer"; // Optional, if you want to show a loading state
 import { Link } from "react-router-dom";
-import ImageSlider from "./ImageSlider"; // Import ImageSlider
-import Navbar from "./Navbar";
+import ImageSlider from "./ImageSlider"; // Import ImageSlider if needed
+import Navbar from "./Navbar"; // Uncomment if you need the Navbar
 import QuoteCarousel from "./QuoteCarousel"; // Import the QuoteCarousel
 
 const Dashboard = () => {
   const [jobs, setJobs] = useState([]);
   const [filteredJobs, setFilteredJobs] = useState([]);
-
-  const [searchTitle, setSearchTitle] = useState("");
-  const [searchLocation, setSearchLocation] = useState("");
-
   const [searchText, setSearchText] = useState("");
-
-  const [selectedTags, setSelectedTags] = useState([]); 
-  const [availableTags, setAvailableTags] = useState([]); 
-  const [images, setImages] = useState([
-    "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  ]);
-
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [availableTags, setAvailableTags] = useState([]);
 
   useEffect(() => {
     fetchJobs();
@@ -33,49 +21,51 @@ const Dashboard = () => {
     try {
       const response = await fetch("http://localhost:8080/jobs/getAllJob");
       const data = await response.json();
-      setJobs(data);
-      setFilteredJobs(data);
-      extractTags(data);
+
+      const jobsWithEmployer = await Promise.all(
+        data.map(async (job) => {
+          return {
+            ...job,
+          };
+        })
+      );
+
+      setJobs(jobsWithEmployer);
+      setFilteredJobs(jobsWithEmployer);
+      extractTags(jobsWithEmployer);
     } catch (error) {
       console.error("Error fetching job data:", error);
     }
   };
 
   const extractTags = (jobs) => {
-    const allTags = jobs.flatMap((job) => job.jobTags); // Get all job tags
-    const uniqueTags = [...new Set(allTags)]; // Get unique tags
-    setAvailableTags(uniqueTags); // Set available tags
+    const allTags = jobs.flatMap((job) => job.jobTags || []); // Ensure jobTags is not undefined
+    const uniqueTags = [...new Set(allTags)];
+    setAvailableTags(uniqueTags);
   };
 
   const handleSearch = () => {
     const filtered = jobs.filter((job) =>
-      (searchTitle ? job.title.toLowerCase().includes(searchTitle.toLowerCase()) : true) &&
-      (searchLocation ? job.location.toLowerCase().includes(searchLocation.toLowerCase()) : true)
-
-    // filtered = jobs.filter(
-    //   (job) =>
-    //     job.title.toLowerCase().includes(searchText.toLowerCase()) ||
-    //     job.location.toLowerCase().includes(searchText.toLowerCase())
-    // )
-  );
+      job.title.toLowerCase().includes(searchText.toLowerCase()) ||
+      job.location.toLowerCase().includes(searchText.toLowerCase())
+    );
 
     if (selectedTags.length > 0) {
-       let filtered = filtered.filter((job) =>
-        job.jobTags.some((tag) => selectedTags.includes(tag))
+      const filteredWithTags = filtered.filter((job) =>
+        job.jobTags && job.jobTags.some((tag) => selectedTags.includes(tag))
       );
+      setFilteredJobs(filteredWithTags);
+    } else {
+      setFilteredJobs(filtered);
     }
-
-    setFilteredJobs(filtered);
   };
 
   const handleTagChange = (tag) => {
-    setSelectedTags((prevSelectedTags) => {
-      if (prevSelectedTags.includes(tag)) {
-        return prevSelectedTags.filter((t) => t !== tag);
-      } else {
-        return [...prevSelectedTags, tag];
-      }
-    });
+    setSelectedTags((prevSelectedTags) =>
+      prevSelectedTags.includes(tag)
+        ? prevSelectedTags.filter((t) => t !== tag)
+        : [...prevSelectedTags, tag]
+    );
   };
 
   return (
@@ -131,8 +121,6 @@ const Dashboard = () => {
             )}
           </div>
         </div>
-
-        {/* Job List */}
         <div className="job-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredJobs.length === 0 ? (
             <p className="text-center text-gray-500 col-span-full">
@@ -147,11 +135,7 @@ const Dashboard = () => {
           )}
         </div>
       </div>
-
-      
-
     </>
-
   );
 };
 

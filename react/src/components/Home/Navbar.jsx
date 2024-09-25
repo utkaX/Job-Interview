@@ -6,12 +6,10 @@ import Jobs from "./Jobs";
 import { useContext } from "react";
 import { useAuth } from "../../context/authContext"; 
 
-
 export default function Navbar() {
-  const { isLoggedIn } = useAuth();
+  const { user } = useAuth(); // Get user from auth context
+  const isLoggedIn = Boolean(user); // Determine if the user is logged in
 
-  console.log(isLoggedIn);
-  
   const handleScrollToAbout = () => {
     const element = document.getElementById("about-section");
     if (element) {

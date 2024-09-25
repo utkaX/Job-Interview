@@ -7,6 +7,7 @@ const{
     getAllEmployee,
     getEmployerByCompanyName,
     updateEmployee,
+    getEmployerById,
     deleteEmployee}=require("../controller/employer")
 
 
@@ -15,6 +16,7 @@ router.get("/getAllEmployee",getAllEmployee)
 router.get("getEmployeeByCompanyName/:companyName",getEmployerByCompanyName)
 router.put("/updateEmployee/:id",updateEmployee)
 router.delete("/deleteEmployeeById/:id",deleteEmployee)
+router.get('/:id', getEmployerById);
 
 
 module.exports=router

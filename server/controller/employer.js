@@ -33,6 +33,19 @@ exports.getEmployerByCompanyName = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+exports.getEmployerById = async (req, res) => {
+    try {
+        const employerId = req.params.id; // Extract employer ID from request parameters
+        
+        // Find the employer by ID
+        const employer = await Employer.findById(employerId);
+        if (!employer) return res.status(404).json({ error: 'Employer not found' });
+
+        res.status(200).json(employer);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 
 exports.updateEmployee= async (req, res) => {

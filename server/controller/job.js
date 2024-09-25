@@ -21,14 +21,17 @@ exports.createJobs = async (req, res) => {
     }
 };
 
-exports.getAllJob= async (req, res) => {
+exports.getAllJob = async (req, res) => {
     try {
-        const jobs = await Job.find();
+        // Fetch all jobs and populate the employerId with the companyName
+        const jobs = await Job.find().populate('employerId', 'companyName');
+
         res.status(200).json(jobs);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 
 exports.getJobById = async (req, res) => {
