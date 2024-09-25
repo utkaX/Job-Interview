@@ -37,7 +37,7 @@ const jobSchema = new Schema({
     isLive: {
         type: Boolean,
         default: false
-    }, // Indicates if the job is live
+    }, 
     postedDate: {
         type: Date,
         default: Date.now
@@ -45,7 +45,8 @@ const jobSchema = new Schema({
 
     benefits: [String], // List of job benefits
     jobTags: [String], // Tags or keywords related to the job
-    companyCulture: String // Description of the company culture
+    companyCulture: String,
+    createdAt: { type: Date, default: Date.now }, 
 }, { timestamps: true });
 
 module.exports = mongoose.model('Job', jobSchema);

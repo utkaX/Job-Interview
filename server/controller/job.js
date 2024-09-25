@@ -80,3 +80,16 @@ exports.deleteJobByTitle = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+exports.getRecentLiveJobs = async (req, res) => {
+    try {
+        const liveJobs = await Job.find({ isLive: true })
+            .sort({ postedDate: -1 }) 
+            .limit(6); 
+
+        res.status(200).json(liveJobs);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer id="about-section" className="bg-gray-800  text-white py-8 mt-auto">
+    <footer id="about-section" className="bg-gray-800  text-white py-8 mt-48">
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-between">
           {/* About Us */}
@@ -52,7 +52,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="bg-gray-700 py-4">
+      <div className="bg-gray-700 py-4 mt-16">
         <div className="container mx-auto text-center text-sm">
           <p>&copy; 2024 Career Craft. All rights reserved.</p>
         </div>

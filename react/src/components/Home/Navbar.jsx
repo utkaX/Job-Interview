@@ -3,12 +3,10 @@ import "../../index.css";
 import Logo from "../../common/Logo.jpg";
 import Notifications from "./Notifications";
 import Jobs from "./Jobs";
-import { useContext } from "react";
 import { useAuth } from "../../context/authContext"; 
 
 export default function Navbar() {
-  const { user } = useAuth(); // Get user from auth context
-  const isLoggedIn = Boolean(user); // Determine if the user is logged in
+  const { isLoggedIn } = useAuth(); // Get isLoggedIn from auth context
 
   const handleScrollToAbout = () => {
     const element = document.getElementById("about-section");
