@@ -13,10 +13,7 @@ const quotes = [
     text: "In learning, you will teach, and in teaching, you will learn.",
     author: "Phil Collins",
   },
-  {
-    text: "Knowledge is power. Information is liberating. Education is the premise of progress, in every society, in every family.",
-    author: "Kofi Annan",
-  },
+ 
   {
     text: "The function of good software is to make the complex appear to be simple.",
     author: "Grady Booch",
@@ -26,10 +23,7 @@ const quotes = [
     text: "The best way to predict the future is to invent it.",
     author: "Alan Kay",
   },
-  {
-    text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.",
-    author: "Martin Fowler",
-  },
+ 
   {
     text: "Continuous improvement is better than delayed perfection.",
     author: "Mark Twain",
@@ -51,14 +45,17 @@ const QuoteCarousel = () => {
   }, []);
 
   return (
-    <div className="quote-carousel p-6 rounded-lg transition-transform transform mt-28 mb-20">
-      <p className="text-center text-2xl font-bold text-gray-800 mb-4">
-        "{quotes[currentQuote].text}"
-      </p>
-      <p className="text-center text-gray-600 text-lg">
-        {quotes[currentQuote].author}
-      </p>
-    </div>
+    <div className="quote-carousel flex justify-center items-center p-6 rounded-lg transition-transform transform mt-28 mb-20">
+  <div className="flex flex-col items-center">
+    <p className="text-center text-2xl font-bold text-gray-800 mb-4">
+      "{quotes[currentQuote].text}"
+    </p>
+    <p className="text-center text-gray-600 text-lg">
+      {quotes[currentQuote].author}
+    </p>
+  </div>
+</div>
+
   );
 };
 

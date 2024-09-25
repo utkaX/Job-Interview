@@ -56,7 +56,7 @@ const Signup = () => {
     setErrors({});
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
-      setLoading(true); // Start loading
+      setLoading(true); 
       try {
         const response = await fetch("http://localhost:8080/auth/sendOTP", {
           method: "POST",
@@ -65,7 +65,6 @@ const Signup = () => {
           },
           body: JSON.stringify({ email: formData.email }),
         });
-        console.log(response);
 
         const data = await response.json();
         if (data.success) {
@@ -79,7 +78,6 @@ const Signup = () => {
             },
           });
         } else {
-          console.log(data.message);
           setErrors({ apiError: data.message });
         }
       } catch (error) {

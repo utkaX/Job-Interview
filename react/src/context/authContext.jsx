@@ -1,5 +1,4 @@
-// context/authContext.js
-import  { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext } from "react";
 
 const AuthContext = createContext();
 
@@ -8,14 +7,17 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState('');
 
-  console.log(user)
+  const isLoggedIn = false;
+
   const updateAuth = (user, token) => {
     setUser(user);
     setToken(token);
+    console.log("login done in use context");
+    isLoggedIn = true;
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, updateAuth }}>
+    <AuthContext.Provider value={{ user, token, isLoggedIn, updateAuth }}>
       {children}
     </AuthContext.Provider>
   );

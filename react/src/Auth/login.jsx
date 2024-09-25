@@ -1,56 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/authContext"; // Adjust the path as needed
-import { getCookie } from "../utils/cookie"; // Adjust the path as needed
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [error, setError] = useState(""); // Ensure this is defined correctly
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { updateAuth } = useAuth();
 
-  useEffect(() => {
-    // Check for existing token in cookies
-    const token = getCookie("jobcookie");
-    if (token) {
-      // If token exists, attempt login with token
-      handleTokenLogin(token);
-    }
-  }, []);
-
-  const handleTokenLogin = async (token) => {
-    try {
-      const response = await fetch("http://localhost:8080/auth/verify-token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Token verification failed");
-      }
-      updateAuth(data.user, token); // Set both user and token
-      navigate("/dashboard"); // Redirect to dashboard after successful login
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError("");
-    setSuccess("");
+    setError(""); // Reset error state
     setLoading(true);
-
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
+      const loginResponse = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,19 +23,18 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
+      const loginData = await loginResponse.json();
+      console.log(loginData);
+      
+      if (!loginResponse.ok) {
+        throw new Error(loginData.message || "Auto-login failed");
       }
 
-      setSuccess("Login successful!");
-      updateAuth(data.user, data.token); // Set both user and token
-      setTimeout(() => {
-        navigate("/employee-dashboard"); // Redirect to dashboard after successful login
-      }, 0);
+      updateAuth(loginData.user, loginData.token);
+      navigate("/");
+
     } catch (error) {
-      setError(error.message);
+      setError(error.message); // Set the error message
     } finally {
       setLoading(false);
     }
@@ -125,22 +89,13 @@ function Login() {
             />
           </div>
 
-          {/* Error and Success Messages */}
+          {/* Error Message */}
           {error && (
             <div
               className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
               role="alert"
             >
               <span className="block sm:inline">{error}</span>
-            </div>
-          )}
-
-          {success && (
-            <div
-              className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-              role="alert"
-            >
-              <span className="block sm:inline">{success}</span>
             </div>
           )}
 
