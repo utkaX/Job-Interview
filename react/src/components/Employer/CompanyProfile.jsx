@@ -41,6 +41,44 @@ export default function CompanyProfile() {
     }
   };
 
+  // Handle logo upload
+  const handleLogoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Replace this with your upload logic to cloud storage
+      const uploadedLogoUrl = await uploadLogoToServer(file);
+      setFormData((prevState) => ({
+        ...prevState,
+        logo: uploadedLogoUrl,
+      }));
+    }
+  };
+
+  // Placeholder function for uploading logo to server
+  const uploadLogoToServer = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+  
+    try {
+      const response = await fetch("http://localhost:8080/logo/upload-logo", {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        return data.url; // The URL of the uploaded logo
+      } else {
+        throw new Error("File upload failed");
+      }
+    } catch (error) {
+      console.error("Error uploading logo:", error);
+      alert("Failed to upload logo. Please try again.");
+      return "";
+    }
+  };
+  
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -76,19 +114,16 @@ export default function CompanyProfile() {
 
   // Effect to handle the prompt every 10 minutes
   useEffect(() => {
-    // Check if the profile is already completed
     const profileCompleted = localStorage.getItem("profileCompleted");
 
     if (!profileCompleted) {
-      // If profile is not complete, set an interval for 10 minutes (600,000 ms)
       const promptInterval = setInterval(() => {
         alert("Please complete your company profile!");
       }, 600000); // 10 minutes = 600,000 ms
 
-      // Clear interval when component unmounts or profile is completed
       return () => clearInterval(promptInterval);
     }
-  }, []); // Empty dependency array ensures this effect runs only once
+  }, []);
 
   return (
     <div className="flex">
@@ -203,14 +238,13 @@ export default function CompanyProfile() {
             </div>
           </div>
 
-          {/* Logo */}
+          {/* Logo Upload */}
           <div className="mb-6">
-            <label className="block text-gray-700 font-medium">Logo URL</label>
+            <label className="block text-gray-700 font-medium">Upload Logo</label>
             <input
-              type="text"
-              name="logo"
-              value={formData.logo}
-              onChange={handleChange}
+              type="file"
+              accept="image/*"
+              onChange={handleLogoUpload}
               className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -218,9 +252,9 @@ export default function CompanyProfile() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="bg-blue-500 text-white font-bold py-3 rounded w-full hover:bg-blue-600 transition duration-200"
+            className="bg-blue-500 text-white font-bold py-3 rounded w-full hover:bg-blue-600 transition"
           >
-            Add Employer
+            Save Company Profile
           </button>
         </form>
       </div>

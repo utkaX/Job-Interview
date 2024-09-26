@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useAuth } from "../../context/authContext";
 import Sidebar from "./Sidebar";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ const PostJob = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [jobData, setJobData] = useState({
-    employerId: user._id,
+    employerId: "",
     title: "",
     description: "",
     location: "",
@@ -21,12 +21,44 @@ const PostJob = () => {
     companyCulture: "",
   });
 
+  const fetchEmployerId = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/employee/getEmployerByUserId/${userId}`);
+      const data = await response.json();
+      if (response.ok && data) {
+        return data._id; // assuming _id is in the response
+      } else {
+        console.error("Error fetching employer by userId", data);
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching employer data:", error);
+      return null;
+    }
+  };
+
+
+
+  useEffect(() => {
+    const loadEmployerId = async () => {
+      const employerId = await fetchEmployerId(user._id);
+      if (employerId) {
+        setJobData((prevState) => ({
+          ...prevState,
+          employerId: employerId,
+        }));
+      }
+    };
+
+    loadEmployerId();
+  }, [user._id]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setJobData({ ...jobData, [name]: value });
   };
 
-  const fetchJobTypeId = async (jobTypeTitle) => {
+  const fetchJobTypeByTitle = async (jobTypeTitle) => {
     try {
       const response = await fetch(
         `http://localhost:8080/jobtype/getJobTypeByTitle/${jobTypeTitle}`
@@ -42,35 +74,36 @@ const PostJob = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const jobTypeId = await fetchJobTypeId(jobData.jobType);
-      if (jobTypeId) {
-        const updatedJobData = { ...jobData, jobType: jobTypeId };
-        const response = await fetch("http://localhost:8080/jobs/addJob", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedJobData),
-        });
+        const jobTypeId = await fetchJobTypeByTitle(jobData.jobType);
+        if (jobTypeId) {
+            const updatedJobData = { ...jobData, jobType: jobTypeId };
+            const response = await fetch("http://localhost:8080/jobs/addJob", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(updatedJobData),
+            });
 
-        const result = await response.json();
-        if (response.ok) {
-          console.log("Job added successfully:", result);
-          alert("Job posted successfully!");
-          navigate("/job-dashboard"); // Redirect to job dashboard after successful posting
+            const result = await response.json();
+            if (response.ok) {
+                console.log("Job added successfully:", result);
+                alert("Job posted successfully!");
+                navigate("/job-dashboard"); // Redirect to job dashboard after successful posting
+            } else {
+                console.error("Error adding job:", result);
+                alert("Error adding job.");
+            }
         } else {
-          console.error("Error adding job:", result);
-          alert("Error adding job.");
+            console.error("Job type not found");
+            alert("Job type not found.");
         }
-      } else {
-        console.error("Job type not found");
-        alert("Job type not found.");
-      }
     } catch (error) {
-      console.error("Error:", error);
-      alert("Something went wrong. Please try again later.");
+        console.error("Error:", error);
+        alert("Something went wrong. Please try again later.");
     }
-  };
+};
+
 
   return (
     <div className="flex">

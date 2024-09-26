@@ -49,14 +49,14 @@ function App() {
     "/signup",
     "/login",
     "/verify-otp",
-    "/employee-dashboard"
+    // "/employee-dashboard"
   ]
 
   return (
     <>
-      {!hideNavAndFooter.includes(location.pathname) && <Navbar />}
+      {isJobSeeker && !hideNavAndFooter.includes(location.pathname) && <Navbar />}
       <>
-          {isJobSeeker && <Navbar />}
+          {/* {isJobSeeker && <Navbar />} */}
           {isEmployer && <EmployerNavbar />}
         </>
 
