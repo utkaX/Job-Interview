@@ -23,6 +23,7 @@ import ProtectedRoute from "./Protected";
 import ManageJobs from "./components/Employer/ManageJobs";
 import Sidebar from "./components/Employer/Sidebar";
 import JobCardDetails from "./components/Employer/JobCardDetails";
+import SearchResults from "./components/Home/SearchResults";
 
 function App() {
   const location = useLocation();
@@ -50,6 +51,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         {/* <Route path="/verify-otp" element={<OtpVerification />} /> */}
         <Route path="/" element={<Dashboard />} />
+        <Route path="/search" element={<SearchResults />} />
         <Route path="/JobDetails/:JobId" element={<JobDetails />} />
 
         {/* Protected Routes for Job Seeker */}

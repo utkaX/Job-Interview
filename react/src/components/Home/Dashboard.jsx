@@ -1,20 +1,26 @@
 import { useEffect, useState, useRef } from "react";
 import JobCard from "./JobCard";
-import { Link } from "react-router-dom";
-import QuoteCarousel from "./QuoteCarousel"; // Import the QuoteCarousel
-import { FaSpinner, FaChevronLeft, FaChevronRight } from "react-icons/fa"; // Import icons
+import { Link, useNavigate } from "react-router-dom";
+import QuoteCarousel from "./QuoteCarousel";
+import { FaSpinner, FaChevronLeft, FaChevronRight, FaBriefcase, FaMapMarkerAlt, FaSearch, FaCaretDown } from "react-icons/fa";
 
 const Dashboard = () => {
   const [jobs, setJobs] = useState([]);
-  const [topCompanies, setTopCompanies] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading state
-  const scrollContainerRef = useRef(null); // Ref for the scrollable container
+  const [topCompanies, setTopCompanies] = useState([]); 
+  const [loading, setLoading] = useState(true);
+  const [searchJob, setSearchJob] = useState("");
+  const [searchLocation, setSearchLocation] = useState("");
+  const [experienceYears, setExperienceYears] = useState("");
+  const [error, setError] = useState(null);
+  const scrollContainerRef = useRef(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       await fetchJobs();
       await fetchTopCompanies();
-      setLoading(false); // Set loading to false after fetching
+      setLoading(false);
     };
 
     fetchData();
@@ -55,7 +61,6 @@ const Dashboard = () => {
     }
   };
 
-  // Scroll the container left or right
   const scroll = (direction) => {
     const { current } = scrollContainerRef;
     if (current) {
@@ -64,9 +69,102 @@ const Dashboard = () => {
     }
   };
 
+  const handleSearch = () => {
+    if (!searchJob) {
+      setError("Please enter keywords to search relevant jobs."); // Set error message
+      return;
+    }
+
+    setError(null);
+
+    // Create a query string from search input  
+    const queryParams = new URLSearchParams();
+    if (searchJob) queryParams.append("jobsearch", searchJob);
+    if (searchLocation) queryParams.append("location", searchLocation);
+    if (experienceYears) queryParams.append("experience", experienceYears);
+
+    navigate(`/search?${queryParams.toString()}`);
+  };
+
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4 py-8">
       <QuoteCarousel />
+
+      {/* Search Bar */}
+      <div
+        className={`rounded-full mb-0 flex items-center justify-between border shadow-md p-2 w-full sm:w-2/3 mx-auto ${
+          error ? "border-red-500" : "border-gray-300"
+        }`}
+      >
+        {/* Job search Input */}
+        <div className="relative flex-grow mx-2">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+            <FaSearch />
+          </div>
+          <input
+            type="text"
+            value={searchJob}
+            onChange={(e) => setSearchJob(e.target.value)}
+            className={`pl-10 p-3 w-full text-gray-700 focus:outline-none ${
+              error ? "border-red-500" : ""
+            }`}
+            placeholder="Enter Skills/Designation/Companies"
+          />
+        </div>
+
+        {/* Separator */}
+        <span className="text-gray-400">|</span>
+
+        {/* Experience Dropdown */}
+        <div className="relative flex-grow mx-2">
+          <select
+            value={experienceYears}
+            onChange={(e) => setExperienceYears(e.target.value)}
+            className="p-3 w-full text-gray-700 focus:outline-none appearance-none"
+          >
+            <option value="">Select Experience</option>
+            {["Freshers", "1 year", "2 years", "3 years", "4 years", "5 years"].map((year) => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+            <FaCaretDown />
+          </div>
+        </div>
+
+        {/* Separator */}
+        <span className="text-gray-400">|</span>
+
+        {/* Location Input */}
+        <div className="relative flex-grow mx-2">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+            <FaMapMarkerAlt />
+          </div>
+          <input
+            type="text"
+            value={searchLocation}
+            onChange={(e) => setSearchLocation(e.target.value)}
+            className="p-3 pl-10 w-full text-gray-700 focus:outline-none"
+            placeholder="Location"
+          />
+        </div>
+
+        {/* Search Button */}
+        <button
+          onClick={handleSearch}
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 px-4 ml-2 flex items-center"
+        >
+          <FaSearch className="mr-2" />
+          Search
+        </button>
+      </div>
+
+      {/* Error Message */}
+      {error && (
+        <p className="text-sm text-red-500 text-left ml-60">
+          {error}
+        </p>
+      )}
 
       {/* Loading Indicator */}
       {loading ? (
@@ -77,11 +175,10 @@ const Dashboard = () => {
       ) : (
         <>
           {/* Top Companies Scrollable Section */}
-          <h2 className="text-2xl font-semibold text-center my-8 text-blue-800">
+          <h2 className="text-2xl font-semibold text-center my-8 text-blue-800 mt-20">
             Top Companies
           </h2>
           <div className="relative flex items-center">
-            {/* Left Scroll Button */}
             <button
               onClick={() => scroll("left")}
               className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700"
@@ -89,7 +186,6 @@ const Dashboard = () => {
               <FaChevronLeft />
             </button>
 
-            {/* Scrollable Company List */}
             <div
               ref={scrollContainerRef}
               className="top-companies overflow-x-auto flex space-x-4 py-4 hide-scrollbar"
@@ -110,7 +206,6 @@ const Dashboard = () => {
               )}
             </div>
 
-            {/* Right Scroll Button */}
             <button
               onClick={() => scroll("right")}
               className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700"

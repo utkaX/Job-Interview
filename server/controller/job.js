@@ -1,7 +1,5 @@
 const Job = require('../models/job');
-const { response } = require("express");
-
-
+const Employer = require('../models/employer'); // Add Employer model for company name search
 
 exports.createJobs = async (req, res) => {
     try {
@@ -32,8 +30,6 @@ exports.getAllJob = async (req, res) => {
     }
 };
 
-
-
 exports.getJobById = async (req, res) => {
     try {
         const job = await Job.findById(req.params.id);
@@ -43,8 +39,6 @@ exports.getJobById = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
-
 
 exports.updateJobById = async (req, res) => {
     try {
@@ -64,7 +58,6 @@ exports.updateJobById = async (req, res) => {
         res.status(400).json({ error: error.message }); // Handle any errors
     }
 };
-
 
 exports.deleteJobByTitle = async (req, res) => {
     try {
@@ -91,5 +84,47 @@ exports.getRecentLiveJobs = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// New Search Function
+exports.searchJobs = async (req, res) => {    
+    try {
+        const { location, experience, keyword } = req.query;
+
+        // Base search query for location and live jobs
+        const searchQuery = {
+            isLive: true,
+            ...(location && { location }) // Only add location if provided
+        };
+
+        // Optional filter for experience
+        if (experience) {
+            searchQuery.minExperience = { $lte: parseInt(experience, 10) }; 
+        }
+
+        // Search for job title with the provided keyword
+        const keywordFilter = keyword ? {
+            title: { $regex: keyword, $options: 'i' } // Search only in title
+        } : {};
+
+        // Find jobs matching the search criteria
+        const jobs = await Job.find({
+            ...searchQuery,
+            ...keywordFilter,
+        }).populate({
+            path: 'employerId', 
+            select: 'companyName',
+        });
+
+        // Filter jobs that have valid employer data
+        const filteredJobs = jobs.filter(job => job.employerId);
+
+        console.log(filteredJobs);
+        
+        res.status(200).json(filteredJobs);
+    } catch (error) {
+        console.error('Error in search API:', error);
+        res.status(500).json({ error: 'Failed to fetch jobs' });
     }
 };
