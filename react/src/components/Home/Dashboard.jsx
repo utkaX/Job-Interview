@@ -2,11 +2,19 @@ import { useEffect, useState, useRef } from "react";
 import JobCard from "./JobCard";
 import { Link, useNavigate } from "react-router-dom";
 import QuoteCarousel from "./QuoteCarousel";
-import { FaSpinner, FaChevronLeft, FaChevronRight, FaBriefcase, FaMapMarkerAlt, FaSearch, FaCaretDown } from "react-icons/fa";
+import {
+  FaSpinner,
+  FaChevronLeft,
+  FaChevronRight,
+  FaBriefcase,
+  FaMapMarkerAlt,
+  FaSearch,
+  FaCaretDown,
+} from "react-icons/fa";
 
 const Dashboard = () => {
   const [jobs, setJobs] = useState([]);
-  const [topCompanies, setTopCompanies] = useState([]); 
+  const [topCompanies, setTopCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchJob, setSearchJob] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
@@ -38,6 +46,7 @@ const Dashboard = () => {
           const employerData = await employerResponse.json();
           return {
             ...job,
+            employeeId: job.employerId,
             company: employerData.companyName,
           };
         })
@@ -77,7 +86,7 @@ const Dashboard = () => {
 
     setError(null);
 
-    // Create a query string from search input  
+    // Create a query string from search input
     const queryParams = new URLSearchParams();
     if (searchJob) queryParams.append("jobsearch", searchJob);
     if (searchLocation) queryParams.append("location", searchLocation);
@@ -123,8 +132,17 @@ const Dashboard = () => {
             className="p-3 w-full text-gray-700 focus:outline-none appearance-none"
           >
             <option value="">Select Experience</option>
-            {["Freshers", "1 year", "2 years", "3 years", "4 years", "5 years"].map((year) => (
-              <option key={year} value={year}>{year}</option>
+            {[
+              "Freshers",
+              "1 year",
+              "2 years",
+              "3 years",
+              "4 years",
+              "5 years",
+            ].map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
             ))}
           </select>
           <div className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
@@ -160,11 +178,7 @@ const Dashboard = () => {
       </div>
 
       {/* Error Message */}
-      {error && (
-        <p className="text-sm text-red-500 text-left ml-60">
-          {error}
-        </p>
-      )}
+      {error && <p className="text-sm text-red-500 text-left ml-60">{error}</p>}
 
       {/* Loading Indicator */}
       {loading ? (
@@ -226,15 +240,7 @@ const Dashboard = () => {
                 No jobs found.
               </p>
             ) : (
-              jobs.map((job) => (
-                <Link
-                  to={`JobDetails/${job._id}`}
-                  key={job._id}
-                  className="mb-8"
-                >
-                  <JobCard jobDetails={job} />
-                </Link>
-              ))
+              jobs.map((job) => <JobCard jobDetails={job} />)
             )}
           </div>
         </>

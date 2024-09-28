@@ -6,7 +6,7 @@ import { FaSpinner } from "react-icons/fa";
 const SearchResults = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // State for handling errors
+  const [error, setError] = useState(null); 
 
   const location = useLocation();
 
@@ -25,12 +25,11 @@ const SearchResults = () => {
       try {
         const queryParams = getQueryParams();
         let apiUrl = `http://localhost:8080/jobs/search?`;
-        console.log(queryParams);
+
         if (queryParams.keyword) apiUrl += `keyword=${encodeURIComponent(queryParams.keyword)}&`;
         if (queryParams.location) apiUrl += `location=${encodeURIComponent(queryParams.location)}&`;
         if (queryParams.experience) apiUrl += `experience=${encodeURIComponent(queryParams.experience)}`;
         
-        // Fetch the search results from the API
         const response = await fetch(apiUrl);
         if (!response.ok) {
           throw new Error("Failed to fetch search results");
@@ -42,13 +41,13 @@ const SearchResults = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching search results:", error);
-        setError(error.message); // Set error message in state
+        setError(error.message); 
         setLoading(false);
       }
     };
 
     fetchSearchResults();
-  }, [location.search]); // Re-run effect when query params change
+  }, [location.search]); 
 
   return (
     <div className="container mx-auto px-4 py-8">

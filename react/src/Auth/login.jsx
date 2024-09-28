@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation for redirectTo
 import { useAuth } from "../context/authContext";
 
 function Login() {
@@ -8,7 +8,11 @@ function Login() {
   const [error, setError] = useState(""); 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Get the location object
   const { updateAuth } = useAuth();
+
+  // Extract the redirectTo query parameter from the URL
+  const redirectTo = new URLSearchParams(location.search).get("redirectTo");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,8 +35,14 @@ function Login() {
       }
 
       updateAuth(loginData.user, loginData.token);
-      navigate("/");
-
+      
+      // Redirect to the original page if redirectTo is set, otherwise redirect to the homepage
+      if (redirectTo) {
+        navigate(redirectTo);
+      } else {
+        navigate("/");
+      }
+      
     } catch (error) {
       setError(error.message); // Set the error message
     } finally {

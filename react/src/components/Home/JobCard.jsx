@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { FaBriefcase, FaMapMarkerAlt, FaClock, FaDollarSign } from "react-icons/fa"; // Import icons
+import {
+  FaBriefcase,
+  FaMapMarkerAlt,
+  FaClock,
+  FaDollarSign,
+} from "react-icons/fa"; // Import icons
+import { useAuth } from "../../context/authContext";
 
 const JobCard = (props) => {
   const {
@@ -11,7 +17,29 @@ const JobCard = (props) => {
     experience,
     jobTags,
     _id,
+    employeeId,
   } = props.jobDetails;
+
+  const { user } = useAuth(); // Get the logged-in user's information (assuming employeeId is stored in the user object)
+
+  // Memoize the formatted salary
+  const formattedSalary = useMemo(() => {
+    return salary ? salary.toLocaleString() : "N/A";
+  }, [salary]);
+
+  // Memoize the rendered job tags
+  const renderedJobTags = useMemo(() => {
+    return jobTags && jobTags.length > 0
+      ? jobTags.map((tag, index) => (
+          <span
+            key={index}
+            className="bg-blue-100 text-blue-600 text-xs font-medium px-2 py-1 rounded-full border border-blue-200"
+          >
+            {tag}
+          </span>
+        ))
+      : null;
+  }, [jobTags]);
 
   return (
     <div className="job-card bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-150 border border-gray-200 transform hover:scale-20">
@@ -33,32 +61,29 @@ const JobCard = (props) => {
           <div className="flex items-center text-gray-600 text-sm mb-1">
             <FaClock className="mr-1 text-gray-400" /> {/* Experience Icon */}
             <span>
-              <strong className="font-medium">Experience:</strong> {experience} years
+              <strong className="font-medium">Experience:</strong> {experience}{" "}
+              years
             </span>
           </div>
           <div className="flex items-center">
             <FaDollarSign className="mr-1 text-gray-400" /> {/* Salary Icon */}
             <span>
-              <strong className="font-medium">Salary:</strong> ${salary}
+              <strong className="font-medium">Salary:</strong> $
+              {formattedSalary}
             </span>
           </div>
         </div>
 
         {/* Job Tags */}
-        {jobTags && jobTags.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {jobTags.map((tag, index) => (
-              <span key={index} className="bg-blue-100 text-blue-600 text-xs font-medium px-2 py-1 rounded-full border border-blue-200">
-                {tag}
-              </span>
-            ))}
-          </div>
+        {renderedJobTags && (
+          <div className="mt-4 flex flex-wrap gap-2">{renderedJobTags}</div>
         )}
       </div>
 
       <div className="flex justify-end mt-6">
         <Link
-          to={`JobDetails/${_id}`}
+          to={`/JobDetails/${_id}?company=${company}&companyId=${employeeId}`}
+          state={{ company, companyId: employeeId }}
           className="text-blue-600 hover:text-blue-800 font-semibold transition-colors duration-200 bg-blue-100 hover:bg-blue-200 px-4 py-2 rounded-md shadow"
         >
           View Details

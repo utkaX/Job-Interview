@@ -1,17 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useParams,Link } from "react-router-dom";
+import React, { useEffect, useState, useMemo } from "react";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+import { FaMapMarkerAlt, FaSuitcase, FaMoneyBillWave } from "react-icons/fa";
+import { useAuth } from "../../context/authContext";
 
 const JobDetails = () => {
-  const jobId = useParams();
-  console.log(jobId.JobId)
+  const { JobId } = useParams();
   const [jobDetails, setJobDetails] = useState({});
-  let details;
+  const { user, isLoggedIn } = useAuth(); // Get user and isLoggedIn from AuthContext
+  const navigate = useNavigate(); // Hook for navigating between routes
+  const location = useLocation(); // Use location to get search params
+  const params = new URLSearchParams(location.search); // Use location.search to get params
+  const companypara = params.get("company");
+  const companyIdpar = params.get("companyId");
+
+  const { company, companyId } = location.state || {};
+  if(company !==companypara){
+    setJobDetails(" ");
+  } 
 
   const fetchJobDetails = async () => {
-    // http://localhost:8080/jobs/getJobById/66c0e1bf27339975cbd8018f
-    const URL = "http://localhost:8080/jobs/getJobById/" + jobId.JobId;
+    const URL = "http://localhost:8080/jobs/getJobById/" + JobId;
     const job = await fetch(URL);
-    details = await job.json();
+    const details = await job.json();
     setJobDetails(details);
   };
 
@@ -19,74 +29,153 @@ const JobDetails = () => {
     fetchJobDetails();
   }, []);
 
-  if (!jobDetails)
-    return <div className="text-center text-gray-600">Loading...</div>;
+  const formattedSalary = useMemo(() => {
+    return jobDetails.salary ? jobDetails.salary.toLocaleString() : "N/A";
+  }, [jobDetails.salary]);
 
-  const formattedSalary = jobDetails.salary
-    ? jobDetails.salary.toLocaleString()
-    : "N/A";
-  const formattedDate = jobDetails.postedDate
-    ? new Date(jobDetails.postedDate).toLocaleDateString()
-    : "N/A";
-  const requirements = jobDetails.requirements
-    ? jobDetails.requirements.join(", ")
-    : "N/A";
-  const responsibilities = jobDetails.responsibilities
-    ? jobDetails.responsibilities.join(", ")
-    : "N/A";
-  const benefits = jobDetails.benefits ? jobDetails.benefits.join(", ") : "N/A";
-  const jobTags = jobDetails.jobTags ? jobDetails.jobTags.join(", ") : "N/A";
+  const formattedDate = useMemo(() => {
+    return jobDetails.postedDate
+      ? new Date(jobDetails.postedDate).toLocaleDateString()
+      : "N/A";
+  }, [jobDetails.postedDate]);
+
+  const requirements = useMemo(() => {
+    return jobDetails.requirements ? jobDetails.requirements.join(", ") : "N/A";
+  }, [jobDetails.requirements]);
+
+  const responsibilities = useMemo(() => {
+    return jobDetails.responsibilities ? jobDetails.responsibilities.join(", ") : "N/A";
+  }, [jobDetails.responsibilities]);
+
+  const benefits = useMemo(() => {
+    return jobDetails.benefits ? jobDetails.benefits.join(", ") : "N/A";
+  }, [jobDetails.benefits]);
+
+  const jobTags = useMemo(() => {
+    return jobDetails.jobTags ? jobDetails.jobTags.join(", ") : "N/A";
+  }, [jobDetails.jobTags]);
+
+  const handleLoginRedirect = () => {
+    navigate(`/login?redirectTo=${window.location.pathname}`);
+  };
+
+  const handleRegisterRedirect = () => {
+    navigate(`/register?redirectTo=${window.location.pathname}`);
+  };
+
+  if (!jobDetails.title) return <div className="text-center text-gray-600">Loading...</div>;
 
   return (
-    <div className="max-w-3xl mx-auto p-8 my-16 bg-white rounded-lg shadow-lg border border-gray-200">
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">
-        {jobDetails.title}
-      </h1>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Description:</strong>{" "}
-        {jobDetails.description}
-      </p>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Location:</strong>{" "}
-        {jobDetails.location}
-      </p>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Job Type:</strong>{" "}
-        {jobDetails.jobType}
-      </p>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Category:</strong>{" "}
-        {jobDetails.category}
-      </p>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Salary:</strong> ${formattedSalary}
-      </p>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Posted Date:</strong> {formattedDate}
-      </p>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Requirements:</strong> {requirements}
-      </p>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Responsibilities:</strong>{" "}
-        {responsibilities}
-      </p>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Benefits:</strong> {benefits}
-      </p>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Job Tags:</strong> {jobTags}
-      </p>
-      <p className="text-lg mb-4">
-        <strong className="text-blue-700">Company Culture:</strong>{" "}
-        {jobDetails.companyCulture || "N/A"}
-      </p>
-      <div className="text-center mt-8">
-      <Link to={`/JobDetails/${jobId.JobId}/ApplyJob`}>
-        <button className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-transform transform hover:scale-105">
-          Apply Now
-        </button>
-        </Link>
+    <div className="max-w-5xl mx-auto p-8 my-16 bg-white rounded-lg shadow-lg border border-gray-200">
+      {/* Job Title and Company */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-4xl font-bold text-gray-900">{jobDetails.title}</h1>
+          <p className="text-gray-600 text-sm mb-2"> {company} </p>
+          <p className="flex items-center space-x-2">
+            <FaMapMarkerAlt className="text-blue-500" />
+            <span>{jobDetails.location || "Bengaluru"}</span>
+          </p>
+        </div>
+        <div>
+          <button className="bg-gradient-to-r from-purple-400 to-blue-500 text-white py-2 px-4 rounded-lg shadow hover:shadow-xl hover:scale-105 transition-transform">
+            Send me jobs like this
+          </button>
+        </div>
+      </div>
+
+      {/* Job Details Overview */}
+      <div className="bg-gray-100 p-6 rounded-lg mb-6 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-md">
+        <div className="flex items-center space-x-3">
+          <FaSuitcase className="text-blue-500 text-lg" />
+          <p>
+            <strong className="text-blue-700">Experience:</strong>{" "}
+            {jobDetails.experience || "0-2 years"}
+          </p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <FaMoneyBillWave className="text-green-500 text-lg" />
+          <p>
+            <strong className="text-blue-700">Salary:</strong> ₹ {formattedSalary}
+          </p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <FaMapMarkerAlt className="text-red-500 text-lg" />
+          <p>
+            <strong className="text-blue-700">Location:</strong>{" "}
+            {jobDetails.location || "N/A"}
+          </p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <p>
+            <strong className="text-blue-700">Posted Date:</strong>{" "}
+            {formattedDate}
+          </p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <p>
+            <strong className="text-blue-700">Applicants:</strong>{" "}
+            {jobDetails.applicants || "1334"}
+          </p>
+        </div>
+        <div className="flex items-center space-x-3">
+          <p>
+            <strong className="text-blue-700">Openings:</strong>{" "}
+            {jobDetails.openings || "1"}
+          </p>
+        </div>
+      </div>
+
+      {/* Job Description Section */}
+      <div className="mb-6">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-4">Job Description</h2>
+        <p className="text-gray-800 leading-relaxed">{jobDetails.description}</p>
+      </div>
+
+      {/* Key Information */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">Requirements</h3>
+          <p>{requirements}</p>
+        </div>
+        <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">Responsibilities</h3>
+          <p>{responsibilities}</p>
+        </div>
+        <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">Benefits</h3>
+          <p>{benefits}</p>
+        </div>
+        <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">Job Tags</h3>
+          <p>{jobTags}</p>
+        </div>
+      </div>
+
+      {/* Apply Button Section */}
+      <div className="text-center">
+        {isLoggedIn ? (
+          <Link to={`/JobDetails/${JobId}/ApplyJob`}>
+            <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-transform transform hover:scale-105">
+              Apply Now
+            </button>
+          </Link>
+        ) : (
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={handleLoginRedirect}
+              className="bg-blue-500 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-transform transform hover:scale-105"
+            >
+              Login to Apply
+            </button>
+            <button
+              onClick={handleRegisterRedirect}
+              className="bg-purple-500 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-transform transform hover:scale-105"
+            >
+              Register to Apply
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
