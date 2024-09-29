@@ -63,6 +63,9 @@ app.use("/jobtype", jobTypeRoute);
 const notificationRoute = require("./routes/notification");
 app.use("/notification", notificationRoute);
 
+// const upload_logo=require("./routes/upload_logo")
+// app.use("/logo",upload_logo)
+
 app.listen(port, () => {
   console.log("Connected successfully...");
 });

@@ -12,6 +12,7 @@ import AddProfile from "./components/Jobseeker/AddProfile";
 import Notifications from "./components/Home/Notifications";
 import Footer from "./components/Home/Footer";
 import Navbar from "./components/Home/Navbar";
+import EmployerNavbar from './components/Employer/Navbar';
 import JobDetails from "./components/Home/JobDetails";
 import ApplyJob from "./components/Home/ApplyJob";
 import CompanyProfile from "./components/Employer/CompanyProfile";
@@ -40,11 +41,21 @@ function App() {
     "/employee-profile",
   ];
 
-  const sideBar = ["/signup", "/login", "/verify-otp", "/employee-dashboard"];
+
+  const sideBar=[
+    "/signup",
+    "/login",
+    "/verify-otp",
+    // "/employee-dashboard"
+  ]
 
   return (
     <>
-      {!hideNavAndFooter.includes(location.pathname) && <Navbar />}
+      {isJobSeeker && !hideNavAndFooter.includes(location.pathname) && <Navbar />}
+      <>
+          {/* {isJobSeeker && <Navbar />} */}
+          {isEmployer && <EmployerNavbar />}
+        </>
 
       <Routes>
         <Route path="/signup" element={<Signup />} />
@@ -79,12 +90,15 @@ function App() {
             <Route path="/employee-dashboard" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
             <Route path="/employee-profile" element={<ProtectedRoute><CompanyProfile /></ProtectedRoute>} />
             <Route path="/manage-jobs" element={<ProtectedRoute><ManageJobs /></ProtectedRoute>}/> */}
-            {/* <Navbar/> */}
-            <Route path="/PostJob" element={<PostJob />} />
-            <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
-            <Route path="/employee-profile" element={<CompanyProfile />} />
-            <Route path="/manage-jobs" element={<ManageJobs />} />
-            <Route path="/job/:id" element={<JobCardDetails />} />
+
+
+              {/* <Navbar/> */}
+              <Route path="/PostJob" element={<PostJob />} />
+              <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+              <Route path="/employee-profile" element={<CompanyProfile />} />
+              <Route path="/manage-jobs" element={<ManageJobs />} />
+              <Route path="/job/:id" element={<JobCardDetails />} />
+
           </>
         )}
 
