@@ -1,4 +1,5 @@
-const Employer = require("../models/employer"); // Changed to 'JobSeeker' to match the model name
+const Employer = require("../models/employer");
+const Job = require("../models/job"); 
 const { response } = require("express");
 const mongoose = require('mongoose');
 
@@ -49,6 +50,23 @@ exports.getEmployerByUserId = async (req, res) => {
     }
 };
 
+exports.getEmployerById = async (req, res) => {
+    try {
+        const employerId = req.params.id;
+                
+        const employer = await Employer.findById(employerId);
+        
+        if (!employer) {
+            return res.status(404).json({ error: 'Employer not found' });
+        }
+
+        res.status(200).json(employer);
+    } catch (error) {
+        console.error(error); 
+        res.status(500).json({ error: error.message });
+    }
+};
+
 
 
 
@@ -73,3 +91,56 @@ exports.deleteEmployee=async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
+
+exports.getTopCompanies = async (req, res) => {
+    try {
+        const topCompanies = await Job.aggregate([
+            {
+                $match: { isLive: true } // Filter for active jobs
+            },
+            {
+                $group: {
+                    _id: "$employerId", // Group by employerId
+                    jobCount: { $sum: 1 } // Count the number of jobs
+                }
+            },
+            {
+                $sort: { jobCount: -1 } // Sort by jobCount in descending order
+            },
+            {
+                $limit: 5 // Get top 5 companies
+            },
+            {
+                $addFields: { 
+                    _id: { $toObjectId: "$_id" } // Convert employerId to ObjectId
+                }
+            },
+            {
+                $lookup: {
+                    from: "employers", // The collection name for employers
+                    localField: "_id", // This is now converted to ObjectId
+                    foreignField: "_id", // _id in the employers collection
+                    as: "employerDetails"
+                }
+            },
+            {
+                $unwind: "$employerDetails" // Unwind to flatten the employer details
+            },
+            {
+                $project: {
+                    _id: 0, // Exclude _id from output
+                    companyName: "$employerDetails.companyName",
+                    jobCount: 1
+                }
+            }
+        ]);
+
+        res.status(200).json(topCompanies);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};

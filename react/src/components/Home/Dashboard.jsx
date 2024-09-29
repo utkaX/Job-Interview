@@ -1,157 +1,251 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import JobCard from "./JobCard";
-import Shimmer from "./Shimmer";
-import { Link } from "react-router-dom";
-import ImageSlider from "./ImageSlider"; // Import ImageSlider
-import Navbar from "./Navbar";
-import QuoteCarousel from "./QuoteCarousel"; // Import the QuoteCarousel
+import { Link, useNavigate } from "react-router-dom";
+import QuoteCarousel from "./QuoteCarousel";
+import {
+  FaSpinner,
+  FaChevronLeft,
+  FaChevronRight,
+  FaBriefcase,
+  FaMapMarkerAlt,
+  FaSearch,
+  FaCaretDown,
+} from "react-icons/fa";
 
 const Dashboard = () => {
   const [jobs, setJobs] = useState([]);
-  const [filteredJobs, setFilteredJobs] = useState([]);
-
-  const [searchTitle, setSearchTitle] = useState("");
+  const [topCompanies, setTopCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchJob, setSearchJob] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
+  const [experienceYears, setExperienceYears] = useState("");
+  const [error, setError] = useState(null);
+  const scrollContainerRef = useRef(null);
 
-  const [searchText, setSearchText] = useState("");
-
-  const [selectedTags, setSelectedTags] = useState([]); 
-  const [availableTags, setAvailableTags] = useState([]); 
-  const [images, setImages] = useState([
-    "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  ]);
-
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchJobs();
+    const fetchData = async () => {
+      await fetchJobs();
+      await fetchTopCompanies();
+      setLoading(false);
+    };
+
+    fetchData();
   }, []);
 
   const fetchJobs = async () => {
     try {
-      const response = await fetch("http://localhost:8080/jobs/getAllJob");
+      const response = await fetch("http://localhost:8080/jobs/live");
       const data = await response.json();
-      setJobs(data);
-      setFilteredJobs(data);
-      extractTags(data);
+      const jobsWithEmployer = await Promise.all(
+        data.map(async (job) => {
+          const employerResponse = await fetch(
+            `http://localhost:8080/employer/${job.employerId}`
+          );
+          const employerData = await employerResponse.json();
+          return {
+            ...job,
+            employeeId: job.employerId,
+            company: employerData.companyName,
+          };
+        })
+      );
+
+      setJobs(jobsWithEmployer);
     } catch (error) {
       console.error("Error fetching job data:", error);
     }
   };
 
-  const extractTags = (jobs) => {
-    const allTags = jobs.flatMap((job) => job.jobTags); // Get all job tags
-    const uniqueTags = [...new Set(allTags)]; // Get unique tags
-    setAvailableTags(uniqueTags); // Set available tags
+  const fetchTopCompanies = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/employer/getAllEmployee"
+      );
+      const data = await response.json();
+      setTopCompanies(data);
+    } catch (error) {
+      console.error("Error fetching top companies:", error);
+    }
+  };
+
+  const scroll = (direction) => {
+    const { current } = scrollContainerRef;
+    if (current) {
+      const scrollAmount = direction === "left" ? -200 : 200;
+      current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
   };
 
   const handleSearch = () => {
-    const filtered = jobs.filter((job) =>
-      (searchTitle ? job.title.toLowerCase().includes(searchTitle.toLowerCase()) : true) &&
-      (searchLocation ? job.location.toLowerCase().includes(searchLocation.toLowerCase()) : true)
-
-    // filtered = jobs.filter(
-    //   (job) =>
-    //     job.title.toLowerCase().includes(searchText.toLowerCase()) ||
-    //     job.location.toLowerCase().includes(searchText.toLowerCase())
-    // )
-  );
-
-    if (selectedTags.length > 0) {
-       let filtered = filtered.filter((job) =>
-        job.jobTags.some((tag) => selectedTags.includes(tag))
-      );
+    if (!searchJob) {
+      setError("Please enter keywords to search relevant jobs."); // Set error message
+      return;
     }
 
-    setFilteredJobs(filtered);
-  };
+    setError(null);
 
-  const handleTagChange = (tag) => {
-    setSelectedTags((prevSelectedTags) => {
-      if (prevSelectedTags.includes(tag)) {
-        return prevSelectedTags.filter((t) => t !== tag);
-      } else {
-        return [...prevSelectedTags, tag];
-      }
-    });
+    // Create a query string from search input
+    const queryParams = new URLSearchParams();
+    if (searchJob) queryParams.append("jobsearch", searchJob);
+    if (searchLocation) queryParams.append("location", searchLocation);
+    if (experienceYears) queryParams.append("experience", experienceYears);
+
+    navigate(`/search?${queryParams.toString()}`);
   };
 
   return (
-    <>
-      {/* <Navbar /> */}
+    <div className="container mx-auto px-4 py-8">
+      <QuoteCarousel />
 
-      <div className="container mx-auto px-4">
-        {/* Quote Carousel */}
-        <QuoteCarousel />
-
-        {/* Search Bar */}
-        <div className="search-container mb-8 mx-auto max-w-2xl flex items-center bg-white shadow-lg rounded-full overflow-hidden border border-gray-200">
+      {/* Search Bar */}
+      <div
+        className={`rounded-full mb-0 flex items-center justify-between border shadow-md p-2 w-full sm:w-2/3 mx-auto ${
+          error ? "border-red-500" : "border-gray-300"
+        }`}
+      >
+        {/* Job search Input */}
+        <div className="relative flex-grow mx-2">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+            <FaSearch />
+          </div>
           <input
             type="text"
-            placeholder="Search by Job Title or Location..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            className="px-6 py-3 flex-grow text-gray-700 placeholder-gray-400 border-none focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full"
+            value={searchJob}
+            onChange={(e) => setSearchJob(e.target.value)}
+            className={`pl-10 p-3 w-full text-gray-700 focus:outline-none ${
+              error ? "border-red-500" : ""
+            }`}
+            placeholder="Enter Skills/Designation/Companies"
           />
-          <button
-            type="button"
-            onClick={handleSearch}
-            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-full hover:bg-gradient-to-l transition-all duration-300 ease-in-out"
-          >
-            Search
-          </button>
         </div>
 
-        {/* Job Tags Filter */}
-        <div className="mb-10 mx-auto max-w-2xl">
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">
-            Filter by Job Tags
-          </h3>
-          <div className="flex flex-wrap gap-3">
-            {availableTags.length > 0 ? (
-              availableTags.map((tag) => (
-                <label
-                  key={tag}
-                  className="flex items-center bg-gray-100 px-4 py-2 rounded-full cursor-pointer hover:bg-gray-200 transition-all"
-                >
-                  <input
-                    type="checkbox"
-                    value={tag}
-                    checked={selectedTags.includes(tag)}
-                    onChange={() => handleTagChange(tag)}
-                    className="form-checkbox h-4 w-4 text-blue-600 focus:ring-blue-500 mr-2"
-                  />
-                  <span className="text-gray-700">{tag}</span>
-                </label>
-              ))
-            ) : (
-              <p className="text-gray-500">No tags available for filtering.</p>
-            )}
+        {/* Separator */}
+        <span className="text-gray-400">|</span>
+
+        {/* Experience Dropdown */}
+        <div className="relative flex-grow mx-2">
+          <select
+            value={experienceYears}
+            onChange={(e) => setExperienceYears(e.target.value)}
+            className="p-3 w-full text-gray-700 focus:outline-none appearance-none"
+          >
+            <option value="">Select Experience</option>
+            {[
+              "Freshers",
+              "1 year",
+              "2 years",
+              "3 years",
+              "4 years",
+              "5 years",
+            ].map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+          <div className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
+            <FaCaretDown />
           </div>
         </div>
 
-        {/* Job List */}
-        <div className="job-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredJobs.length === 0 ? (
-            <p className="text-center text-gray-500 col-span-full">
-              No jobs found.
-            </p>
-          ) : (
-            filteredJobs.map((job) => (
-              <Link to={`JobDetails/${job._id}`} key={job._id} className="mb-8">
-                <JobCard jobDetails={job} /> {/* Pass job details to JobCard */}
-              </Link>
-            ))
-          )}
+        {/* Separator */}
+        <span className="text-gray-400">|</span>
+
+        {/* Location Input */}
+        <div className="relative flex-grow mx-2">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+            <FaMapMarkerAlt />
+          </div>
+          <input
+            type="text"
+            value={searchLocation}
+            onChange={(e) => setSearchLocation(e.target.value)}
+            className="p-3 pl-10 w-full text-gray-700 focus:outline-none"
+            placeholder="Location"
+          />
         </div>
+
+        {/* Search Button */}
+        <button
+          onClick={handleSearch}
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 px-4 ml-2 flex items-center"
+        >
+          <FaSearch className="mr-2" />
+          Search
+        </button>
       </div>
 
-      
+      {/* Error Message */}
+      {error && <p className="text-sm text-red-500 text-left ml-60">{error}</p>}
 
-    </>
+      {/* Loading Indicator */}
+      {loading ? (
+        <div className="text-center py-10 flex flex-col items-center">
+          <FaSpinner className="animate-spin text-gray-500 mb-2" size={24} />
+          <p className="text-gray-500">Loading...</p>
+        </div>
+      ) : (
+        <>
+          {/* Top Companies Scrollable Section */}
+          <h2 className="text-2xl font-semibold text-center my-8 text-blue-800 mt-20">
+            Top Companies
+          </h2>
+          <div className="relative flex items-center">
+            <button
+              onClick={() => scroll("left")}
+              className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700"
+            >
+              <FaChevronLeft />
+            </button>
 
+            <div
+              ref={scrollContainerRef}
+              className="top-companies overflow-x-auto flex space-x-4 py-4 hide-scrollbar"
+              style={{ scrollBehavior: "smooth", whiteSpace: "nowrap" }}
+            >
+              {topCompanies.length > 0 ? (
+                topCompanies.map((company, index) => (
+                  <div
+                    key={index}
+                    className="flex-none bg-blue-100 px-4 py-2 rounded-lg shadow-sm text-center text-blue-700 font-semibold"
+                    style={{ minWidth: "200px" }}
+                  >
+                    {company.companyName}
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">No companies found.</p>
+              )}
+            </div>
+
+            <button
+              onClick={() => scroll("right")}
+              className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700"
+            >
+              <FaChevronRight />
+            </button>
+          </div>
+
+          {/* Recent Jobs Title */}
+          <h2 className="text-2xl font-semibold text-center my-8 text-blue-800">
+            Recent Jobs
+          </h2>
+
+          {/* Job List */}
+          <div className="job-list grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {jobs.length === 0 ? (
+              <p className="text-center text-gray-500 col-span-full">
+                No jobs found.
+              </p>
+            ) : (
+              jobs.map((job) => <JobCard jobDetails={job} />)
+            )}
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 

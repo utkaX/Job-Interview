@@ -7,7 +7,7 @@ import {
 import Dashboard from "./components/Home/Dashboard";
 import Signup from "./auth/signup";
 import Login from "./auth/login";
-import OtpVerification from "./auth/verifyOtp";
+// import OtpVerification from "./auth/verifyOtp";
 import AddProfile from "./components/Jobseeker/AddProfile";
 import Notifications from "./components/Home/Notifications";
 import Footer from "./components/Home/Footer";
@@ -24,26 +24,23 @@ import ProtectedRoute from "./Protected";
 import ManageJobs from "./components/Employer/ManageJobs";
 import Sidebar from "./components/Employer/Sidebar";
 import JobCardDetails from "./components/Employer/JobCardDetails";
-
+import SearchResults from "./components/Home/SearchResults";
 
 function App() {
   const location = useLocation();
   const { user } = useAuth();
 
-  const isEmployer = user && user.role === 'employer';
-  const isJobSeeker = user && user.role === 'job_seeker';
-
-  // const isEmployer = true
-  // const isJobSeeker =true
-
+  const isEmployer = user && user.role === "employer";
+  const isJobSeeker = user && user.role === "job_seeker";
 
   const hideNavAndFooter = [
     "/signup",
     "/login",
     "/verify-otp",
     "/employee-dashboard",
-    "/employee-profile"
+    "/employee-profile",
   ];
+
 
   const sideBar=[
     "/signup",
@@ -60,11 +57,13 @@ function App() {
           {isEmployer && <EmployerNavbar />}
         </>
 
-
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/verify-otp" element={<OtpVerification />} />
+        {/* <Route path="/verify-otp" element={<OtpVerification />} /> */}
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/search" element={<SearchResults />} />
+        <Route path="/JobDetails/:JobId" element={<JobDetails />} />
 
         {/* Protected Routes for Job Seeker */}
         {isJobSeeker && (
@@ -76,27 +75,22 @@ function App() {
           //   <Route path="/JobDetails/:JobId/ApplyJob" element={<ProtectedRoute><ApplyJob /></ProtectedRoute>} />
           // </>
 
-         
-            <>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/Notifications" element={<Notifications />} />
-              <Route path="/add-profile" element={<AddProfile />} />
-              <Route path="/JobDetails/:JobId" element={<JobDetails />} />
-              <Route path="/JobDetails/:JobId/ApplyJob" element={<ApplyJob />} />
-            </>
-
+          <>
+            <Route path="/Notifications" element={<Notifications />} />
+            <Route path="/add-profile" element={<AddProfile />} />
+            <Route path="/JobDetails/:JobId/ApplyJob" element={<ApplyJob />} />
+          </>
         )}
-
 
         {/* Protected Routes for Employer */}
         {isEmployer && (
           <>
-\
-          {/* { <Sidebar/>} */}
+            \{/* { <Sidebar/>} */}
             {/* <Route path="/PostJob" element={<ProtectedRoute><PostJob /></ProtectedRoute>} />
             <Route path="/employee-dashboard" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
             <Route path="/employee-profile" element={<ProtectedRoute><CompanyProfile /></ProtectedRoute>} />
             <Route path="/manage-jobs" element={<ProtectedRoute><ManageJobs /></ProtectedRoute>}/> */}
+
 
               {/* <Navbar/> */}
               <Route path="/PostJob" element={<PostJob />} />
@@ -109,7 +103,14 @@ function App() {
         )}
 
         {/* Redirect unauthenticated users to login */}
-        <Route path="*" element={<Navigate to={user ? (isEmployer ? "/employee-dashboard" : "/") : "/login"} />} />
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={user ? (isEmployer ? "/employee-dashboard" : "/") : "/login"}
+            />
+          }
+        />
       </Routes>
       {!hideNavAndFooter.includes(location.pathname) && <Footer />}
     </>

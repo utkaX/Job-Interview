@@ -43,7 +43,7 @@ const jobRoutes = require('./routes/job');
 app.use("/jobs", jobRoutes);
 
 const employeeRoute = require('./routes/employer');
-app.use("/employee", employeeRoute);
+app.use("/employer", employeeRoute);
 
 const jobSeekerRoute = require("./routes/job_seeker.js");
 app.use("/jobSeeker", jobSeekerRoute);

@@ -3,15 +3,11 @@ import "../../index.css";
 import Logo from "../../common/Logo.jpg";
 import Notifications from "./Notifications";
 import Jobs from "./Jobs";
-import { useContext } from "react";
 import { useAuth } from "../../context/authContext"; 
 
-
 export default function Navbar() {
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth(); // Get isLoggedIn from auth context
 
-  console.log(isLoggedIn);
-  
   const handleScrollToAbout = () => {
     const element = document.getElementById("about-section");
     if (element) {
