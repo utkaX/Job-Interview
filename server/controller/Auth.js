@@ -89,8 +89,6 @@ exports.signup = async (req, res) => {
       password,
       role,
     });
-    // await newUser.save();
-    console.log(newUser);
 
     recentOtp.used = true;
     await recentOtp.save();

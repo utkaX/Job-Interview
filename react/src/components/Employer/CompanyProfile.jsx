@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import Sidebar from "./Sidebar";
@@ -7,7 +7,6 @@ export default function CompanyProfile() {
   const location = useLocation();
   const { user } = useAuth(); // Assuming user has the ID
 
-  // Initialize form state
   const [formData, setFormData] = useState({
     userId: user._id,
     companyName: "",
@@ -25,7 +24,6 @@ export default function CompanyProfile() {
     },
   });
 
-  // Handle form changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name in formData.socialMediaLinks) {
@@ -41,45 +39,6 @@ export default function CompanyProfile() {
     }
   };
 
-  // Handle logo upload
-  const handleLogoUpload = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      // Replace this with your upload logic to cloud storage
-      const uploadedLogoUrl = await uploadLogoToServer(file);
-      setFormData((prevState) => ({
-        ...prevState,
-        logo: uploadedLogoUrl,
-      }));
-    }
-  };
-
-  // Placeholder function for uploading logo to server
-  const uploadLogoToServer = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-  
-    try {
-      const response = await fetch("http://localhost:8080/logo/upload-logo", {
-        method: "POST",
-        body: formData,
-      });
-  
-      if (response.ok) {
-        const data = await response.json();
-        return data.url; // The URL of the uploaded logo
-      } else {
-        throw new Error("File upload failed");
-      }
-    } catch (error) {
-      console.error("Error uploading logo:", error);
-      alert("Failed to upload logo. Please try again.");
-      return "";
-    }
-  };
-  
-
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -96,10 +55,6 @@ export default function CompanyProfile() {
         const data = await response.json();
         console.log("Employer added:", data);
         alert("Employer profile added successfully!");
-
-        // Store flag in localStorage to prevent future prompts
-        localStorage.setItem("profileCompleted", "true");
-
         Navigate("/employee-dashboard");
       } else {
         const errorData = await response.json();
@@ -111,19 +66,6 @@ export default function CompanyProfile() {
       alert("Something went wrong. Please try again later.");
     }
   };
-
-  // Effect to handle the prompt every 10 minutes
-  useEffect(() => {
-    const profileCompleted = localStorage.getItem("profileCompleted");
-
-    if (!profileCompleted) {
-      const promptInterval = setInterval(() => {
-        alert("Please complete your company profile!");
-      }, 600000); // 10 minutes = 600,000 ms
-
-      return () => clearInterval(promptInterval);
-    }
-  }, []);
 
   return (
     <div className="flex">
@@ -238,13 +180,14 @@ export default function CompanyProfile() {
             </div>
           </div>
 
-          {/* Logo Upload */}
+          {/* Logo */}
           <div className="mb-6">
-            <label className="block text-gray-700 font-medium">Upload Logo</label>
+            <label className="block text-gray-700 font-medium">Logo URL</label>
             <input
-              type="file"
-              accept="image/*"
-              onChange={handleLogoUpload}
+              type="text"
+              name="logo"
+              value={formData.logo}
+              onChange={handleChange}
               className="border border-gray-300 p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -252,9 +195,9 @@ export default function CompanyProfile() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="bg-blue-500 text-white font-bold py-3 rounded w-full hover:bg-blue-600 transition"
+            className="bg-blue-500 text-white font-bold py-3 rounded w-full hover:bg-blue-600 transition duration-200"
           >
-            Save Company Profile
+            Add Employer
           </button>
         </form>
       </div>

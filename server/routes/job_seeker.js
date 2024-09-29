@@ -5,13 +5,13 @@ const router = express.Router();
 const {
     createJobSeeker,
     getAllJobSeekers,
-    getJobSeekerById,
+    getJobSeekerByUserId,
     updateJobSeekerById,
     deleteJobSeeker} = require("../controller/job_seeker");
 
 router.post("/addjobseeker",createJobSeeker);
 router.get("/getAlljobseeker",getAllJobSeekers);
-router.get("/getJobSeekerById/:id",getJobSeekerById);
+router.get("/getJobSeekerById/:id",getJobSeekerByUserId);
 router.put("/updateJobSeekerById/:id",updateJobSeekerById);
 router.delete("/deleteJobSeeker/:id",deleteJobSeeker);
 

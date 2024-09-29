@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation for redirectTo
+import { useNavigate, useLocation } from "react-router-dom"; 
 import { useAuth } from "../context/authContext";
 
 function Login() {
@@ -8,11 +8,12 @@ function Login() {
   const [error, setError] = useState(""); 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // Get the location object
+  const location = useLocation(); 
   const { updateAuth } = useAuth();
 
-  // Extract the redirectTo query parameter from the URL
+  // Extract the redirectTo query parameter and state values from the location object
   const redirectTo = new URLSearchParams(location.search).get("redirectTo");
+  const { company, companyId } = location.state || {}; // Destructure company and companyId
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -36,15 +37,15 @@ function Login() {
 
       updateAuth(loginData.user, loginData.token);
       
-      // Redirect to the original page if redirectTo is set, otherwise redirect to the homepage
+      // Redirect to the specified location
       if (redirectTo) {
-        navigate(redirectTo);
+        navigate(redirectTo, { state: { company, companyId } }); // Pass company and companyId
       } else {
         navigate("/");
       }
       
     } catch (error) {
-      setError(error.message); // Set the error message
+      setError(error.message); 
     } finally {
       setLoading(false);
     }
@@ -63,10 +64,7 @@ function Login() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email Input */}
           <div>
-            <label
-              className="block text-sm font-medium text-gray-700"
-              htmlFor="email"
-            >
+            <label className="block text-sm font-medium text-gray-700" htmlFor="email">
               Email
             </label>
             <input
@@ -82,10 +80,7 @@ function Login() {
 
           {/* Password Input */}
           <div>
-            <label
-              className="block text-sm font-medium text-gray-700"
-              htmlFor="password"
-            >
+            <label className="block text-sm font-medium text-gray-700" htmlFor="password">
               Password
             </label>
             <input
@@ -101,10 +96,7 @@ function Login() {
 
           {/* Error Message */}
           {error && (
-            <div
-              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-              role="alert"
-            >
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
               <span className="block sm:inline">{error}</span>
             </div>
           )}
@@ -138,3 +130,4 @@ function Login() {
 }
 
 export default Login;
+  

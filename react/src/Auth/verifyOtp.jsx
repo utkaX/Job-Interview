@@ -31,7 +31,7 @@ function OtpVerification() {
         },
         body: JSON.stringify({ email, password, role, otp }),
       });
-      // console.log("signup req send");
+      console.log("signup req send");
       const data = await response.json();
       console.log(data);
       if (!response.ok) {
@@ -49,7 +49,7 @@ function OtpVerification() {
       });
 
       const loginData = await loginResponse.json();
-      // console.log(loginData);
+      console.log(loginData);
       if (!loginResponse.ok) {
         throw new Error(loginData.message || "Auto-login failed");
       }

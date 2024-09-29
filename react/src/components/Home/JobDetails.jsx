@@ -9,25 +9,29 @@ const JobDetails = () => {
   const { user, isLoggedIn } = useAuth(); // Get user and isLoggedIn from AuthContext
   const navigate = useNavigate(); // Hook for navigating between routes
   const location = useLocation(); // Use location to get search params
-  const params = new URLSearchParams(location.search); // Use location.search to get params
+  const params = new URLSearchParams(location.search);
   const companypara = params.get("company");
   const companyIdpar = params.get("companyId");
 
   const { company, companyId } = location.state || {};
-  if(company !==companypara){
-    setJobDetails(" ");
-  } 
 
   const fetchJobDetails = async () => {
-    const URL = "http://localhost:8080/jobs/getJobById/" + JobId;
-    const job = await fetch(URL);
-    const details = await job.json();
-    setJobDetails(details);
+    try {
+      const response = await fetch(`http://localhost:8080/jobs/getJobById/${JobId}`);
+      if (!response.ok) throw new Error("Failed to fetch job details");
+      const details = await response.json();
+      setJobDetails(details);
+    } catch (error) {
+      console.error("Error fetching job details:", error);
+      // Handle the error, such as displaying a message or redirecting
+    }
   };
 
   useEffect(() => {
-    fetchJobDetails();
-  }, []);
+    if (JobId) {
+      fetchJobDetails();
+    }
+  }, [JobId]);
 
   const formattedSalary = useMemo(() => {
     return jobDetails.salary ? jobDetails.salary.toLocaleString() : "N/A";
@@ -56,11 +60,21 @@ const JobDetails = () => {
   }, [jobDetails.jobTags]);
 
   const handleLoginRedirect = () => {
-    navigate(`/login?redirectTo=${window.location.pathname}`);
+    navigate(`/login?redirectTo=${encodeURIComponent(window.location.pathname + window.location.search)}`, {
+      state: {
+        company,
+        companyId,
+      },
+    });
   };
 
   const handleRegisterRedirect = () => {
-    navigate(`/register?redirectTo=${window.location.pathname}`);
+    navigate(`/register?redirectTo=${encodeURIComponent(window.location.pathname + window.location.search)}`, {
+      state: {
+        company,
+        companyId,
+      },
+    });
   };
 
   if (!jobDetails.title) return <div className="text-center text-gray-600">Loading...</div>;
@@ -71,7 +85,7 @@ const JobDetails = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-4xl font-bold text-gray-900">{jobDetails.title}</h1>
-          <p className="text-gray-600 text-sm mb-2"> {company} </p>
+          <p className="text-gray-600 text-sm mb-2">{company}</p>
           <p className="flex items-center space-x-2">
             <FaMapMarkerAlt className="text-blue-500" />
             <span>{jobDetails.location || "Bengaluru"}</span>
@@ -89,8 +103,7 @@ const JobDetails = () => {
         <div className="flex items-center space-x-3">
           <FaSuitcase className="text-blue-500 text-lg" />
           <p>
-            <strong className="text-blue-700">Experience:</strong>{" "}
-            {jobDetails.experience || "0-2 years"}
+            <strong className="text-blue-700">Experience:</strong> {jobDetails.experience || "0-2 years"}
           </p>
         </div>
         <div className="flex items-center space-x-3">
@@ -102,26 +115,22 @@ const JobDetails = () => {
         <div className="flex items-center space-x-3">
           <FaMapMarkerAlt className="text-red-500 text-lg" />
           <p>
-            <strong className="text-blue-700">Location:</strong>{" "}
-            {jobDetails.location || "N/A"}
+            <strong className="text-blue-700">Location:</strong> {jobDetails.location || "N/A"}
           </p>
         </div>
         <div className="flex items-center space-x-3">
           <p>
-            <strong className="text-blue-700">Posted Date:</strong>{" "}
-            {formattedDate}
+            <strong className="text-blue-700">Posted Date:</strong> {formattedDate}
           </p>
         </div>
         <div className="flex items-center space-x-3">
           <p>
-            <strong className="text-blue-700">Applicants:</strong>{" "}
-            {jobDetails.applicants || "1334"}
+            <strong className="text-blue-700">Applicants:</strong> {jobDetails.applicants || "1334"}
           </p>
         </div>
         <div className="flex items-center space-x-3">
           <p>
-            <strong className="text-blue-700">Openings:</strong>{" "}
-            {jobDetails.openings || "1"}
+            <strong className="text-blue-700">Openings:</strong> {jobDetails.openings || "1"}
           </p>
         </div>
       </div>
@@ -155,7 +164,11 @@ const JobDetails = () => {
       {/* Apply Button Section */}
       <div className="text-center">
         {isLoggedIn ? (
-          <Link to={`/JobDetails/${JobId}/ApplyJob`}>
+          <Link 
+          to={`/JobDetails/${encodeURIComponent(JobId)}/ApplyJob`} 
+          state={{ jobId: encodeURIComponent(JobId) }} // Encode jobId for the state
+        >
+
             <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-transform transform hover:scale-105">
               Apply Now
             </button>

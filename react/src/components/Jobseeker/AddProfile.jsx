@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useLocation,useNavigate  } from "react-router-dom";
-import { useAuth } from "../../context/authContext"; 
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/authContext";
 
 import ProfileStep1 from "./ProfileStep1";
 import ProfileStep2 from "./ProfileStep2";
@@ -9,22 +9,16 @@ import ProfileStep4 from "./ProfileStep4";
 
 const AddProfile = () => {
   const location = useLocation();
-  const { name } = location.state || {};
-  
-  // Get user from context
-  const { user } = useAuth();
+  const { name } = location.state || {}; 
+  const { user } = useAuth(); 
   const navigate = useNavigate();
 
-  
-  useEffect(() => {
-    if (user) {
-      console.log("User ID:", user._id);  // Log full user object or its properties
-    } else {
-      console.log("User is not defined yet.");
-    }
-  }, [user]);
+  if (!user) {
+    console.error("User not found. Please log in.");
+    navigate("/login"); 
+    return null; 
+  }
 
-  // Function to split name
   const splitName = (fullName) => {
     const nameParts = fullName?.trim().split(" ");
     const firstName = nameParts[0] || "";
@@ -32,17 +26,16 @@ const AddProfile = () => {
     return { firstName, lastName };
   };
 
-  // Set initial form data, handling if `user` or its properties are undefined
   const [formData, setFormData] = useState({
-    user: user._id,  
-    firstName: user?.firstName || "", 
-    lastName: user?.lastName || "", 
+    user: user._id,
+    firstName: user.firstName || "",
+    lastName: user.lastName || "",
     bio: "",
     resume: "",
     skills: [],
     education: [],
     experience: [],
-    location: user?.location || "", 
+    location: user.location || "",
     profilePicture: "",
     availability: "",
     preferredJobLocations: [],
@@ -79,7 +72,6 @@ const AddProfile = () => {
       }
 
       const data = await response.json();
-      console.log("Profile submitted successfully:", data);
       navigate("/");
     } catch (error) {
       console.error("Error submitting profile:", error);

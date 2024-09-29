@@ -1,5 +1,6 @@
 const JobSeeker = require("../models/jobseeker"); 
 const { response } = require("express");
+const mongoose = require('mongoose');
 
 
 exports.createJobSeeker = async (req, res) => {
@@ -22,15 +23,32 @@ exports.getAllJobSeekers = async (req, res) => {
 };
 
 
-exports.getJobSeekerById = async (req, res) => {
+
+exports.getJobSeekerByUserId = async (req, res) => {
+    const userId = req.params.id; // Assuming your URL uses /:id instead of /:userId
+
+    // Check if the provided userId is a valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID format' });
+    }
+
     try {
-        const jobSeeker = await JobSeeker.findById(req.params.id);
-        if (!jobSeeker) return res.status(404).json({ message: 'Job seeker not found' });
+        const jobSeeker = await JobSeeker.findOne({ user: userId })
+            .populate('user') // Populate the User data if needed
+            .exec(); // Execute the query
+
+        if (!jobSeeker) {
+            return res.status(404).json({ message: 'Job seeker not found' });
+        }
+
         res.status(200).json(jobSeeker);
     } catch (err) {
-        res.status(500).json({ message: 'Error fetching job seeker', error: err.message });
+        console.error('Error fetching job seeker:', err);
+        res.status(500).json({ message: 'Server error while fetching job seeker', error: err.message });
     }
 };
+
+
 
 // Update a job seeker by ID
 exports.updateJobSeekerById = async (req, res) => {

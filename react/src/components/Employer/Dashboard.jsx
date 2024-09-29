@@ -9,7 +9,7 @@ const Dashboard = () => {
   return (
     <div className="h-screen flex flex-col">
       {/* Full-width Navbar */}
-      {/* <Navbar /> */}
+      <Navbar />
       
       <div className="flex flex-grow">
         {/* Sidebar always visible, taking part of the left side */}

@@ -16,7 +16,7 @@ const SearchResults = () => {
     return {
       keyword: searchParams.get("jobsearch") || "",
       location: searchParams.get("location") || "",
-      experience: searchParams.get("experience") || ""
+      experience: searchParams.get("experience") || "",
     };
   };
 

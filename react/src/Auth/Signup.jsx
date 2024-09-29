@@ -127,7 +127,7 @@ const Signup = () => {
       if (formData.role === "employer") {
         navigate("/employee-dashboard", { state: { name: formData.name } });
       } else {
-        navigate("/", { state: { name: formData.name } });
+        navigate("/add-profile", { state: { name: formData.name } });
       }
     } catch (error) {
       setOtpError(error.message);

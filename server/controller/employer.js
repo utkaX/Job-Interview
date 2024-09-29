@@ -1,7 +1,6 @@
 const Employer = require("../models/employer");
 const Job = require("../models/job"); 
 const { response } = require("express");
-const mongoose = require('mongoose');
 
 exports.createEmployee=async (req, res) => {
     try {
@@ -22,26 +21,12 @@ exports.getAllEmployee=async (req, res) => {
     }
 }
 
-// exports.getEmployerById = async (req, res) => {
-//     try {
-//         const { id } = req.params; // Extract id from request parameters
-        
-//         // Find the employer by id
-//         const employer = await Employer.findById(id);
-//         if (!employer) return res.status(404).json({ error: 'Employer not found' });
-
-//         res.status(200).json(employer);
-//     } catch (error) {
-//         res.status(500).json({ error: error.message });
-//     }
-// };
-
-exports.getEmployerByUserId = async (req, res) => {
+exports.getEmployerByCompanyName = async (req, res) => {
     try {
-        const { id } = req.params; // Extract userId from request parameters
-
-
-        const employer = await Employer.findOne({ userId: id });
+        const { companyName } = req.params; // Extract companyName from request parameters
+        
+        // Find the employer by companyName
+        const employer = await Employer.findOne({ companyName });
         if (!employer) return res.status(404).json({ error: 'Employer not found' });
 
         res.status(200).json(employer);
@@ -66,10 +51,6 @@ exports.getEmployerById = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-
-
-
-
 
 
 exports.updateEmployee= async (req, res) => {
