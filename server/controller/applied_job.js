@@ -3,40 +3,29 @@ const { response } = require("express");
 
 // Create an applied job with validation
 exports.createAppliedJob = async (req, res) => {
+  console.log("Body:", req.body); // Log incoming data
+
   try {
-    const { jobSeekerId, jobId, source, notes, coverLetter } = req.body;
-    const resume = req.file;
-    
-    // if (!jobSeekerId || !jobId || !resume) {
-    //   return res.status(400).json({ message: 'jobSeekerId, jobId, and resume are required.' });
-    // }
-    
-    // Create a new applied job
-    const newAppliedJob = new AppliedJob({
-      jobSeekerId,
-      jobId,
-      source,
-      notes,
-      coverLetter,
-      resume: "resume",
-    });
-    
-    
-    console.log(jobSeekerId);
-    console.log(jobId);
-    
-    
-    const savedAppliedJob = await AppliedJob.create(newAppliedJob);
-    res.status(201).json(savedAppliedJob);
-    console.log("hello from the top");
+      const { jobSeekerId, jobId, coverLetter, source, notes ,resumeUrl} = req.body;
 
+      // Construct new applied job data
+      const newAppliedJob = {
+          jobSeekerId,
+          jobId,
+          coverLetter,
+          source,
+          notes,
+          resume:resumeUrl,
+      };
 
+      const savedAppliedJob = await AppliedJob.create(newAppliedJob);
+      res.status(201).json(savedAppliedJob);
   } catch (error) {
-    res.status(400).json({ message: 'Error creating job application', error: error.message });
-    console.log(error.message);
-    
+      console.error("Error creating job application:", error);
+      res.status(400).json({ message: 'Error creating job application', error: error.message });
   }
 };
+
 
 exports.getAllAppliedJobs = async (req, res) => {
   try {
