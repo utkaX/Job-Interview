@@ -11,7 +11,6 @@ function Login() {
   const location = useLocation(); 
   const { updateAuth } = useAuth();
 
-  // Extract the redirectTo query parameter and state values from the location object
   const redirectTo = new URLSearchParams(location.search).get("redirectTo");
   const { company, companyId } = location.state || {}; // Destructure company and companyId
 
