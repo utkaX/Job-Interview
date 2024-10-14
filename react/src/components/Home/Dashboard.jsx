@@ -28,6 +28,11 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  // Reset scroll position to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const fetchJobs = async () => {
     try {
       const response = await fetch("http://localhost:8080/jobs/live");

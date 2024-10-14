@@ -12,7 +12,7 @@ export default function Company() {
   const companyId = location.state?.companyId
     ? decodeURIComponent(location.state.companyId)
     : null;
-    console.log(companyId);
+  console.log(companyId);
 
   const fetchEmployees = async () => {
     try {
@@ -31,6 +31,7 @@ export default function Company() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (companyId) {
       fetchEmployees();
     }
@@ -38,17 +39,17 @@ export default function Company() {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <CompanyHeader company = {employees}/>
+      <CompanyHeader company={employees} />
       <CompanyTabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
       {selectedTab === "overview" && (
         <div>
-          <CompanyAbout company = {employees}/>
+          <CompanyAbout company={employees} />
         </div>
       )}
 
       {selectedTab === "jobs" && (
-        <JobListings companyId = {employees} company = {employees}/>
+        <JobListings companyId={employees} company={employees} />
       )}
     </div>
   );

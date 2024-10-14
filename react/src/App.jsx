@@ -26,6 +26,8 @@ import JobCardDetails from "./components/Employer/JobCardDetails";
 import SearchResults from "./components/Home/SearchResults";
 import Company from "./components/Company/Company";
 import AppliedJobs from "./components/AppliedJobs/AppliedJobs";
+import InterviewDetails from "./components/AppliedJobs/InterviewDetails";
+import SavedJob from "./components/Home/SavedJob";
 
 function App() {
   const location = useLocation();
@@ -58,6 +60,11 @@ function App() {
         <Route path="/company/:CompanyID" element={<Company />} />
         <Route path="/appliedjobs" element={<AppliedJobs />} />
         <Route path="/Notifications" element={<Notifications />} />
+        <Route
+          path="/interview-details/:AppliedJobId"
+          element={<InterviewDetails />}
+        />
+         <Route path="/saved-jobs" element={<SavedJob />} />
 
         {/* Protected Routes for Job Seeker */}
         {isJobSeeker && (

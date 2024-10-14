@@ -2,19 +2,31 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { FaMapMarkerAlt, FaSuitcase, FaMoneyBillWave } from "react-icons/fa";
 import { useAuth } from "../../context/authContext";
+import SaveJobButton from "./SaveJobButton";
 
 const JobDetails = () => {
   const { JobId } = useParams();
-  const [jobDetails, setJobDetails] = useState({});
+  const [jobDetails, setJobDetails] = useState({
+    title: "",
+    location: "",
+    experience: "",
+    salary: 0,
+    postedDate: "",
+    applicants: 0,
+    openings: 0,
+    description: "",
+    requirements: [],
+    responsibilities: [],
+    benefits: [],
+    jobTags: [],
+  });
+
   const { user, isLoggedIn } = useAuth(); // Get user and isLoggedIn from AuthContext
   const navigate = useNavigate(); // Hook for navigating between routes
   const location = useLocation(); // Use location to get search params
   const params = new URLSearchParams(location.search);
-  const companypara = params.get("company");
-  const companyIdpar = params.get("companyId");
-
-  const { company, companyId } = location.state || {};
-  console.log(companyId);
+  const company = params.get("company");
+  const companyId = params.get("companyId");
 
   const fetchJobDetails = async () => {
     try {
@@ -116,11 +128,7 @@ const JobDetails = () => {
             <span>{jobDetails.location || "Bengaluru"}</span>
           </p>
         </div>
-        <div>
-          <button className="bg-gradient-to-r from-purple-400 to-blue-500 text-white py-2 px-4 rounded-lg shadow hover:shadow-xl hover:scale-105 transition-transform">
-            Send me jobs like this
-          </button>
-        </div>
+        <div>{isLoggedIn && <SaveJobButton jobId={JobId} />}</div>
       </div>
 
       {/* Job Details Overview */}
@@ -215,13 +223,13 @@ const JobDetails = () => {
           <div className="flex justify-center space-x-4">
             <button
               onClick={handleLoginRedirect}
-              className="bg-blue-500 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-transform transform hover:scale-105"
+              className="bg-blue-500 text-white py-3 px-6 rounded-full"
             >
               Login to Apply
             </button>
             <button
               onClick={handleRegisterRedirect}
-              className="bg-purple-500 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-transform transform hover:scale-105"
+              className="bg-green-500 text-white py-3 px-6 rounded-full"
             >
               Register to Apply
             </button>

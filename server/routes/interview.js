@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
-
-const{
+const {
     createInterview,
-    getAllInterview,
+    getAllInterviews,
     getInterviewById,
     updateInterviewById,
-    deleteInterviewById}=require("../controller/interview")
+    deleteInterviewById,
+    getInterviewsByAppliedJobId
+} = require("../controller/interview"); 
 
+router.post("/create", createInterview); 
+router.get("/", getAllInterviews); 
+router.get("/:id", getInterviewById);
+router.put("/:id", updateInterviewById); 
+router.delete("/:id", deleteInterviewById);
+router.get("/appliedJob/:appliedJobId", getInterviewsByAppliedJobId); 
 
-router.post("/createInterview",createInterview)
-router.get("/getAllInterview",getAllInterview)
-router.get("/getInterviewById/:id",getInterviewById)
-router.put("/updateInterviewById/:id",updateInterviewById)
-router.delete("/deleteInterviewById/:id",deleteInterviewById)
-
-
-module.exports=router
+module.exports = router;

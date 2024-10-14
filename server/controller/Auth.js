@@ -15,9 +15,7 @@ exports.sendOTP = async (req, res) => {
       });
     }
 
-    // Await the result of User.findOne
     const checkUserpresent = await User.findOne({ email });
-    console.log(checkUserpresent);
 
     if (checkUserpresent) {
       return res.status(401).json({

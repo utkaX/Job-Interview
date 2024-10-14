@@ -71,8 +71,9 @@ const jobSeekerSchema = new Schema(
     education: [educationSchema],
     location: String,
     profilePicture: String,
-    preferredJobLocations: [String], // Preferred job locations
+    preferredJobLocations: [String],
     jobTypePreferences: Object,
+    savedJobs: [{ type: Schema.Types.ObjectId, ref: "Job" }], // New field for saved jobs
   },
   { timestamps: true }
 );

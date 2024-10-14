@@ -36,7 +36,6 @@ exports.getJobTypeById = async (req, res) => {
   try {
     const { id } = req.params;
     const jobType = await JobType.findById(id);
-    console.log(jobType);
     if (!jobType) {
       return res.status(404).json({ message: "Job type not found" });
     }

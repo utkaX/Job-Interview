@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaBriefcase,
   FaCalendarCheck,
   FaBuilding,
   FaCheckCircle,
   FaTimesCircle,
-  FaSpinner, // Import the spinner icon
+  FaSpinner,
 } from "react-icons/fa";
 
 const JobCard = ({ appliedJob }) => {
   const [jobDetails, setJobDetails] = useState(null);
   const [employerDetails, setEmployerDetails] = useState(null);
-  const [jobType, setJobType] = useState(null); // State for job type
-  const [loading, setLoading] = useState(true); // Loading state
-  const { jobId, appliedDate, status } = appliedJob;
+  const [jobType, setJobType] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { jobId, appliedDate, status, _id: applicationId } = appliedJob; // Destructure application ID here
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
-        setLoading(true); // Set loading to true before fetching
+        setLoading(true);
         const response = await fetch(
           `http://localhost:8080/jobs/getJobById/${jobId}`
         );
@@ -26,20 +28,19 @@ const JobCard = ({ appliedJob }) => {
           throw new Error("Error fetching job details");
         }
         const data = await response.json();
-        setJobDetails(data); // Set job details first
+        setJobDetails(data);
 
-        // Fetch job type based on the jobType field from jobDetails
         const jobTypeResponse = await fetch(
           `http://localhost:8080/jobtype/getJobTypeById/${data.jobType}`
         );
         if (jobTypeResponse.ok) {
-          const jobTypeData = await jobTypeResponse.json(); // Corrected from `response.json()` to `jobTypeResponse.json()`
-          setJobType(jobTypeData.title); // Assume the job type title is in the "title" field
+          const jobTypeData = await jobTypeResponse.json();
+          setJobType(jobTypeData.title);
         }
       } catch (error) {
         console.error("Error fetching job details:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
@@ -49,7 +50,7 @@ const JobCard = ({ appliedJob }) => {
   }, [jobId]);
 
   const fetchEmployerDetails = async () => {
-    if (!jobDetails || !jobDetails.employerId) return; // Ensure jobDetails is defined
+    if (!jobDetails || !jobDetails.employerId) return;
     try {
       const response = await fetch(
         `http://localhost:8080/employer/${jobDetails.employerId}`
@@ -65,10 +66,9 @@ const JobCard = ({ appliedJob }) => {
   };
 
   useEffect(() => {
-    fetchEmployerDetails(); // Fetch employer details only when jobDetails is updated
+    fetchEmployerDetails();
   }, [jobDetails]);
 
-  // Show the spinner icon while loading
   if (loading) {
     return (
       <div className="text-center text-gray-600">
@@ -86,6 +86,12 @@ const JobCard = ({ appliedJob }) => {
     );
   }
 
+  const handleInterviewDetailsClick = (appliedJob) => {
+    navigate(`/interview-details/${appliedJob._id}`, {
+      state: { appliedJob: appliedJob },
+    });
+  };
+
   return (
     <div className="flex flex-col bg-white shadow-lg rounded-lg p-6 mb-6 border border-gray-200 hover:shadow-xl transition-shadow duration-300 ease-in-out">
       <div className="flex-1">
@@ -99,13 +105,16 @@ const JobCard = ({ appliedJob }) => {
         </p>
         <p className="text-md mb-1 flex items-center text-gray-700">
           <FaBriefcase className="mr-2 text-gray-500" />
-          <strong>Job Type:</strong> {jobType || "Loading..."}{" "}
-          {/* Use jobType state */}
+          <strong>Job Type:</strong> {jobType || "Loading..."}
         </p>
         <p className="text-md mb-1 flex items-center text-gray-700">
           <FaCalendarCheck className="mr-2 text-gray-500" />
           <strong>Applied on:</strong>{" "}
           {new Date(appliedDate).toLocaleDateString()}
+        </p>
+        <p className="text-md mb-1 flex items-center text-gray-700">
+          <strong>Application ID:</strong> {applicationId}{" "}
+          {/* Display Application ID here */}
         </p>
         <p
           className={`text-md font-medium flex items-center ${
@@ -121,7 +130,8 @@ const JobCard = ({ appliedJob }) => {
           ) : (
             <FaCheckCircle className="mr-2" />
           )}
-          <strong>Status:</strong> {status === "rejected" ? "Rejected" : status}
+          <strong>Status : </strong>{" "}
+          {status === "rejected" ? "Rejected" : status}
         </p>
         {status === "shortlisted" && (
           <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-md">
@@ -134,9 +144,7 @@ const JobCard = ({ appliedJob }) => {
       {status === "shortlisted" && (
         <button
           className="mt-4 bg-gradient-to-r from-green-400 to-green-600 text-white px-5 py-2 rounded-md hover:bg-green-500 transition duration-200"
-          onClick={() => {
-            window.location.href = `/interview-details/${appliedJob._id}`; // Adjust the path as needed
-          }}
+          onClick={() => handleInterviewDetailsClick(appliedJob)}
         >
           View Interview Details
         </button>
