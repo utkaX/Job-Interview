@@ -20,14 +20,11 @@ const JobCard = (props) => {
     employeeId,
   } = props.jobDetails;
 
-  const { user } = useAuth(); // Get the logged-in user's information (assuming employeeId is stored in the user object)
-
-  // Memoize the formatted salary
+  const { user } = useAuth(); 
   const formattedSalary = useMemo(() => {
     return salary ? salary.toLocaleString() : "N/A";
   }, [salary]);
 
-  // Memoize the rendered job tags
   const renderedJobTags = useMemo(() => {
     return jobTags && jobTags.length > 0
       ? jobTags.map((tag, index) => (

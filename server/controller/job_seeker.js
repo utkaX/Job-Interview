@@ -25,17 +25,16 @@ exports.getAllJobSeekers = async (req, res) => {
 
 
 exports.getJobSeekerByUserId = async (req, res) => {
-    const userId = req.params.id; // Assuming your URL uses /:id instead of /:userId
+    const userId = req.params.id;
 
-    // Check if the provided userId is a valid MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid user ID format' });
     }
 
     try {
         const jobSeeker = await JobSeeker.findOne({ user: userId })
-            .populate('user') // Populate the User data if needed
-            .exec(); // Execute the query
+            .populate('user')
+            .exec();
 
         if (!jobSeeker) {
             return res.status(404).json({ message: 'Job seeker not found' });

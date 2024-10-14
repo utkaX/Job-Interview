@@ -25,6 +25,7 @@ import Sidebar from "./components/Employer/Sidebar";
 import JobCardDetails from "./components/Employer/JobCardDetails";
 import SearchResults from "./components/Home/SearchResults";
 import Company from "./components/Company/Company";
+import AppliedJobs from "./components/AppliedJobs/AppliedJobs";
 
 function App() {
   const location = useLocation();
@@ -55,19 +56,12 @@ function App() {
         <Route path="/search" element={<SearchResults />} />
         <Route path="/JobDetails/:JobId" element={<JobDetails />} />
         <Route path="/company/:CompanyID" element={<Company />} />
+        <Route path="/appliedjobs" element={<AppliedJobs />} />
+        <Route path="/Notifications" element={<Notifications />} />
 
         {/* Protected Routes for Job Seeker */}
         {isJobSeeker && (
-          // <>
-          //   <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          //   <Route path="/Notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
-          //   <Route path="/add-profile" element={<ProtectedRoute><AddProfile /></ProtectedRoute>} />
-          //   <Route path="/JobDetails/:JobId" element={<ProtectedRoute><JobDetails /></ProtectedRoute>} />
-          //   <Route path="/JobDetails/:JobId/ApplyJob" element={<ProtectedRoute><ApplyJob /></ProtectedRoute>} />
-          // </>
-
           <>
-            <Route path="/Notifications" element={<Notifications />} />
             <Route path="/add-profile" element={<AddProfile />} />
             <Route path="/JobDetails/:JobId/ApplyJob" element={<ApplyJob />} />
           </>

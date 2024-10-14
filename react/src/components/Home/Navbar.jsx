@@ -3,7 +3,7 @@ import "../../index.css";
 import Logo from "../../common/Logo.jpg";
 import Notifications from "./Notifications";
 import Jobs from "./Jobs";
-import { useAuth } from "../../context/authContext"; 
+import { useAuth } from "../../context/authContext";
 
 export default function Navbar() {
   const { isLoggedIn } = useAuth(); // Get isLoggedIn from auth context
@@ -31,17 +31,23 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link to="/Notifications" className="navButton text-lg font-semibold">
-              <Notifications />
+            <Link
+              to="/Notifications"
+              className="navButton text-lg font-semibold"
+            >
+              Notifications
             </Link>
           </li>
           <li>
-            <Link to="/Jobs" className="navButton text-lg font-semibold">
-              <Jobs />
+            <Link to="/appliedjobs" className="navButton text-lg font-semibold">
+              Applied Jobs
             </Link>
           </li>
           <li>
-            <button onClick={handleScrollToAbout} className="navButton text-lg font-semibold text-black">
+            <button
+              onClick={handleScrollToAbout}
+              className="navButton text-lg font-semibold text-black"
+            >
               About Us
             </button>
           </li>

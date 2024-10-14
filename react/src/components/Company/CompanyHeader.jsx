@@ -1,30 +1,53 @@
-import React from 'react';
+import React from "react";
+import { FaMapMarkerAlt, FaEnvelope, FaGlobe } from "react-icons/fa";
 
-export default function CompanyHeader() {
-  const company = {
-    name: 'Koch Industries',
-    logo: 'https://via.placeholder.com/80',
-    followers: 219,
-  };
+const CompanyHeader = React.memo(({ company }) => {
+  console.log("in the header", company);
 
   return (
     <div className="flex justify-between items-center bg-white p-4 shadow-sm rounded-lg">
       <div className="flex items-center space-x-4">
-        <img src={company.logo} alt="Company Logo" className="h-16 w-16 rounded-full" />
-        <div>
-          <h1 className="text-2xl font-bold">{company.name}</h1>
-          <p className="text-sm text-gray-500">All In All Together</p>
-          <div className="flex space-x-2">
-            <span className="text-sm bg-gray-100 px-2 py-1 rounded">Oil & Gas</span>
-            <span className="text-sm bg-gray-100 px-2 py-1 rounded">Private</span>
-            <span className="text-sm bg-gray-100 px-2 py-1 rounded">Foreign MNC</span>
+        <img
+          src={company?.logo}
+          alt={`${company?.companyName || "Company"} Logo`}
+          className="h-16 w-16 rounded-full"
+        />
+        <div className="m-8">
+          <h1 className="text-2xl font-bold">
+            {company?.companyName || "Unknown Company"}
+          </h1>
+         
+          <p className="text-sm text-gray-500 flex items-center">
+            <FaMapMarkerAlt className="mr-1 text-red-500" />{" "}
+          
+            {company?.location || "Location not available"}
+          </p>
+          <div className="flex space-x-2 mt-2">
+            {company?.industry ? (
+              <span className="text-sm bg-gray-100 px-2 py-1 rounded">
+                {company.industry}
+              </span>
+            ) : (
+              <span className="text-sm bg-gray-100 px-2 py-1 rounded">
+                Industry not specified
+              </span>
+            )}
           </div>
         </div>
       </div>
-      {/* <div className="flex items-center space-x-4">
-        <p className="text-sm text-gray-600">{company.followers} followers</p>
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg">+ Follow</button>
-      </div> */}
+
+      <div className="flex flex-col items-end space-y-2">
+        <a
+          href={company?.companyWebsite || "#"}
+          className="text-xl text-blue-500 underline flex items-center"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaGlobe className="mr-1 text-blue-500" />
+        </a>
+      </div>
     </div>
   );
-}
+});
+
+export default CompanyHeader;

@@ -26,7 +26,6 @@ const JobDetails = () => {
       setJobDetails(details);
     } catch (error) {
       console.error("Error fetching job details:", error);
-      // Handle the error, such as displaying a message or redirecting
     }
   };
 

@@ -32,11 +32,11 @@ exports.createJobType = async (req, res) => {
   }
 };
 
-
 exports.getJobTypeById = async (req, res) => {
   try {
-    const { id } = req.params; // Get the job type ID from the request params
-    const jobType = await JobType.findById(id); // Find job type by ID
+    const { id } = req.params;
+    const jobType = await JobType.findById(id);
+    console.log(jobType);
     if (!jobType) {
       return res.status(404).json({ message: "Job type not found" });
     }
@@ -47,16 +47,14 @@ exports.getJobTypeById = async (req, res) => {
   }
 };
 
-
-
 exports.getJobTypeByTitle = async (req, res) => {
   try {
     const { title } = req.params; // Get the title from the request params
 
     // Find the job type with the matching title (case-insensitive)
     const jobType = await JobType.findOne({
-        title: { $regex: new RegExp("^" + title + "$", "i") }
-      });
+      title: { $regex: new RegExp("^" + title + "$", "i") },
+    });
     console.log(jobType);
     if (!jobType) {
       return res.status(404).json({ message: "Job type not found" });
