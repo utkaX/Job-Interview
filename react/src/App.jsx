@@ -24,6 +24,7 @@ import ManageJobs from "./components/Employer/ManageJobs";
 import Sidebar from "./components/Employer/Sidebar";
 import JobCardDetails from "./components/Employer/JobCardDetails";
 import SearchResults from "./components/Home/SearchResults";
+import Company from "./components/Company/Company";
 
 function App() {
   const location = useLocation();
@@ -53,6 +54,7 @@ function App() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/JobDetails/:JobId" element={<JobDetails />} />
+        <Route path="/company/:CompanyID" element={<Company />} />
 
         {/* Protected Routes for Job Seeker */}
         {isJobSeeker && (

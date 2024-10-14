@@ -14,10 +14,13 @@ const JobDetails = () => {
   const companyIdpar = params.get("companyId");
 
   const { company, companyId } = location.state || {};
+  console.log(companyId);
 
   const fetchJobDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/jobs/getJobById/${JobId}`);
+      const response = await fetch(
+        `http://localhost:8080/jobs/getJobById/${JobId}`
+      );
       if (!response.ok) throw new Error("Failed to fetch job details");
       const details = await response.json();
       setJobDetails(details);
@@ -48,7 +51,9 @@ const JobDetails = () => {
   }, [jobDetails.requirements]);
 
   const responsibilities = useMemo(() => {
-    return jobDetails.responsibilities ? jobDetails.responsibilities.join(", ") : "N/A";
+    return jobDetails.responsibilities
+      ? jobDetails.responsibilities.join(", ")
+      : "N/A";
   }, [jobDetails.responsibilities]);
 
   const benefits = useMemo(() => {
@@ -60,32 +65,53 @@ const JobDetails = () => {
   }, [jobDetails.jobTags]);
 
   const handleLoginRedirect = () => {
-    navigate(`/login?redirectTo=${encodeURIComponent(window.location.pathname + window.location.search)}`, {
-      state: {
-        company,
-        companyId,
-      },
-    });
+    navigate(
+      `/login?redirectTo=${encodeURIComponent(
+        location.pathname + location.search
+      )}`,
+      {
+        state: {
+          company,
+          companyId,
+        },
+      }
+    );
   };
 
   const handleRegisterRedirect = () => {
-    navigate(`/register?redirectTo=${encodeURIComponent(window.location.pathname + window.location.search)}`, {
-      state: {
-        company,
-        companyId,
-      },
-    });
+    navigate(
+      `/register?redirectTo=${encodeURIComponent(
+        location.pathname + location.search
+      )}`,
+      {
+        state: {
+          company,
+          companyId,
+        },
+      }
+    );
   };
 
-  if (!jobDetails.title) return <div className="text-center text-gray-600">Loading...</div>;
+  if (!jobDetails.title)
+    return <div className="text-center text-gray-600">Loading...</div>;
 
   return (
     <div className="max-w-5xl mx-auto p-8 my-16 bg-white rounded-lg shadow-lg border border-gray-200">
       {/* Job Title and Company */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-4xl font-bold text-gray-900">{jobDetails.title}</h1>
-          <p className="text-gray-600 text-sm mb-2">{company}</p>
+          <h1 className="text-4xl font-bold text-gray-900">
+            {jobDetails.title}
+          </h1>
+          <p className="text-gray-600 text-sm mb-2">
+            <Link
+              to={`/company/${encodeURIComponent(companyId)}`}
+              state={{ companyId: encodeURIComponent(companyId) }}
+              className="text-blue-500 hover:underline"
+            >
+              {company || "Unknown Company"}
+            </Link>
+          </p>
           <p className="flex items-center space-x-2">
             <FaMapMarkerAlt className="text-blue-500" />
             <span>{jobDetails.location || "Bengaluru"}</span>
@@ -103,52 +129,66 @@ const JobDetails = () => {
         <div className="flex items-center space-x-3">
           <FaSuitcase className="text-blue-500 text-lg" />
           <p>
-            <strong className="text-blue-700">Experience:</strong> {jobDetails.experience || "0-2 years"}
+            <strong className="text-blue-700">Experience:</strong>{" "}
+            {jobDetails.experience || "0-2 years"}
           </p>
         </div>
         <div className="flex items-center space-x-3">
           <FaMoneyBillWave className="text-green-500 text-lg" />
           <p>
-            <strong className="text-blue-700">Salary:</strong> ₹ {formattedSalary}
+            <strong className="text-blue-700">Salary:</strong> ₹{" "}
+            {formattedSalary}
           </p>
         </div>
         <div className="flex items-center space-x-3">
           <FaMapMarkerAlt className="text-red-500 text-lg" />
           <p>
-            <strong className="text-blue-700">Location:</strong> {jobDetails.location || "N/A"}
+            <strong className="text-blue-700">Location:</strong>{" "}
+            {jobDetails.location || "N/A"}
           </p>
         </div>
         <div className="flex items-center space-x-3">
           <p>
-            <strong className="text-blue-700">Posted Date:</strong> {formattedDate}
+            <strong className="text-blue-700">Posted Date:</strong>{" "}
+            {formattedDate}
           </p>
         </div>
         <div className="flex items-center space-x-3">
           <p>
-            <strong className="text-blue-700">Applicants:</strong> {jobDetails.applicants || "1334"}
+            <strong className="text-blue-700">Applicants:</strong>{" "}
+            {jobDetails.applicants || "1334"}
           </p>
         </div>
         <div className="flex items-center space-x-3">
           <p>
-            <strong className="text-blue-700">Openings:</strong> {jobDetails.openings || "1"}
+            <strong className="text-blue-700">Openings:</strong>{" "}
+            {jobDetails.openings || "1"}
           </p>
         </div>
       </div>
 
       {/* Job Description Section */}
       <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">Job Description</h2>
-        <p className="text-gray-800 leading-relaxed">{jobDetails.description}</p>
+        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+          Job Description
+        </h2>
+        <p className="text-gray-800 leading-relaxed">
+          {jobDetails.description || "No description available."}
+        </p>
       </div>
 
       {/* Key Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">Requirements</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            Requirements
+          </h3>
           <p>{requirements}</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">Responsibilities</h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">
+            Responsibilities
+          </h3>
           <p>{responsibilities}</p>
         </div>
         <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
@@ -164,11 +204,10 @@ const JobDetails = () => {
       {/* Apply Button Section */}
       <div className="text-center">
         {isLoggedIn ? (
-          <Link 
-          to={`/JobDetails/${encodeURIComponent(JobId)}/ApplyJob`} 
-          state={{ jobId: encodeURIComponent(JobId) }} // Encode jobId for the state
-        >
-
+          <Link
+            to={`/JobDetails/${encodeURIComponent(JobId)}/ApplyJob`}
+            state={{ jobId: encodeURIComponent(JobId) }} // Encode jobId for the state
+          >
             <button className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-3 px-6 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-transform transform hover:scale-105">
               Apply Now
             </button>
