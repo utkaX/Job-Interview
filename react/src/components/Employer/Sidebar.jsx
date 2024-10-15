@@ -18,22 +18,22 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li>
-                    <Link to="/view-applications" className="block p-2 rounded hover:bg-gray-700 transition">
+                    <Link to="#" className="block p-2 rounded hover:bg-gray-700 transition">
                         View Applications
                     </Link>
                 </li>
                 <li>
-                    <Link to="/interview-schedule" className="block p-2 rounded hover:bg-gray-700 transition">
+                    <Link to="#" className="block p-2 rounded hover:bg-gray-700 transition">
                         Interview Schedule
                     </Link>
                 </li>
                 <li>
-                    <Link to="/analytics" className="block p-2 rounded hover:bg-gray-700 transition">
+                    <Link to="#" className="block p-2 rounded hover:bg-gray-700 transition">
                         Analytics
                     </Link>
                 </li>
                 <li>
-                    <Link to="/company-profile" className="block p-2 rounded hover:bg-gray-700 transition">
+                    <Link to="/employee-profile" className="block p-2 rounded hover:bg-gray-700 transition">
                         Company Profile
                     </Link>
                 </li>

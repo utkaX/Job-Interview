@@ -3,6 +3,7 @@ import { useAuth } from "../../context/authContext"; // Adjust the path as neede
 import Sidebar from "./Sidebar";
 import JobCard from "./JobCard"; // Import the JobCard component
 import { Link } from "react-router-dom"; // Import Link
+import Navbar from "./Navbar";
 
 const ManageJobs = () => {
   const { user } = useAuth();
@@ -11,18 +12,34 @@ const ManageJobs = () => {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [filteredJobs, setFilteredJobs] = useState([]); // State for filtered jobs
+  const [companyId, setCompanyId] = useState(""); // State for company ID
 
   useEffect(() => {
-    const fetchJobs = async () => {
+    const fetchCompanyAndJobs = async () => {
       try {
-        const response = await fetch("http://localhost:8080/jobs/getAllJob");
-        if (!response.ok) {
+        // Fetch company details by user ID
+        const companyResponse = await fetch(
+          `http://localhost:8080/employer/getEmployerByUserId/${user._id}`
+        );
+
+        if (!companyResponse.ok) {
+          throw new Error("Failed to fetch company information.");
+        }
+        const companyData = await companyResponse.json();
+        setCompanyId(companyData._id); // Set company ID from the fetched data
+
+        // Fetch jobs for the company
+        const jobsResponse = await fetch("http://localhost:8080/jobs/getAllJob");
+
+        if (!jobsResponse.ok) {
           throw new Error("Network response was not ok");
         }
-        const data = await response.json();
-        const userJobs = data.filter((job) => job.employerId === user._id); // Adjust userId based on your user object
-        setJobs(userJobs);
-        setFilteredJobs(userJobs); // Initialize filteredJobs with all user jobs
+
+        // Filter jobs by company ID
+        const companyJobs = await fetch(`http://localhost:8080/jobs/getJobsByEmployerId/${companyData._id}`) // Correct filtering based on employerId._id
+        const jobs=await companyJobs.json();
+        setJobs(jobs);
+        setFilteredJobs(jobs); // Initialize filteredJobs with all company jobs
       } catch (err) {
         setError(err.message);
       } finally {
@@ -30,7 +47,7 @@ const ManageJobs = () => {
       }
     };
 
-    fetchJobs();
+    fetchCompanyAndJobs();
   }, [user]);
 
   const handleSearch = () => {

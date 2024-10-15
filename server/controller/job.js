@@ -1,5 +1,6 @@
 const Job = require("../models/job");
 const Employer = require("../models/employer"); // Add Employer model for company name search
+const mongoose = require("mongoose");
 
 exports.createJobs = async (req, res) => {
   try {
@@ -37,6 +38,25 @@ exports.getJobById = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+
+exports.getJobsByEmployerId = async (req, res) => {
+  const employerId  = req.params.id; // Extract employerId from request parameters
+
+    // Find jobs that match the provided employerId
+    const jobs = await Job.find({ employerId: new mongoose.Types.ObjectId(employerId) });
+    // If no jobs are found, send a 404 response
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({ message: "No jobs found for this employer." });
+    }
+
+    // Return the list of jobs
+    res.status(200).json(jobs);
+  // } catch (err) {
+  //   // Handle any errors that occur during the query
+  //   res.status(500).json({ message: "An error occurred while retrieving jobs.", error: err.message });
+  // }
 };
 
 exports.updateJobById = async (req, res) => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/authContext";
 import Sidebar from "./Sidebar";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ const PostJob = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [jobData, setJobData] = useState({
-    employerId: user._id,
+    employerId: "",
     title: "",
     description: "",
     location: "",
@@ -19,7 +19,40 @@ const PostJob = () => {
     benefits: "",
     jobTags: "",
     companyCulture: "",
+    Experience: "", // Added experience field
   });
+
+  const fetchEmployerId = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:8080/employer/getEmployerByUserId/${userId}`);
+      console.log(response)
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch employer data");
+      }
+      const data = await response.json();
+      return data._id; // assuming _id is in the response
+    } catch (error) {
+      console.error("Error fetching employer data:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const loadEmployerId = async () => {
+      if (user && user._id) {
+        const employerId = await fetchEmployerId(user._id);
+        if (employerId) {
+          setJobData((prevState) => ({
+            ...prevState,
+            employerId: employerId,
+          }));
+        }
+      }
+    };
+
+    loadEmployerId();
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,11 +61,12 @@ const PostJob = () => {
 
   const fetchJobTypeId = async (jobTypeTitle) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/jobtype/getJobTypeByTitle/${jobTypeTitle}`
-      );
+      const response = await fetch(`http://localhost:8080/jobtype/getJobTypeByTitle/${jobTypeTitle}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch job type");
+      }
       const data = await response.json();
-      return response.ok ? data._id : null;
+      return data._id;
     } catch (error) {
       console.error("Error fetching job type ID:", error);
       return null;
@@ -45,6 +79,13 @@ const PostJob = () => {
       const jobTypeId = await fetchJobTypeId(jobData.jobType);
       if (jobTypeId) {
         const updatedJobData = { ...jobData, jobType: jobTypeId };
+
+        // Ensure all required fields are present
+        if (!updatedJobData.Experience) {
+          alert("Experience is required.");
+          return;
+        }
+
         const response = await fetch("http://localhost:8080/jobs/addJob", {
           method: "POST",
           headers: {
@@ -53,15 +94,17 @@ const PostJob = () => {
           body: JSON.stringify(updatedJobData),
         });
 
-        const result = await response.json();
-        if (response.ok) {
-          console.log("Job added successfully:", result);
-          alert("Job posted successfully!");
-          navigate("/job-dashboard"); // Redirect to job dashboard after successful posting
-        } else {
+        if (!response.ok) {
+          const result = await response.json();
           console.error("Error adding job:", result);
-          alert("Error adding job.");
+          alert(`Error adding job: ${result.error}`);
+          return;
         }
+
+        const result = await response.json();
+        console.log("Job added successfully:", result);
+        alert("Job posted successfully!");
+        navigate("/job-dashboard"); // Redirect to job dashboard after successful posting
       } else {
         console.error("Job type not found");
         alert("Job type not found.");
@@ -193,17 +236,31 @@ const PostJob = () => {
             </div>
           </div>
 
+          {/* Experience Field */}
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-1">Experience</label>
+            <input
+              type="text"
+              name="Experience"
+              value={jobData.Experience}
+              onChange={handleChange}
+              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+              placeholder="e.g. 2+ years"
+              required
+            />
+          </div>
+
           {/* Benefits and Job Tags */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
               <label className="block text-gray-700 font-medium mb-1">Benefits</label>
-              <textarea
+              <input
+                type="text"
                 name="benefits"
                 value={jobData.benefits}
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-                rows="2"
-                placeholder="e.g. Health insurance, 401k"
+                placeholder="e.g. Health insurance"
               />
             </div>
             <div>
@@ -214,7 +271,7 @@ const PostJob = () => {
                 value={jobData.jobTags}
                 onChange={handleChange}
                 className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-                placeholder="e.g. remote, full-stack"
+                placeholder="e.g. JavaScript, React"
               />
             </div>
           </div>
@@ -227,15 +284,12 @@ const PostJob = () => {
               value={jobData.companyCulture}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-              rows="4"
-              placeholder="Describe your company culture"
+              rows="2"
+              placeholder="Describe the company culture"
             />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 transition-all"
-          >
+          <button type="submit" className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all">
             Post Job
           </button>
         </form>

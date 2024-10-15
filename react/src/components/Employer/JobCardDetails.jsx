@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Sidebar from './Sidebar';
 
 const JobCardDetails = () => {
   const { id } = useParams(); // Get job ID from the URL params
@@ -86,7 +87,12 @@ const JobCardDetails = () => {
 
   // Display the job details or update form
   return (
-    <div className="p-6 border border-gray-300 rounded-lg shadow-lg bg-white max-w-2xl mx-auto my-10">
+
+    <div className="flex">
+    <Sidebar />
+
+    <div className="p-6 border w-3/4 border-gray-300 rounded-lg shadow-lg bg-white max-w-2xl mx-auto my-10">
+     
       <h2 className="text-3xl font-bold mb-4 text-gray-800 border-b pb-2 border-gray-300">Job Details</h2>
 
       {isEditing ? (
@@ -276,6 +282,7 @@ const JobCardDetails = () => {
           </button>
         </div>
       )}
+    </div>
     </div>
   );
 };

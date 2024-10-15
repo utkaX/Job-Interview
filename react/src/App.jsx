@@ -28,6 +28,7 @@ import Company from "./components/Company/Company";
 import AppliedJobs from "./components/AppliedJobs/AppliedJobs";
 import InterviewDetails from "./components/AppliedJobs/InterviewDetails";
 import SavedJob from "./components/Home/SavedJob";
+import EmpNavbar from "./components/Employer/Navbar";
 
 function App() {
   const location = useLocation();
@@ -42,13 +43,33 @@ function App() {
     "/verify-otp",
     "/employee-dashboard",
     "/employee-profile",
+    "/manage-jobs",
+    "/postJob",
+  ];
+
+  const employeerSideNav = [
+    "/employee-dashboard",
+    "/employee-profile",
+    "/manage-jobs",
+    "/postJob",
   ];
 
   const sideBar = ["/signup", "/login", "/verify-otp", "/employee-dashboard"];
 
+  // Function to check if the current path matches the dynamic job route
+  const isJobRoute = () => {
+    const jobRoutePattern = /^\/job\/\w+$/; // Regular expression to match "/job/:id"
+    return jobRoutePattern.test(location.pathname);
+  };
+
+  // Condition to render the correct Navbar based on user role and route
+  const showEmpNavbar = employeerSideNav.includes(location.pathname) || isJobRoute();
+  const showMainNavbar = !showEmpNavbar && !hideNavAndFooter.includes(location.pathname);
+
   return (
     <>
-      {!hideNavAndFooter.includes(location.pathname) && <Navbar />}
+      {showMainNavbar && <Navbar />}
+      {showEmpNavbar && <EmpNavbar />}
 
       <Routes>
         <Route path="/signup" element={<Signup />} />
@@ -60,11 +81,8 @@ function App() {
         <Route path="/company/:CompanyID" element={<Company />} />
         <Route path="/appliedjobs" element={<AppliedJobs />} />
         <Route path="/Notifications" element={<Notifications />} />
-        <Route
-          path="/interview-details/:AppliedJobId"
-          element={<InterviewDetails />}
-        />
-         <Route path="/saved-jobs" element={<SavedJob />} />
+        <Route path="/interview-details/:AppliedJobId" element={<InterviewDetails />} />
+        <Route path="/saved-jobs" element={<SavedJob />} />
 
         {/* Protected Routes for Job Seeker */}
         {isJobSeeker && (
@@ -74,15 +92,8 @@ function App() {
           </>
         )}
 
-        {/* Protected Routes for Employer */}
         {isEmployer && (
           <>
-            \{/* { <Sidebar/>} */}
-            {/* <Route path="/PostJob" element={<ProtectedRoute><PostJob /></ProtectedRoute>} />
-            <Route path="/employee-dashboard" element={<ProtectedRoute><EmployeeDashboard /></ProtectedRoute>} />
-            <Route path="/employee-profile" element={<ProtectedRoute><CompanyProfile /></ProtectedRoute>} />
-            <Route path="/manage-jobs" element={<ProtectedRoute><ManageJobs /></ProtectedRoute>}/> */}
-            {/* <Navbar/> */}
             <Route path="/PostJob" element={<PostJob />} />
             <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
             <Route path="/employee-profile" element={<CompanyProfile />} />
@@ -101,10 +112,14 @@ function App() {
           }
         />
       </Routes>
+
+      {/* Show Footer conditionally */}
       {!hideNavAndFooter.includes(location.pathname) && <Footer />}
+      {showEmpNavbar && <Footer />}
     </>
   );
 }
+
 
 function Main() {
   return (

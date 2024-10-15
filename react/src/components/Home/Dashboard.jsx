@@ -18,21 +18,6 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchJobs();
-      await fetchTopCompanies();
-      setLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  // Reset scroll position to top on component mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const fetchJobs = async () => {
     try {
       const response = await fetch("http://localhost:8080/jobs/live");
@@ -92,6 +77,21 @@ const Dashboard = () => {
 
     navigate(`/search?${queryParams.toString()}`);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchJobs();
+      await fetchTopCompanies();
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  // Reset scroll position to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">

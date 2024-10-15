@@ -12,7 +12,7 @@ const RecentJobs = ({ jobs }) => {
             No jobs found.
           </p>
         ) : (
-          jobs.map((job) => <JobCard key={job.id} jobDetails={job} />)
+          jobs.map((job) => <JobCard key={job._id} jobDetails={job} />)
         )}
       </div>
     </div>
