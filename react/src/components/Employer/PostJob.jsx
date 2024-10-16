@@ -8,6 +8,7 @@ const PostJob = () => {
   const { user } = useAuth();
   const [jobData, setJobData] = useState({
     employerId: "",
+    userId: "",
     title: "",
     description: "",
     location: "",
@@ -19,7 +20,7 @@ const PostJob = () => {
     benefits: "",
     jobTags: "",
     companyCulture: "",
-    Experience: "", // Added experience field
+    Experience: "",
   });
 
   const fetchEmployerId = async (userId) => {
@@ -44,6 +45,7 @@ const PostJob = () => {
           setJobData((prevState) => ({
             ...prevState,
             employerId: employerId,
+            userId: user._id,
           }));
         }
       }
@@ -71,6 +73,37 @@ const PostJob = () => {
     }
   };
 
+  const notifyJobSeekers = async (jobId, jobTitle) => {
+    try {
+      const response = await fetch('http://localhost:8080/notification/notification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: jobData.employerId,
+          jobId,
+          message: `New job posted: ${jobTitle}`,
+        }),
+      });
+
+      if (!response.ok) {
+        const result = await response.json();
+        console.error("Error notifying job seekers:", result);
+        alert(`Error notifying job seekers: ${result.error}`);
+      } else {
+        console.log("Job seekers notified successfully!");
+      }
+    } catch (error) {
+      console.error("Error sending notifications:", error);
+    }
+  };
+
+  const incrementNotificationCount = () => {
+    // Your logic to increment the notification count goes here
+    console.log("Notification count incremented.");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -78,7 +111,6 @@ const PostJob = () => {
       if (jobTypeId) {
         const updatedJobData = { ...jobData, jobType: jobTypeId };
 
-        // Ensure all required fields are present
         if (!updatedJobData.Experience) {
           alert("Experience is required.");
           return;
@@ -99,10 +131,12 @@ const PostJob = () => {
           return;
         }
 
-        const result = await response.json();
-        console.log("Job added successfully:", result);
+        const jobResult = await response.json();
         alert("Job posted successfully!");
-        navigate("/job-dashboard"); // Redirect to job dashboard after successful posting
+
+        await notifyJobSeekers(jobResult._id, updatedJobData.title); // Notify job seekers
+        incrementNotificationCount(); // Increment notification count
+        navigate("/Notifications");
       } else {
         console.error("Job type not found");
         alert("Job type not found.");
@@ -117,12 +151,12 @@ const PostJob = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-8 bg-gray-50">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Post a New Job</h2>
-        <form onSubmit={handleSubmit} className="bg-white shadow-xl rounded-lg p-10 max-w-2xl mx-auto border border-gray-200">
+        <h2 className="text-4xl font-bold mb-6 text-center text-gray-800">Post a New Job</h2>
+        <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg p-10 max-w-3xl mx-auto border border-gray-200">
           {/* Job Title and Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Job Title</label>
+              <label className="block text-gray-700 font-semibold mb-1">Job Title</label>
               <input
                 type="text"
                 name="title"
@@ -134,7 +168,7 @@ const PostJob = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Location</label>
+              <label className="block text-gray-700 font-semibold mb-1">Location</label>
               <input
                 type="text"
                 name="location"
@@ -150,7 +184,7 @@ const PostJob = () => {
           {/* Job Type and Salary */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Job Type</label>
+              <label className="block text-gray-700 font-semibold mb-1">Job Type</label>
               <select
                 name="jobType"
                 value={jobData.jobType}
@@ -167,7 +201,7 @@ const PostJob = () => {
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Salary</label>
+              <label className="block text-gray-700 font-semibold mb-1">Salary</label>
               <input
                 type="number"
                 name="salary"
@@ -183,7 +217,7 @@ const PostJob = () => {
           {/* Category and Description */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Category</label>
+              <label className="block text-gray-700 font-semibold mb-1">Category</label>
               <input
                 type="text"
                 name="category"
@@ -195,7 +229,7 @@ const PostJob = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Description</label>
+              <label className="block text-gray-700 font-semibold mb-1">Description</label>
               <textarea
                 name="description"
                 value={jobData.description}
@@ -208,51 +242,95 @@ const PostJob = () => {
             </div>
           </div>
 
-          {/* Responsibilities and Requirements */}
+          {/* Requirements and Responsibilities */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-gray-700 font-medium mb-1">Responsibilities</label>
-              <textarea
-                name="responsibilities"
-                value={jobData.responsibilities}
-                onChange={handleChange}
-                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                rows="2"
-                placeholder="e.g. Develop applications"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Requirements</label>
+              <label className="block text-gray-700 font-semibold mb-1">Requirements</label>
               <textarea
                 name="requirements"
                 value={jobData.requirements}
                 onChange={handleChange}
                 className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                rows="2"
-                placeholder="e.g. Bachelor's degree"
+                rows="3"
+                placeholder="List the job requirements"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 font-semibold mb-1">Responsibilities</label>
+              <textarea
+                name="responsibilities"
+                value={jobData.responsibilities}
+                onChange={handleChange}
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                rows="3"
+                placeholder="List the job responsibilities"
+                required
               />
             </div>
           </div>
 
-          {/* Additional Information */}
-          <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-1">Experience</label>
-            <input
-              type="text"
-              name="Experience"
-              value={jobData.Experience}
-              onChange={handleChange}
-              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-              placeholder="e.g. 3+ years"
-              required
-            />
+          {/* Additional Fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-gray-700 font-semibold mb-1">Experience</label>
+              <input
+                type="text"
+                name="Experience"
+                value={jobData.Experience}
+                onChange={handleChange}
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                placeholder="e.g. 3 years"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 font-semibold mb-1">Benefits</label>
+              <textarea
+                name="benefits"
+                value={jobData.benefits}
+                onChange={handleChange}
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                rows="3"
+                placeholder="List the job benefits"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Job Tags and Company Culture */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-gray-700 font-semibold mb-1">Job Tags</label>
+              <input
+                type="text"
+                name="jobTags"
+                value={jobData.jobTags}
+                onChange={handleChange}
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                placeholder="e.g. JavaScript, React"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 font-semibold mb-1">Company Culture</label>
+              <textarea
+                name="companyCulture"
+                value={jobData.companyCulture}
+                onChange={handleChange}
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                rows="3"
+                placeholder="Describe the company culture"
+                required
+              />
+            </div>
           </div>
 
           {/* Submit Button */}
-          <div className="text-center">
+          <div className="text-center mt-6">
             <button
               type="submit"
-              className="w-full p-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
+              className="bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-all hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             >
               Post Job
             </button>

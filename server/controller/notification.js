@@ -1,4 +1,4 @@
-const notification = require("../models/notification"); 
+const Notification = require("../models/notification"); 
 const { response } = require("express");
 
 
@@ -35,6 +35,27 @@ exports.getNotificationById=async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+
+exports.getNotificationsByUserId = async (req, res) => {
+    const  userId  = req.params.id;
+
+    try {
+        const notifications = await Notification.find({ userId }).sort({ timestamp: -1 });
+
+        if (!notifications || notifications.length === 0) {
+            return res.status(404).json({ message: 'No notifications found for this user.' });
+        }
+
+        return res.status(200).json(notifications); // Return the notifications array
+    } catch (error) {
+        console.error("Error fetching notifications:", error);
+        return res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+};
+
+
+
 
 exports.updateNotification=async (req, res) => {
     try {
