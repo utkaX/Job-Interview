@@ -3,7 +3,6 @@ import { useAuth } from "../../context/authContext"; // Adjust the path as neede
 import Sidebar from "./Sidebar";
 import JobCard from "./JobCard"; // Import the JobCard component
 import { Link } from "react-router-dom"; // Import Link
-import Navbar from "./Navbar";
 
 const ManageJobs = () => {
   const { user } = useAuth();
@@ -29,15 +28,15 @@ const ManageJobs = () => {
         setCompanyId(companyData._id); // Set company ID from the fetched data
 
         // Fetch jobs for the company
-        const jobsResponse = await fetch("http://localhost:8080/jobs/getAllJob");
+        const jobsResponse = await fetch(
+          `http://localhost:8080/jobs/getJobsByEmployerId/${companyData._id}`
+        );
 
         if (!jobsResponse.ok) {
           throw new Error("Network response was not ok");
         }
 
-        // Filter jobs by company ID
-        const companyJobs = await fetch(`http://localhost:8080/jobs/getJobsByEmployerId/${companyData._id}`) // Correct filtering based on employerId._id
-        const jobs=await companyJobs.json();
+        const jobs = await jobsResponse.json();
         setJobs(jobs);
         setFilteredJobs(jobs); // Initialize filteredJobs with all company jobs
       } catch (err) {
@@ -50,12 +49,40 @@ const ManageJobs = () => {
     fetchCompanyAndJobs();
   }, [user]);
 
+  // Search function that only runs when the button is clicked
   const handleSearch = () => {
-    // Filter jobs based on search query when the button is clicked
     const results = jobs.filter((job) =>
       job.title.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredJobs(results);
+  };
+
+  // Toggle job live status
+  const toggleLiveStatus = async (jobId, currentStatus) => {
+    try {
+      const updatedStatus = !currentStatus; // Toggle the live status
+      const response = await fetch(`http://localhost:8080/jobs/updateJobById/${jobId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isLive: updatedStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update job status.");
+      }
+
+      // Update the local state after successful update
+      const updatedJobs = jobs.map((job) =>
+        job._id === jobId ? { ...job, isLive: updatedStatus } : job
+      );
+      setJobs(updatedJobs);
+      setFilteredJobs(updatedJobs);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to update job status.");
+    }
   };
 
   if (loading) return <p className="text-center text-lg">Loading...</p>;
@@ -73,11 +100,11 @@ const ManageJobs = () => {
             type="text"
             placeholder="Search by job title..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery as the user types
             className="border border-gray-300 rounded-md p-2 w-full"
           />
           <button
-            onClick={handleSearch}
+            onClick={handleSearch} // Trigger search on click
             className="ml-2 bg-blue-500 text-white rounded-md px-4 py-2"
           >
             Search
@@ -93,6 +120,14 @@ const ManageJobs = () => {
                 <Link to={`/job/${job._id}`} className="block">
                   <JobCard job={job} /> {/* Pass the job object here */}
                 </Link>
+                <button
+                  onClick={() => toggleLiveStatus(job._id, job.isLive)} // Toggle job status on click
+                  className={`mt-2 ${
+                    job.isLive ? "bg-green-500" : "bg-red-500"
+                  } text-white rounded-md px-4 py-2`}
+                >
+                  {job.isLive ? "Set to Not Live" : "Set to Live"}
+                </button>
               </li>
             ))}
           </ul>
