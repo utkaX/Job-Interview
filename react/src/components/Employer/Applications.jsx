@@ -62,19 +62,19 @@ const Applications = () => {
 
   return (
     <div className="flex">
-      <Sidebar/>
-    <div className="container mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-6 text-center">Job Applications</h1>
-      {applications.length === 0 ? (
-        <p className="text-center text-gray-600">No applications found</p>
-      ) : (
-        <div className="application-list grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {applications.map((application) => (
-            <ApplicationCard key={application._id} application={application} />
-          ))}
-        </div>
-      )}
-    </div>
+      <Sidebar />
+      <div className="container mx-auto py-8">
+        <h1 className="text-2xl font-bold mb-6 text-center">Job Applications</h1>
+        {applications.length === 0 ? (
+          <p className="text-center text-gray-600">No applications found</p>
+        ) : (
+          <div className="application-list grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {applications.map((application) => (
+              <ApplicationCard key={application._id} application={application} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

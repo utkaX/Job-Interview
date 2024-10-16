@@ -25,8 +25,6 @@ const PostJob = () => {
   const fetchEmployerId = async (userId) => {
     try {
       const response = await fetch(`http://localhost:8080/employer/getEmployerByUserId/${userId}`);
-      console.log(response)
-
       if (!response.ok) {
         throw new Error("Failed to fetch employer data");
       }
@@ -118,9 +116,9 @@ const PostJob = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 p-8 bg-gray-100">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Post a New Job</h2>
-        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 max-w-3xl mx-auto">
+      <div className="flex-1 p-8 bg-gray-50">
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Post a New Job</h2>
+        <form onSubmit={handleSubmit} className="bg-white shadow-xl rounded-lg p-10 max-w-2xl mx-auto border border-gray-200">
           {/* Job Title and Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
@@ -130,7 +128,7 @@ const PostJob = () => {
                 name="title"
                 value={jobData.title}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 placeholder="e.g. Software Engineer"
                 required
               />
@@ -142,7 +140,7 @@ const PostJob = () => {
                 name="location"
                 value={jobData.location}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 placeholder="e.g. New York, NY"
                 required
               />
@@ -157,7 +155,7 @@ const PostJob = () => {
                 name="jobType"
                 value={jobData.jobType}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 required
               >
                 <option value="">Select Job Type</option>
@@ -175,7 +173,7 @@ const PostJob = () => {
                 name="salary"
                 value={jobData.salary}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 placeholder="e.g. 60000"
                 required
               />
@@ -191,7 +189,7 @@ const PostJob = () => {
                 name="category"
                 value={jobData.category}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 placeholder="e.g. IT, Marketing"
                 required
               />
@@ -202,7 +200,7 @@ const PostJob = () => {
                 name="description"
                 value={jobData.description}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 rows="3"
                 placeholder="Describe the job responsibilities"
                 required
@@ -218,7 +216,7 @@ const PostJob = () => {
                 name="responsibilities"
                 value={jobData.responsibilities}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 rows="2"
                 placeholder="e.g. Develop applications"
               />
@@ -229,14 +227,14 @@ const PostJob = () => {
                 name="requirements"
                 value={jobData.requirements}
                 onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
                 rows="2"
-                placeholder="e.g. Bachelor’s degree in relevant field"
+                placeholder="e.g. Bachelor's degree"
               />
             </div>
           </div>
 
-          {/* Experience Field */}
+          {/* Additional Information */}
           <div className="mb-6">
             <label className="block text-gray-700 font-medium mb-1">Experience</label>
             <input
@@ -244,54 +242,21 @@ const PostJob = () => {
               name="Experience"
               value={jobData.Experience}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-              placeholder="e.g. 2+ years"
+              className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+              placeholder="e.g. 3+ years"
               required
             />
           </div>
 
-          {/* Benefits and Job Tags */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Benefits</label>
-              <input
-                type="text"
-                name="benefits"
-                value={jobData.benefits}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-                placeholder="e.g. Health insurance"
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 font-medium mb-1">Job Tags</label>
-              <input
-                type="text"
-                name="jobTags"
-                value={jobData.jobTags}
-                onChange={handleChange}
-                className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-                placeholder="e.g. JavaScript, React"
-              />
-            </div>
+          {/* Submit Button */}
+          <div className="text-center">
+            <button
+              type="submit"
+              className="w-full p-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all"
+            >
+              Post Job
+            </button>
           </div>
-
-          {/* Company Culture */}
-          <div className="mb-6">
-            <label className="block text-gray-700 font-medium mb-1">Company Culture</label>
-            <textarea
-              name="companyCulture"
-              value={jobData.companyCulture}
-              onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all"
-              rows="2"
-              placeholder="Describe the company culture"
-            />
-          </div>
-
-          <button type="submit" className="w-full p-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all">
-            Post Job
-          </button>
         </form>
       </div>
     </div>
