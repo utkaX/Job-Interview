@@ -2,7 +2,7 @@ import React from "react";
 import { FaLinkedin, FaTwitter, FaFacebook } from "react-icons/fa"; // Importing icons from react-icons
 
 const CompanyAbout = React.memo(({ company }) => {
-  console.log("company", company?.companyName);
+  // console.log("company", company?.companyName);
 
   return (
     <div className="mt-6 bg-white p-6 rounded-lg shadow-sm">

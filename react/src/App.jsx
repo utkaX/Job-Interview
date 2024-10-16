@@ -29,6 +29,7 @@ import AppliedJobs from "./components/AppliedJobs/AppliedJobs";
 import InterviewDetails from "./components/AppliedJobs/InterviewDetails";
 import SavedJob from "./components/Home/SavedJob";
 import EmpNavbar from "./components/Employer/Navbar";
+import Applications from "./components/Employer/Applications";
 
 function App() {
   const location = useLocation();
@@ -99,6 +100,8 @@ function App() {
             <Route path="/employee-profile" element={<CompanyProfile />} />
             <Route path="/manage-jobs" element={<ManageJobs />} />
             <Route path="/job/:id" element={<JobCardDetails />} />
+            <Route path="/Applications" element={<Applications />} />
+
           </>
         )}
 
