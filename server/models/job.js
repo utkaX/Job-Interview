@@ -37,7 +37,7 @@ const jobSchema = new Schema(
     responsibilities: [String],
     isLive: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     postedDate: {
       type: Date,

@@ -63,8 +63,10 @@ function App() {
   };
 
   // Condition to render the correct Navbar based on user role and route
-  const showEmpNavbar = employeerSideNav.includes(location.pathname) || isJobRoute();
-  const showMainNavbar = !showEmpNavbar && !hideNavAndFooter.includes(location.pathname);
+  const showEmpNavbar =
+    employeerSideNav.includes(location.pathname) || isJobRoute();
+  const showMainNavbar =
+    !showEmpNavbar && !hideNavAndFooter.includes(location.pathname);
 
   return (
     <>
@@ -81,16 +83,16 @@ function App() {
         <Route path="/company/:CompanyID" element={<Company />} />
         <Route path="/appliedjobs" element={<AppliedJobs />} />
         <Route path="/Notifications" element={<Notifications />} />
-        <Route path="/interview-details/:AppliedJobId" element={<InterviewDetails />} />
+        <Route
+          path="/interview-details/:AppliedJobId"
+          element={<InterviewDetails />}
+        />
         <Route path="/saved-jobs" element={<SavedJob />} />
+        <Route path="/add-profile" element={<AddProfile />} />
+        <Route path="/JobDetails/:JobId/ApplyJob" element={<ApplyJob />} />
 
         {/* Protected Routes for Job Seeker */}
-        {isJobSeeker && (
-          <>
-            <Route path="/add-profile" element={<AddProfile />} />
-            <Route path="/JobDetails/:JobId/ApplyJob" element={<ApplyJob />} />
-          </>
-        )}
+        {isJobSeeker && <></>}
 
         {isEmployer && (
           <>
@@ -119,7 +121,6 @@ function App() {
     </>
   );
 }
-
 
 function Main() {
   return (

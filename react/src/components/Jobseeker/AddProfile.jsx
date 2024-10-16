@@ -9,14 +9,15 @@ import ProfileStep4 from "./ProfileStep4";
 
 const AddProfile = () => {
   const location = useLocation();
-  const { name } = location.state || {}; 
-  const { user } = useAuth(); 
+  const { name } = location.state || {};
+  const { user, isLoggedIn } = useAuth();
   const navigate = useNavigate();
+    
 
-  if (!user) {
+  if (!isLoggedIn) {
     console.error("User not found. Please log in.");
-    navigate("/login"); 
-    return null; 
+    navigate("/login");
+    return null;
   }
 
   const splitName = (fullName) => {
@@ -59,13 +60,16 @@ const AddProfile = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost:8080/jobSeeker/addjobseeker", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "http://localhost:8080/jobSeeker/addjobseeker",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to submit profile.");

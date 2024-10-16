@@ -19,7 +19,7 @@ const PostJob = () => {
     benefits: "",
     jobTags: "",
     companyCulture: "",
-    Experience: "", // Added experience field
+    Experience: "", 
   });
 
   const fetchEmployerId = async (userId) => {
