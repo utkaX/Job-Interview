@@ -29,6 +29,7 @@ import AppliedJobs from "./components/AppliedJobs/AppliedJobs";
 import InterviewDetails from "./components/AppliedJobs/InterviewDetails";
 import SavedJob from "./components/Home/SavedJob";
 import EmpNavbar from "./components/Employer/Navbar";
+import UpdateProfile from "./components/Jobseeker/UpdateProfile";
 
 function App() {
   const location = useLocation();
@@ -90,6 +91,7 @@ function App() {
         <Route path="/saved-jobs" element={<SavedJob />} />
         <Route path="/add-profile" element={<AddProfile />} />
         <Route path="/JobDetails/:JobId/ApplyJob" element={<ApplyJob />} />
+        <Route path="/update-profile" element={<UpdateProfile />} />
 
         {/* Protected Routes for Job Seeker */}
         {isJobSeeker && <></>}

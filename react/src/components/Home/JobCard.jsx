@@ -14,13 +14,13 @@ const JobCard = (props) => {
     company,
     location,
     salary,
-    experience,
+    Experience,
     jobTags,
     _id,
     employeeId,
   } = props.jobDetails;
 
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const formattedSalary = useMemo(() => {
     return salary ? salary.toLocaleString() : "N/A";
   }, [salary]);
@@ -58,7 +58,7 @@ const JobCard = (props) => {
           <div className="flex items-center text-gray-600 text-sm mb-1">
             <FaClock className="mr-1 text-gray-400" /> {/* Experience Icon */}
             <span>
-              <strong className="font-medium">Experience:</strong> {experience}{" "}
+              <strong className="font-medium">Experience:</strong> {Experience}{" "}
               years
             </span>
           </div>

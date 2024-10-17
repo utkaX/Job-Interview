@@ -9,7 +9,7 @@ import ProfileStep4 from "./ProfileStep4";
 
 const AddProfile = () => {
   const location = useLocation();
-  const { name } = location.state || {};
+  const { name } = location.state || " ";
   const { user, isLoggedIn } = useAuth();
   const navigate = useNavigate();
     
@@ -84,7 +84,6 @@ const AddProfile = () => {
   };
 
   return (
-    //for the defing some test
     <div className="container mx-auto p-4">
       {step === 1 && (
         <ProfileStep1
