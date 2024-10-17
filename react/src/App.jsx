@@ -28,7 +28,11 @@ import AppliedJobs from "./components/AppliedJobs/AppliedJobs";
 import InterviewDetails from "./components/AppliedJobs/InterviewDetails";
 import SavedJob from "./components/Home/SavedJob";
 import EmpNavbar from "./components/Employer/Navbar";
+
+import UpdateProfile from "./components/Jobseeker/UpdateProfile";
+
 import Applications from "./components/Employer/Applications";
+
 
 function App() {
   const location = useLocation();
@@ -64,10 +68,64 @@ function App() {
   };
 
   // Condition to render the correct Navbar based on user role and route
-  const showEmpNavbar = employeerSideNav.includes(location.pathname) || isJobRoute();
-  const showMainNavbar = !showEmpNavbar && !hideNavAndFooter.includes(location.pathname);
+  const showEmpNavbar =
+    employeerSideNav.includes(location.pathname) || isJobRoute();
+  const showMainNavbar =
+    !showEmpNavbar && !hideNavAndFooter.includes(location.pathname);
 
   return (
+
+    <>
+      {showMainNavbar && <Navbar />}
+      {showEmpNavbar && <EmpNavbar />}
+
+      <Routes>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+        {/* <Route path="/verify-otp" element={<OtpVerification />} /> */}
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/search" element={<SearchResults />} />
+        <Route path="/JobDetails/:JobId" element={<JobDetails />} />
+        <Route path="/company/:CompanyID" element={<Company />} />
+        <Route path="/appliedjobs" element={<AppliedJobs />} />
+        <Route path="/Notifications" element={<Notifications />} />
+        <Route
+          path="/interview-details/:AppliedJobId"
+          element={<InterviewDetails />}
+        />
+        <Route path="/saved-jobs" element={<SavedJob />} />
+        <Route path="/add-profile" element={<AddProfile />} />
+        <Route path="/JobDetails/:JobId/ApplyJob" element={<ApplyJob />} />
+        <Route path="/update-profile" element={<UpdateProfile />} />
+
+        {/* Protected Routes for Job Seeker */}
+        {isJobSeeker && <></>}
+
+        {isEmployer && (
+          <>
+            <Route path="/PostJob" element={<PostJob />} />
+            <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+            <Route path="/employee-profile" element={<CompanyProfile />} />
+            <Route path="/manage-jobs" element={<ManageJobs />} />
+            <Route path="/job/:id" element={<JobCardDetails />} />
+          </>
+        )}
+
+        {/* Redirect unauthenticated users to login */}
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to={user ? (isEmployer ? "/employee-dashboard" : "/") : "/login"}
+            />
+          }
+        />
+      </Routes>
+
+      {/* Show Footer conditionally */}
+      {!hideNavAndFooter.includes(location.pathname) && <Footer />}
+      {showEmpNavbar && <Footer />}
+    </>
     <div className="app-layout flex">
       {/* Conditionally render Sidebar on employer routes */}
       {sideBarRoutes.includes(location.pathname) && <Sidebar />}

@@ -48,7 +48,6 @@ exports.sendOTP = async (req, res) => {
   }
 };
 
-
 exports.signup = async (req, res) => {
   try {
     const { email, password, role, otp } = req.body;
@@ -122,6 +121,7 @@ exports.login = async (req, res) => {
       });
     }
 
+    console.log("huu");
     const payload = {
       email: user.email,
       id: user._id,
@@ -272,4 +272,3 @@ exports.verifyToken = async (req, res) => {
     });
   }
 };
-

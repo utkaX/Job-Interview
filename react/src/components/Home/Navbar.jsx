@@ -137,7 +137,10 @@ export default function Navbar() {
             <div className="relative" ref={dropdownRef}>
               <button onClick={toggleDropdown} className="focus:outline-none">
                 <img
-                  src={user?.profilePicture || "https://via.placeholder.com/40"} // Replace with actual profile picture
+                  src={
+                    user?.profilePicture ||
+                    "https://ui-avatars.com/api/?name=Karan&background=0D8ABC&color=fff"
+                  } // Replace with actual profile picture
                   alt="Profile"
                   className="h-10 w-10 rounded-full border-2 border-gray-300 shadow-sm hover:shadow-md transition-all"
                 />
@@ -147,7 +150,7 @@ export default function Navbar() {
                   <ul className="py-1">
                     <li>
                       <Link
-                        to="/employee-dashboard"
+                        to="/update-profile"
                         className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                       >
                         Profile
