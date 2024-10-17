@@ -39,6 +39,7 @@ const ApplyJob = () => {
     window.scrollTo(0, 0);
     const loadJobSeeker = async () => {
       if (user && user._id) {
+        console.log(user._id)
         const jobSeeker = await fetchJobSeeker(user._id);
         if (jobSeeker) {
           setFormData((prev) => ({

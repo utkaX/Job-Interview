@@ -2,7 +2,6 @@ import React from "react";
 import { FaMapMarkerAlt, FaEnvelope, FaGlobe } from "react-icons/fa";
 
 const CompanyHeader = React.memo(({ company }) => {
-  console.log("in the header", company);
 
   return (
     <div className="flex justify-between items-center bg-white p-4 shadow-sm rounded-lg">

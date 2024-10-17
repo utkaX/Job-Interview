@@ -54,18 +54,21 @@ exports.getEmployerById = async (req, res) => {
 
 exports.getEmployerByUserId = async (req, res) => {
     try {
-      const userId = req.params.id; // Extracting userId from request parameters  
-    
-      const employer = await Employer.findOne({ userId }).populate("jobsPosted"); // Populate jobsPosted if needed
+      const userId = req.params.id; // Extracting userId from request parameters
   
-      if (!employer) {
-        return res.status(404).json({ message: "Employer not found" });
-      }
+      // Validate if userId is a valid ObjectId before querying
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: "Invalid user ID format" });
       }
   
+      // Find the employer by userId
+      const employer = await Employer.findOne({ userId }).populate("jobsPosted");
   
+      if (!employer) {
+        return res.status(404).json({ message: "Employer not found" });
+      }
+  
+      // Return the employer data if found
       res.status(200).json(employer);
     } catch (error) {
       console.error("Error fetching employer:", error);

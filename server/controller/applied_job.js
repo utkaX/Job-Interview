@@ -1,13 +1,19 @@
 const AppliedJob = require("../models/appliedJob");
 const { response } = require("express");
+const mongoose = require("mongoose");
+const Job = require('../models/job');
 
 // Create an applied job with validation
 exports.createAppliedJob = async (req, res) => {
   console.log("Body:", req.body); // Log incoming data
 
   try {
-    const { jobSeekerId, jobId, coverLetter, source, notes, resumeUrl } =
-      req.body;
+    const { jobSeekerId, jobId, coverLetter, source, notes, resumeUrl } = req.body;
+
+    // Check if jobSeekerId is valid
+    if (!mongoose.Types.ObjectId.isValid(jobSeekerId)) {
+      return res.status(400).json({ message: "Invalid jobSeekerId" });
+    }
 
     // Construct new applied job data
     const newAppliedJob = {
@@ -23,14 +29,41 @@ exports.createAppliedJob = async (req, res) => {
     res.status(201).json(savedAppliedJob);
   } catch (error) {
     console.error("Error creating job application:", error);
-    res
-      .status(400)
-      .json({
-        message: "Error creating job application",
-        error: error.message,
-      });
+    res.status(400).json({
+      message: "Error creating job application",
+      error: error.message,
+    });
   }
 };
+
+
+
+exports.companyApplications = async (req, res) => {
+  try {
+    const employerId = req.params.id; // Assuming the employer is authenticated
+
+    // Step 1: Find all jobs posted by this employer
+    const jobs = await Job.find({ employerId }).select('_id title');
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({ message: 'No jobs found for this employer.' });
+    }
+
+    // Step 2: Extract jobIds and find applications
+    const jobIds = jobs.map(job => job._id);
+    const applications = await AppliedJob.find({ jobId: { $in: jobIds } })
+      .populate('jobSeekerId', 'firstName lastName resume')
+      .populate('jobId', 'title')
+      .sort({ appliedDate: -1 });
+
+    res.status(200).json({ applications });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error.' });
+  }
+};
+
+
 
 // Fetch all applied jobs, allowing query filters
 exports.getAllAppliedJobs = async (req, res) => {

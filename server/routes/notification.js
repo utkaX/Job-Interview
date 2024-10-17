@@ -5,13 +5,15 @@ const{createNotification,
     getAllNotification,
     getNotificationById,
     updateNotification,
-    deleteNotification
+    deleteNotification,
+    getNotificationsByUserId
 }=require("../controller/notification");
 
 
-router.get("/notification",createNotification);
+router.post("/notification",createNotification);
 router.get("/getAllNotification",getAllNotification);
 router.get("/notification/:id",getNotificationById);
+router.get("/getNotificationsByUserId/:id",getNotificationsByUserId);
 router.put("/notification/:id",updateNotification);
 router.delete("/notification/:id",deleteNotification);
 

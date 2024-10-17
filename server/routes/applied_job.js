@@ -8,10 +8,12 @@ const{
     getAppliedJobById,
     updateAppliedJob,
     deleteAppliedJob,
-    getApplicationsByJobSeekerId}=require("../controller/applied_job")
+    getApplicationsByJobSeekerId,
+    companyApplications}=require("../controller/applied_job")
 
 
 router.post("/createApplyJob",createAppliedJob)
+router.get("/getApplications/:id",companyApplications)
 router.get("/getAllAppliedJob",getAllAppliedJobs)
 router.get("/getAppliedJobById/:id",getAppliedJobById)
 router.get("/apliedjobforjs/:jobSeekerId",getApplicationsByJobSeekerId)

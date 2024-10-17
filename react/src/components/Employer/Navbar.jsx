@@ -51,8 +51,8 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link className="navButton text-lg font-semibold">
-              {<Applications />}
+            <Link to="/Applications" className="navButton text-lg font-semibold">
+              Applications
             </Link>
           </li>
           <li>

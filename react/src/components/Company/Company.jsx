@@ -12,7 +12,6 @@ export default function Company() {
   const companyId = location.state?.companyId
     ? decodeURIComponent(location.state.companyId)
     : null;
-  console.log(companyId);
 
   const fetchEmployees = async () => {
     try {

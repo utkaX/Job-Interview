@@ -8,6 +8,7 @@ import { useAuth } from "../../context/authContext";
 export default function Navbar() {
   const { isLoggedIn, logout, user } = useAuth(); // Get the user and logout from auth context
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0); // State for notification count
   const navigate = useNavigate(); // Initialize navigate
   const dropdownRef = useRef(null); // Reference for dropdown menu
 
@@ -47,6 +48,26 @@ export default function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Function to increment notification count when a new job is added
+  const incrementNotificationCount = () => {
+    setNotificationCount((prevCount) => prevCount + 1);
+  };
+
+  // UseEffect to fetch notifications count on user login
+  useEffect(() => {
+    if (isLoggedIn) {
+      // Fetch notifications count from your API if user is logged in
+      const fetchNotificationsCount = async () => {
+        const response = await fetch(`http://localhost:8080/notification/getCount/${user._id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setNotificationCount(data.count); // Assuming API returns { count: number }
+        }
+      };
+      fetchNotificationsCount();
+    }
+  }, [isLoggedIn, user]);
 
   return (
     <nav className="bg-gray-100 py-4 shadow-lg">
@@ -98,12 +119,17 @@ export default function Navbar() {
             <FaBookmark size={22} /> {/* Saved Jobs icon */}
           </Link>
 
-          {/* Notification Icon */}
+          {/* Notification Icon with badge */}
           <Link
             to="/Notifications"
-            className="text-gray-800 hover:text-blue-500 transition"
+            className="relative text-gray-800 hover:text-blue-500 transition"
           >
             <FaBell size={22} /> {/* Notification bell icon */}
+            {notificationCount > 0 && (
+              <span className="absolute top-0 right-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-red-100 bg-red-600 rounded-full">
+                {notificationCount > 9 ? "9+" : notificationCount}
+              </span>
+            )}
           </Link>
 
           {/* Profile Picture and Dropdown */}
