@@ -152,9 +152,8 @@ exports.searchJobs = async (req, res) => {
 
 exports.getJobsByCompanyId = async (req, res) => {
     try {
-      const { companyId } = req.params; // Extract company ID from request parameters
+      const { companyId } = req.params; 
   
-      // Fetch jobs for the given company ID and sort them by createdAt in descending order
       const jobs = await Job.find({ employerId: companyId }).sort({ createdAt: -1 });
   
       if (jobs.length === 0)

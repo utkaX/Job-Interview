@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/authContext";
-import Sidebar from "./Sidebar";
 import { useNavigate } from "react-router-dom";
+import Layout from "./Layout";
 
 const PostJob = () => {
   const navigate = useNavigate();
@@ -20,19 +20,19 @@ const PostJob = () => {
     benefits: "",
     jobTags: "",
     companyCulture: "",
-
-    Experience: "", 
-
+    experience: "", // Changed from "Experience" to lowercase
   });
 
   const fetchEmployerId = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:8080/employer/getEmployerByUserId/${userId}`);
+      const response = await fetch(
+        `http://localhost:8080/employer/getEmployerByUserId/${userId}`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch employer data");
       }
       const data = await response.json();
-      return data._id; // assuming _id is in the response
+      return data._id;
     } catch (error) {
       console.error("Error fetching employer data:", error);
       return null;
@@ -63,7 +63,9 @@ const PostJob = () => {
 
   const fetchJobTypeId = async (jobTypeTitle) => {
     try {
-      const response = await fetch(`http://localhost:8080/jobtype/getJobTypeByTitle/${jobTypeTitle}`);
+      const response = await fetch(
+        `http://localhost:8080/jobtype/getJobTypeByTitle/${jobTypeTitle}`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch job type");
       }
@@ -77,17 +79,20 @@ const PostJob = () => {
 
   const notifyJobSeekers = async (jobId, jobTitle) => {
     try {
-      const response = await fetch('http://localhost:8080/notification/notification', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: jobData.employerId,
-          jobId,
-          message: `New job posted: ${jobTitle}`,
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:8080/notification/notification",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: jobData.employerId,
+            jobId,
+            message: `New job posted: ${jobTitle}`,
+          }),
+        }
+      );
 
       if (!response.ok) {
         const result = await response.json();
@@ -102,7 +107,6 @@ const PostJob = () => {
   };
 
   const incrementNotificationCount = () => {
-    // Your logic to increment the notification count goes here
     console.log("Notification count incremented.");
   };
 
@@ -113,7 +117,7 @@ const PostJob = () => {
       if (jobTypeId) {
         const updatedJobData = { ...jobData, jobType: jobTypeId };
 
-        if (!updatedJobData.Experience) {
+        if (!updatedJobData.experience) {
           alert("Experience is required.");
           return;
         }
@@ -137,7 +141,7 @@ const PostJob = () => {
         alert("Job posted successfully!");
 
         await notifyJobSeekers(jobResult._id, updatedJobData.title); // Notify job seekers
-        incrementNotificationCount(); // Increment notification count
+        incrementNotificationCount();
         navigate("/Notifications");
       } else {
         console.error("Job type not found");
@@ -150,15 +154,21 @@ const PostJob = () => {
   };
 
   return (
-    <div className="flex">
-      <Sidebar />
+    <Layout>
       <div className="flex-1 p-8 bg-gray-50">
-        <h2 className="text-4xl font-bold mb-6 text-center text-gray-800">Post a New Job</h2>
-        <form onSubmit={handleSubmit} className="bg-white shadow-lg rounded-lg p-10 max-w-3xl mx-auto border border-gray-200">
+        <h2 className="text-4xl font-bold mb-6 text-center text-gray-800">
+          Post a New Job
+        </h2>
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow-lg rounded-lg p-10 max-w-3xl mx-auto border border-gray-200"
+        >
           {/* Job Title and Location */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-gray-700 font-semibold mb-1">Job Title</label>
+              <label className="block text-gray-700 font-semibold mb-1">
+                Job Title
+              </label>
               <input
                 type="text"
                 name="title"
@@ -170,7 +180,9 @@ const PostJob = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-semibold mb-1">Location</label>
+              <label className="block text-gray-700 font-semibold mb-1">
+                Location
+              </label>
               <input
                 type="text"
                 name="location"
@@ -186,7 +198,9 @@ const PostJob = () => {
           {/* Job Type and Salary */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-gray-700 font-semibold mb-1">Job Type</label>
+              <label className="block text-gray-700 font-semibold mb-1">
+                Job Type
+              </label>
               <select
                 name="jobType"
                 value={jobData.jobType}
@@ -203,7 +217,9 @@ const PostJob = () => {
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 font-semibold mb-1">Salary</label>
+              <label className="block text-gray-700 font-semibold mb-1">
+                Salary
+              </label>
               <input
                 type="number"
                 name="salary"
@@ -219,7 +235,9 @@ const PostJob = () => {
           {/* Category and Description */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-gray-700 font-semibold mb-1">Category</label>
+              <label className="block text-gray-700 font-semibold mb-1">
+                Category
+              </label>
               <input
                 type="text"
                 name="category"
@@ -231,7 +249,9 @@ const PostJob = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-semibold mb-1">Description</label>
+              <label className="block text-gray-700 font-semibold mb-1">
+                Description
+              </label>
               <textarea
                 name="description"
                 value={jobData.description}
@@ -244,22 +264,72 @@ const PostJob = () => {
             </div>
           </div>
 
-          {/* Requirements and Responsibilities */}
+          {/* Experience and Benefits */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-gray-700 font-semibold mb-1">Requirements</label>
-              <textarea
-                name="requirements"
-                value={jobData.requirements}
+              <label className="block text-gray-700 font-semibold mb-1">
+                Experience (Years)
+              </label>
+              <input
+                type="number"
+                name="experience"
+                value={jobData.experience}
                 onChange={handleChange}
                 className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                rows="3"
-                placeholder="List the job requirements"
+                placeholder="e.g. 3"
                 required
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-semibold mb-1">Responsibilities</label>
+              <label className="block text-gray-700 font-semibold mb-1">
+                Benefits
+              </label>
+              <textarea
+                name="benefits"
+                value={jobData.benefits}
+                onChange={handleChange}
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                rows="3"
+                placeholder="List the benefits provided"
+              />
+            </div>
+          </div>
+
+          {/* Job Tags, Company Culture, and Responsibilities */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label className="block text-gray-700 font-semibold mb-1">
+                Job Tags
+              </label>
+              <input
+                type="text"
+                name="jobTags"
+                value={jobData.jobTags}
+                onChange={handleChange}
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                placeholder="e.g. JavaScript, React"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700 font-semibold mb-1">
+                Company Culture
+              </label>
+              <textarea
+                name="companyCulture"
+                value={jobData.companyCulture}
+                onChange={handleChange}
+                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                rows="3"
+                placeholder="Describe the company's work culture"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 mb-6">
+            <div>
+              <label className="block text-gray-700 font-semibold mb-1">
+                Responsibilities
+              </label>
               <textarea
                 name="responsibilities"
                 value={jobData.responsibilities}
@@ -272,74 +342,17 @@ const PostJob = () => {
             </div>
           </div>
 
-          {/* Additional Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block text-gray-700 font-semibold mb-1">Experience</label>
-              <input
-                type="text"
-                name="Experience"
-                value={jobData.Experience}
-                onChange={handleChange}
-                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                placeholder="e.g. 3 years"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 font-semibold mb-1">Benefits</label>
-              <textarea
-                name="benefits"
-                value={jobData.benefits}
-                onChange={handleChange}
-                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                rows="3"
-                placeholder="List the job benefits"
-                required
-              />
-            </div>
-          </div>
-
-          {/* Job Tags and Company Culture */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block text-gray-700 font-semibold mb-1">Job Tags</label>
-              <input
-                type="text"
-                name="jobTags"
-                value={jobData.jobTags}
-                onChange={handleChange}
-                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                placeholder="e.g. JavaScript, React"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 font-semibold mb-1">Company Culture</label>
-              <textarea
-                name="companyCulture"
-                value={jobData.companyCulture}
-                onChange={handleChange}
-                className="w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                rows="3"
-                placeholder="Describe the company culture"
-                required
-              />
-            </div>
-          </div>
-
-          {/* Submit Button */}
-          <div className="text-center mt-6">
+          <div className="text-center">
             <button
               type="submit"
-              className="bg-blue-500 text-white font-semibold py-3 px-6 rounded-lg shadow-lg transition-all hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all"
             >
               Post Job
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </Layout>
   );
 };
 

@@ -141,7 +141,7 @@ const JobCard = ({ appliedJob }) => {
           </div>
         )}
       </div>
-      {status === "shortlisted" && (
+      {status === "Shortlisted" && (
         <button
           className="mt-4 bg-gradient-to-r from-green-400 to-green-600 text-white px-5 py-2 rounded-md hover:bg-green-500 transition duration-200"
           onClick={() => handleInterviewDetailsClick(appliedJob)}

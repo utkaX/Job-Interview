@@ -1,20 +1,14 @@
-// Dashboard.jsx
-import React, { useState } from 'react';
-import Sidebar from './Sidebar';
+import React from "react";
+import Layout from "./Layout"; // Layout contains Navbar, Sidebar, and Footer
 
 const Dashboard = () => {
-  
   return (
-    <div className="h-screen flex flex-col">
-    
-      
-      <div className="flex flex-grow">
-        <Sidebar />
-          <div className="flex-grow bg-gray-100 p-4">
-          <h1 className="text-2xl">Welcome to the Dashboard</h1>
-        </div>
+    <Layout>
+      <div>
+        <h1 className="text-2xl font-bold">Dashboard</h1>
+
       </div>
-    </div>
+    </Layout>
   );
 };
 

@@ -23,7 +23,9 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 async function main() {
-  await mongoose.connect('mongodb+srv://gurjarkaran03022004:uiMrlvFtyky53Uog@career-craft.yxphn.mongodb.net/job-interview');
+  await mongoose.connect(
+    "mongodb+srv://gurjarkaran03022004:uiMrlvFtyky53Uog@career-craft.yxphn.mongodb.net/job-interview"
+  );
 }
 main()
   .then(() => {
@@ -39,10 +41,10 @@ app.use("/users", userRoutes);
 const auth = require("./routes/test.js");
 app.use("/auth", auth);
 
-const jobRoutes = require('./routes/job');
+const jobRoutes = require("./routes/job");
 app.use("/jobs", jobRoutes);
 
-const employeeRoute = require('./routes/employer');
+const employeeRoute = require("./routes/employer");
 app.use("/employer", employeeRoute);
 
 const jobSeekerRoute = require("./routes/job_seeker.js");
@@ -57,7 +59,7 @@ app.use("/company", companyRoute);
 const interviewRoute = require("./routes/interview");
 app.use("/interview", interviewRoute);
 
-const jobTypeRoute = require('./routes/job_type');
+const jobTypeRoute = require("./routes/job_type");
 app.use("/jobtype", jobTypeRoute);
 
 const notificationRoute = require("./routes/notification");

@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar";
 import JobCard from "./JobCard"; // Import the JobCard component
 import { Link } from "react-router-dom"; // Import Link
 import { FaSearch } from "react-icons/fa"; // Import search icon
+import Layout from "./Layout";
 
 const ManageJobs = () => {
   const { user } = useAuth();
@@ -13,6 +14,7 @@ const ManageJobs = () => {
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [filteredJobs, setFilteredJobs] = useState([]); // State for filtered jobs
   const [companyId, setCompanyId] = useState(""); // State for company ID
+  console.log(user);
 
   useEffect(() => {
     const fetchCompanyAndJobs = async () => {
@@ -48,7 +50,6 @@ const ManageJobs = () => {
     fetchCompanyAndJobs();
   }, [user]);
 
-  // Search function that only runs when the button is clicked
   const handleSearch = () => {
     const results = jobs.filter((job) =>
       job.title.toLowerCase().includes(searchQuery.toLowerCase())
@@ -60,13 +61,16 @@ const ManageJobs = () => {
   const toggleLiveStatus = async (jobId, currentStatus) => {
     try {
       const updatedStatus = !currentStatus; // Toggle the live status
-      const response = await fetch(`http://localhost:8080/jobs/updateJobById/${jobId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ isLive: updatedStatus }),
-      });
+      const response = await fetch(
+        `http://localhost:8080/jobs/updateJobById/${jobId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ isLive: updatedStatus }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update job status.");
@@ -84,58 +88,70 @@ const ManageJobs = () => {
     }
   };
 
-  if (loading) return <p className="text-center text-lg">Loading...</p>;
+  if (loading)
+    return (
+      <Layout>
+        <p className="text-center text-lg">Loading...</p>
+      </Layout>
+    );
   if (error) return <p className="text-red-500 text-center">Error: {error}</p>;
 
   return (
-    <div className="flex bg-gray-50">
-      <Sidebar />
+    <Layout>
+      <div className="flex bg-gray-50">
+        <div className="max-w-7xl mx-auto p-6">
+          <h2 className="text-4xl font-bold mb-6 text-center text-blue-600">
+            My Jobs
+          </h2>
 
-      <div className="max-w-7xl mx-auto p-6">
-        <h2 className="text-4xl font-bold mb-6 text-center text-blue-600">My Jobs</h2>
-
-        <div className="mb-4 flex items-center">
-          <div className="relative w-full">
-            <input
-              type="text"
-              placeholder="Search by job title..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery as the user types
-              className="border border-gray-300 rounded-md p-3 pl-10 w-full focus:outline-none focus:ring focus:ring-blue-400"
-            />
-            <FaSearch className="absolute left-3 top-3 text-gray-400" />
+          <div className="mb-4 flex items-center">
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Search by job title..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)} // Update searchQuery as the user types
+                className="border border-gray-300 rounded-md p-3 pl-10 w-full focus:outline-none focus:ring focus:ring-blue-400"
+              />
+              <FaSearch className="absolute left-3 top-3 text-gray-400" />
+            </div>
+            <button
+              onClick={handleSearch} // Trigger search on click
+              className="ml-2 bg-blue-600 text-white rounded-md px-4 py-2 transition duration-200 hover:bg-blue-700"
+            >
+              Search
+            </button>
           </div>
-          <button
-            onClick={handleSearch} // Trigger search on click
-            className="ml-2 bg-blue-600 text-white rounded-md px-4 py-2 transition duration-200 hover:bg-blue-700"
-          >
-            Search
-          </button>
-        </div>
 
-        {filteredJobs.length === 0 ? (
-          <p className="text-center text-lg text-gray-500">No jobs found.</p>
-        ) : (
-          <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredJobs.map((job) => (
-              <li key={job._id} className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4">
-                <Link to={`/job/${job._id}`} className="block mb-4">
-                  <JobCard job={job} /> {/* Pass the job object here */}
-                </Link>
-                <button
-                  onClick={() => toggleLiveStatus(job._id, job.isLive)} // Toggle job status on click
-                  className={`w-full py-2 mt-2 text-white font-semibold rounded-md transition duration-200 ${
-                    job.isLive ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"
-                  }`}
+          {filteredJobs.length === 0 ? (
+            <p className="text-center text-lg text-gray-500">No jobs found.</p>
+          ) : (
+            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredJobs.map((job) => (
+                <li
+                  key={job._id}
+                  className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 p-4"
                 >
-                  {job.isLive ? "Set to Not Live" : "Set to Live"}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+                  <Link to={`/job/${job._id}`} className="block mb-4">
+                    <JobCard job={job} /> {/* Pass the job object here */}
+                  </Link>
+                  <button
+                    onClick={() => toggleLiveStatus(job._id, job.isLive)} // Toggle job status on click
+                    className={`w-full py-2 mt-2 text-white font-semibold rounded-md transition duration-200 ${
+                      job.isLive
+                        ? "bg-green-500 hover:bg-green-600"
+                        : "bg-red-500 hover:bg-red-600"
+                    }`}
+                  >
+                    {job.isLive ? "Set to Not Live" : "Set to Live"}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

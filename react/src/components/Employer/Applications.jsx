@@ -1,37 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/authContext";
-import ApplicationCard from "./ApplicationCard"; // Import the new ApplicationCard component
+import { Link } from "react-router-dom"; // Import Link for navigation
+import ApplicationCard from "./ApplicationCard";
 import Sidebar from "./Sidebar";
+import Layout from "./Layout";
 
 const Applications = () => {
-  const user = useAuth(); 
-  const [applications, setApplications] = useState([]);
+  const user = useAuth();
+  const [employer, setemployer] = useState();
+  const [jobs, setjobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  console.log(user);
 
   const fetchEmployerId = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/employer/getEmployerByUserId/${user.user._id}`);
+      const response = await fetch(
+        `http://localhost:8080/employer/getEmployerByUserId/${user.user._id}`
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch employer information');
+        throw new Error("Failed to fetch employer information");
       }
       const employerData = await response.json();
+      setemployer(employerData);
+
       return employerData._id;
     } catch (err) {
-      throw new Error('Error fetching employer information');
+      throw new Error("Error fetching employer information");
     }
   };
 
-  const fetchApplications = async (employerId) => {
+  const fetchJobs = async (employerId) => {
     try {
-      const response = await fetch(`http://localhost:8080/appliedJob/getApplications/${employerId}`);
+      const response = await fetch(
+        `http://localhost:8080/jobs/company/${employerId}`
+      );
       if (!response.ok) {
-        throw new Error('Failed to fetch applications');
+        throw new Error("Failed to fetch applications");
       }
       const data = await response.json();
-      setApplications(data.applications);
+      setjobs(data);
     } catch (err) {
-      throw new Error('Error fetching applications');
+      throw new Error("Error fetching applications");
     }
   };
 
@@ -40,7 +50,7 @@ const Applications = () => {
       try {
         setLoading(true);
         const employerId = await fetchEmployerId();
-        await fetchApplications(employerId);
+        await fetchJobs(employerId);
       } catch (err) {
         setError(err.message);
         console.error(err);
@@ -53,7 +63,11 @@ const Applications = () => {
   }, [user.user._id]);
 
   if (loading) {
-    return <p className="text-center mt-4">Loading applications...</p>;
+    return (
+      <Layout>
+        <p className="text-center mt-4">Loading applications...</p>
+      </Layout>
+    );
   }
 
   if (error) {
@@ -61,21 +75,17 @@ const Applications = () => {
   }
 
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="container mx-auto py-8">
-        <h1 className="text-2xl font-bold mb-6 text-center">Job Applications</h1>
-        {applications.length === 0 ? (
-          <p className="text-center text-gray-600">No applications found</p>
-        ) : (
-          <div className="application-list grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {applications.map((application) => (
-              <ApplicationCard key={application._id} application={application} />
-            ))}
-          </div>
-        )}
+    <Layout>
+      <h2 className="text-xl font-bold mb-4">Your Jobs</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {jobs.map((job) => (
+          // Include employerId in the URL
+          <Link to={`/jobCandidates/${job._id}`} key={job._id}>
+            <ApplicationCard job={job} />
+          </Link>
+        ))}
       </div>
-    </div>
+    </Layout>
   );
 };
 

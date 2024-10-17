@@ -1,39 +1,42 @@
 import React from "react";
 
-const ApplicationCard = ({ application }) => {
+const ApplicationCard = ({ job }) => {
+  // Log the job object to the console
+  console.log(job);
+
   return (
-    <div className="application-card ml-6 p-6 bg-white shadow-lg rounded-lg mb-6 transition-transform transform hover:scale-105 hover:shadow-2xl duration-300 ease-in-out">
-      <h3 className="text-xl font-semibold text-blue-600 mb-2 truncate">
-        Job Title: {application.jobId.title || application.jobId._id}
+    <div className="application-card ml-6 p-6 bg-white shadow-lg rounded-lg mb-6 transition-transform transform">
+      <h3 className="text-xl font-semibold text-blue-600 mb-2">
+        Job Title: {job.title}
       </h3>
       <div className="text-sm text-gray-700 space-y-1">
-        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-          <span className="font-bold">Status:</span> {application.status}
+        <p>
+          <span className="font-bold">Description:</span>{" "}
+          {job.description || "No description available"}
         </p>
-        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-          <span className="font-bold">Cover Letter:</span> {application.coverLetter || "No cover letter provided"}
+        <p>
+          <span className="font-bold">Location:</span>{" "}
+          {job.location || "Not specified"}
         </p>
-        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-          <span className="font-bold">Resume:</span> {application.resume || "No resume uploaded"}
+        <p>
+          <span className="font-bold">Job Type:</span> {job.jobType}
         </p>
-        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-          <span className="font-bold">Source:</span> {application.source}
+        <p>
+          <span className="font-bold">Category:</span>{" "}
+          {job.category || "Not specified"}
         </p>
-        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-          <span className="font-bold">Notes:</span> {application.notes || "No notes available"}
+        <p>
+          <span className="font-bold">Salary:</span> $
+          {job.salary?.toLocaleString() || "Not specified"}
         </p>
-        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-          <span className="font-bold">Application Type:</span> {application.applicationType}
-        </p>
-        <p className="overflow-hidden overflow-ellipsis whitespace-nowrap">
-          <span className="font-bold">Applied Date:</span> {new Date(application.appliedDate).toLocaleDateString()}
+        <p>
+          <span className="font-bold">Posted Date:</span>{" "}
+          {new Date(job.postedDate).toLocaleDateString()}
         </p>
       </div>
-
-      {/* Button section */}
       <div className="mt-4 flex justify-end">
         <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400">
-          View Details
+          View Application
         </button>
       </div>
     </div>
