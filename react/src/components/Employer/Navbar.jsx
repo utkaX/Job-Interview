@@ -86,7 +86,7 @@ export default function EmployerNavbar() {
           </li>
           <li>
             <Link
-              to="/employer-jobs"
+              to="#"
               className="navButton text-lg font-semibold"
             >
               Jobs
@@ -94,7 +94,7 @@ export default function EmployerNavbar() {
           </li>
           <li>
             <Link
-              to="/employer-candidates"
+              to="#"
               className="navButton text-lg font-semibold"
             >
               Candidates
@@ -102,7 +102,7 @@ export default function EmployerNavbar() {
           </li>
           <li>
             <Link
-              to="/employer-profile"
+              to="#"
               className="navButton text-lg font-semibold"
             >
               Profile
@@ -129,7 +129,7 @@ export default function EmployerNavbar() {
                   <ul className="py-1">
                     <li>
                       <Link
-                        to="/employer-profile"
+                        to="/profile"
                         className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                       >
                         Profile

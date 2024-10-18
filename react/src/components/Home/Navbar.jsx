@@ -150,7 +150,7 @@ export default function Navbar() {
                   <ul className="py-1">
                     <li>
                       <Link
-                        to="/update-profile"
+                        to="/profile"
                         className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                       >
                         Profile

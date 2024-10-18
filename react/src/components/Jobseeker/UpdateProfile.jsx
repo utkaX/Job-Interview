@@ -9,7 +9,7 @@ const UpdateProfile = () => {
     const fetchProfileData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/jobSeeker/getJobSeekerById/${user._id}`
+          `http://localhost:8080/jobSeeker/getJobSeekerByUserId/${user._id}`
         );
         if (!response.ok) throw new Error("Failed to fetch job seeker");
         const data = await response.json();

@@ -42,7 +42,10 @@ exports.getJobSeekerByUserId = async (req, res) => {
       .exec();
 
     if (!jobSeeker) {
-      return res.status(404).json({ message: "Job seeker not found" });
+      return res.status(200).json({
+        success: false,
+        message: 'No profile found for this user'
+      });
     }
 
     res.status(200).json(jobSeeker);
@@ -58,18 +61,22 @@ exports.getJobSeekerByUserId = async (req, res) => {
 // Update a job seeker by ID
 exports.updateJobSeekerById = async (req, res) => {
   try {
-    const updatedJobSeeker = await JobSeeker.findByIdAndUpdate(
-      req.params.id,
+    const userId = req.params.id; // Get userId from the request parameters
+
+    // Find the job seeker by userId and update their details
+    const updatedJobSeeker = await JobSeeker.findOneAndUpdate(
+      { user: userId }, // Filter by user ID
       req.body,
       { new: true, runValidators: true } // Options: new returns the updated document, runValidators validates the update
     );
-    if (!updatedJobSeeker)
+
+    if (!updatedJobSeeker) {
       return res.status(404).json({ message: "Job seeker not found" });
+    }
+    
     res.status(200).json(updatedJobSeeker);
   } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error updating job seeker", error: err.message });
+    res.status(500).json({ message: "Error updating job seeker", error: err.message });
   }
 };
 

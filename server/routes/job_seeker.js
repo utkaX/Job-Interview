@@ -18,8 +18,10 @@ const {
 router.post("/addjobseeker", createJobSeeker);
 router.get("/getAlljobseeker", getAllJobSeekers);
 router.get("/getJobSeekerById/:id", getJobSeekerByUserId);
+router.get("/getJobSeekerByUserId/:id", getJobSeekerByUserId);
 router.put("/updateJobSeekerById/:id", updateJobSeekerById);
 router.delete("/deleteJobSeeker/:id", deleteJobSeeker);
+
 
 // New routes for saved jobs
 router.post("/save-job", saveJob); // Save a job

@@ -30,11 +30,12 @@ import Applications from "./components/Employer/Applications";
 import JobCandidates from "./components/Employer/JobCandidates";
 import CandidateDetails from "./components/Employer/candidateDetails";
 import UpdateInterviewDetails from "./components/Employer/UpdateInterviewDetails";
+import UserProfile from "./components/Jobseeker/UserProfile";
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
 
-  if (!user || user.role !== "employer") {
-  }
+  // if (!user || user.role !== "employer") {
+  // }
 
   return children;
 }
@@ -85,6 +86,7 @@ function App() {
         <Route path="/add-profile" element={<AddProfile />} />
         <Route path="/JobDetails/:JobId/ApplyJob" element={<ApplyJob />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
+        <Route path="/profile" element={<UserProfile />} />
 
         <Route path="/PostJob" element={<PostJob />} />
         <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
@@ -100,7 +102,7 @@ function App() {
         <Route path="/update-interview-details/:id" element={<UpdateInterviewDetails />} />
       </Routes>
 
-      {/* {!hideNavAndFooter.includes(location.pathname) && <Footer />} */}
+      {!hideNavAndFooter.includes(location.pathname) && <Footer />}
     </>
   );
 }
