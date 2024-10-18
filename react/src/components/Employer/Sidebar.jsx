@@ -35,7 +35,7 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            to="#"
+            to="/interview-schedule"
             className="block p-2 rounded hover:bg-gray-700 transition"
           >
             Interview Schedule

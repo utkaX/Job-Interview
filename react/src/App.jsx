@@ -3,7 +3,6 @@ import {
   Routes,
   Route,
   useLocation,
-  Navigate,
 } from "react-router-dom";
 import Dashboard from "./components/Home/Dashboard";
 import Signup from "./auth/signup";
@@ -31,12 +30,14 @@ import JobCandidates from "./components/Employer/JobCandidates";
 import CandidateDetails from "./components/Employer/candidateDetails";
 import UpdateInterviewDetails from "./components/Employer/UpdateInterviewDetails";
 import UserProfile from "./components/Jobseeker/UserProfile";
+import InterviewRoom from "./components/InterviewRoom";
+import InterviewSchedule from "./components/Employer/InterviewSchedule"; // Fixed typo
+import SocketProvider from "./context/Socket";
+
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
 
-  // if (!user || user.role !== "employer") {
-  // }
-
+  // Add logic to protect routes if necessary
   return children;
 }
 
@@ -54,10 +55,11 @@ function App() {
     "/employee-profile",
     "/manage-jobs",
     "/job/",
-    "/Applications",
+    "/applications", // Ensure consistent casing for paths
     "/jobCandidates/",
     "/candidateDetails/",
     "/update-interview-details/",
+    "/interview-schedule",
   ];
 
   const showMainNavbar = !hideNavAndFooter.some((route) =>
@@ -77,7 +79,7 @@ function App() {
         <Route path="/JobDetails/:JobId" element={<JobDetails />} />
         <Route path="/company/:CompanyID" element={<Company />} />
         <Route path="/appliedjobs" element={<AppliedJobs />} />
-        <Route path="/Notifications" element={<Notifications />} />
+        <Route path="/notifications" element={<Notifications />} />
         <Route
           path="/interview-details/:AppliedJobId"
           element={<InterviewDetails />}
@@ -87,19 +89,24 @@ function App() {
         <Route path="/JobDetails/:JobId/ApplyJob" element={<ApplyJob />} />
         <Route path="/update-profile" element={<UpdateProfile />} />
         <Route path="/profile" element={<UserProfile />} />
-
-        <Route path="/PostJob" element={<PostJob />} />
+        <Route path="/postJob" element={<PostJob />} />
         <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
         <Route path="/employee-profile" element={<CompanyProfile />} />
         <Route path="/manage-jobs" element={<ManageJobs />} />
         <Route path="/job/:id" element={<JobCardDetails />} />
-        <Route path="/Applications" element={<Applications />} />
+        <Route path="/applications" element={<Applications />} />
         <Route path="/jobCandidates/:jobId" element={<JobCandidates />} />
         <Route
           path="/candidateDetails/:candidateId"
           element={<CandidateDetails />}
         />
-        <Route path="/update-interview-details/:id" element={<UpdateInterviewDetails />} />
+        <Route
+          path="/update-interview-details/:id"
+          element={<UpdateInterviewDetails />}
+        />
+        <Route path="/interview-schedule" element={<InterviewSchedule />} />
+        <Route path="/interview" element={<InterviewRoom />} />{" "}
+        {/* Fixed typo */}
       </Routes>
 
       {!hideNavAndFooter.includes(location.pathname) && <Footer />}
@@ -109,9 +116,11 @@ function App() {
 
 function Main() {
   return (
-    <Router>
-      <App />
-    </Router>
+    <SocketProvider>
+      <Router>
+        <App />
+      </Router>
+    </SocketProvider>
   );
 }
 

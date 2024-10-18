@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   FaCalendarAlt,
   FaMapMarkerAlt,
@@ -7,14 +7,21 @@ import {
   FaClipboardList,
   FaUser,
 } from "react-icons/fa";
+import { useAuth } from "../../context/authContext"; // Import useAuth to access user details
+
+import { useSocket } from "../../context/Socket";
 
 const InterviewDetails = () => {
+  const { socket } = useSocket();
+
+  const { user } = useAuth(); // Destructure user from authContext to get the email
   const [interviewDetails, setInterviewDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const location = useLocation();
   const appliedJob = location.state?.appliedJob || null;
+  const navigate = useNavigate(); // Use navigate for redirection
 
   useEffect(() => {
     const fetchInterviewDetails = async () => {
@@ -38,6 +45,22 @@ const InterviewDetails = () => {
 
     fetchInterviewDetails();
   }, [appliedJob]);
+
+  const handleRoomJoined = ({ roomId }) => {
+    navigate(`/interview?email=${user.email}&roomId=${roomId}`);
+  };
+  useEffect(() => {
+    socket.on("joined-room", handleRoomJoined);
+  }, [socket]);
+
+  const handleJoinInterview = () => {
+    if (interviewDetails && interviewDetails.roomId) {
+      socket.emit("join-room", {
+        email: user.email,
+        roomId: interviewDetails.roomId,
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -91,20 +114,22 @@ const InterviewDetails = () => {
         </div>
       </div>
 
-      <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
-        <FaLink className="text-blue-500 mr-3" size={24} />
-        <div>
-          <p className="text-md font-semibold">Interview Link:</p>
-          <a
-            href={interviewDetails.interviewLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:bg-blue-100 hover:underline px-2 py-1 rounded transition duration-200"
-          >
-            {interviewDetails.interviewLink}
-          </a>
+      {interviewDetails.interviewMode === "online" && (
+        <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
+          <FaLink className="text-blue-500 mr-3" size={24} />
+          <div>
+            <p className="text-md font-semibold">Interview Link:</p>
+            <a
+              href={interviewDetails.interviewLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:bg-blue-100 hover:underline px-2 py-1 rounded transition duration-200"
+            >
+              {interviewDetails.interviewLink}
+            </a>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
         <FaClipboardList className="text-blue-500 mr-3" size={24} />
@@ -138,6 +163,15 @@ const InterviewDetails = () => {
           </p>
         </div>
       </div>
+
+      {interviewDetails.interviewMode === "online" && (
+        <button
+          className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          onClick={handleJoinInterview}
+        >
+          Join Interview Room
+        </button>
+      )}
     </div>
   );
 };

@@ -82,3 +82,21 @@ exports.deleteInterviewById = async (req, res) => {
     res.status(400).json({ message: "Error deleting interview", error });
   }
 };
+
+exports.getShortlistedJobsByEmployerId = async (req, res) => {
+  try {
+    const { employerId } = req.params;
+
+    const interviews = await Interview.find({ employerId });        
+
+    if (interviews.length === 0) {
+      return res.status(404).json({ message: "No interviews found for this employer" });
+    }
+
+    // Return the interviews found
+    res.status(200).json(interviews);
+  } catch (error) {
+    // Handle errors
+    res.status(400).json({ message: "Error fetching interviews", error });
+  }
+};

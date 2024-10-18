@@ -8,6 +8,10 @@ const interviewSchema = new Schema(
       ref: "AppliedJob",
       required: true,
     },
+    employerId: {
+      type: Schema.Types.ObjectId, // Add employerId field
+      ref: "Employer", // Reference the Employer model
+    },
     interviewMode: {
       type: String,
       enum: ["online", "offline"],

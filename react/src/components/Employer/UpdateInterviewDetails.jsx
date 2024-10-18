@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "./Layout";
+import { useAuth } from "../../context/authContext";
 
 const UpdateInterviewDetails = () => {
-  const { id } = useParams(); // Get the candidate ID from the URL
-  const [appliedJobId, setAppliedJobId] = useState(id); // Set it as the initial state
-  const [interviewMode, setInterviewMode] = useState("online");
+  const { id } = useParams(); // Getting the job ID from URL
+  const { user } = useAuth(); // Getting user from context
+
+  const [appliedJobId, setAppliedJobId] = useState(id); // Set initial applied job ID
+  const [employerId, setEmployerId] = useState(""); // Employer ID from API
+  const [interviewMode, setInterviewMode] = useState("online"); // Initial interview mode
   const [interviewDateTime, setInterviewDateTime] = useState("");
   const [interviewLink, setInterviewLink] = useState("");
   const [address, setAddress] = useState("");
   const [feedback, setFeedback] = useState("");
-  const [interviewers, setInterviewers] = useState(["", ""]);
+  const [interviewers, setInterviewers] = useState(["", ""]); // Array of interviewers
   const [successMessage, setSuccessMessage] = useState("");
-  const [roomId, setRoomId] = useState(generateRoomId()); // Generate Room ID on component mount
+  const [roomId, setRoomId] = useState(""); // Room ID for online interviews
 
-  // Function to generate a 6-character alphanumeric room ID
-  function generateRoomId() {
+  // Generate Room ID (6 characters)
+  const generateRoomId = () => {
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
@@ -25,50 +29,54 @@ const UpdateInterviewDetails = () => {
       );
     }
     return result;
-  }
+  };
 
-  // Optionally, fetch existing interview details for the candidate
+  // Set roomId when the component mounts
   useEffect(() => {
-    const fetchInterviewDetails = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/interview/${id}`);
-        const data = await response.json();
+    setRoomId(generateRoomId());
+  }, []);
 
-        // Check if data is available and populate the state
-        if (data) {
-          setInterviewMode(data.interviewMode || "online");
-          setInterviewDateTime(data.interviewDateTime || "");
-          setInterviewLink(data.interviewLink || "");
-          setAddress(data.address || "");
-          setFeedback(data.feedback || "");
-          setInterviewers(data.interviewers || ["", ""]);
-          // Only set roomId if not already set (to keep generated value)
-          if (!roomId) {
-            setRoomId(data.roomId || generateRoomId());
+  // Fetch Employer ID based on the user ID
+  useEffect(() => {
+    const fetchEmployerId = async () => {
+      if (user && user._id) {
+        try {
+          const response = await fetch(
+            `http://localhost:8080/employer/getEmployerByUserId/${user._id}`
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch employer ID");
           }
+          const data = await response.json();
+          if (data && data._id) {
+            setEmployerId(data._id);
+          }
+        } catch (error) {
+          console.error("Error fetching employer ID:", error);
         }
-      } catch (error) {
-        console.error("Error fetching interview details:", error);
       }
     };
 
-    fetchInterviewDetails();
-  }, [id]);
+    fetchEmployerId();
+  }, [user]);
 
+  // Handle Interviewer Field Changes
   const handleInterviewersChange = (index, value) => {
     const newInterviewers = [...interviewers];
     newInterviewers[index] = value;
     setInterviewers(newInterviewers);
   };
 
+  // Form Submit Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     const interviewDetails = {
       appliedJobId,
+      employerId,
       interviewMode,
       interviewDateTime,
       interviewLink,
-      roomId, // Auto-generated Room ID
+      roomId,
       address,
       feedback,
       interviewers,
@@ -88,24 +96,20 @@ const UpdateInterviewDetails = () => {
       }
 
       setSuccessMessage("Interview details updated successfully!");
-      setAppliedJobId("");
-      setInterviewDateTime("");
-      setInterviewLink("");
-      setRoomId(generateRoomId()); // Generate new Room ID for future submissions
-      setAddress("");
-      setFeedback("");
-      setInterviewers(["", ""]);
+      handleClear(); // Clear fields after submission
     } catch (error) {
       console.error("Error updating interview details:", error);
       setSuccessMessage("Error updating interview details.");
     }
   };
 
+  // Clear Form Fields after Submission
   const handleClear = () => {
-    setAppliedJobId("");
+    setAppliedJobId(id); // Reset to initial job ID from URL params
+    setEmployerId("");
     setInterviewDateTime("");
     setInterviewLink("");
-    setRoomId(generateRoomId()); // Generate new Room ID
+    setRoomId(generateRoomId()); // Reset roomId to a new value
     setAddress("");
     setFeedback("");
     setInterviewers(["", ""]);
@@ -119,6 +123,7 @@ const UpdateInterviewDetails = () => {
           Update Interview Details
         </h2>
         <form onSubmit={handleSubmit}>
+          {/* Interview Mode Field */}
           <div className="mb-5">
             <label className="font-semibold">Interview Mode:</label>
             <div>
@@ -145,18 +150,17 @@ const UpdateInterviewDetails = () => {
             </div>
           </div>
 
+          {/* Conditional fields based on interview mode */}
           {interviewMode === "online" && (
-            <>
-              <div className="mb-5">
-                <label className="font-semibold">Zoom Meeting Link:</label>
-                <input
-                  type="text"
-                  value={interviewLink}
-                  onChange={(e) => setInterviewLink(e.target.value)}
-                  className="border border-blue-300 rounded p-3 w-full focus:outline-none focus:border-blue-500 transition"
-                />
-              </div>
-            </>
+            <div className="mb-5">
+              <label className="font-semibold">Zoom Meeting Link:</label>
+              <input
+                type="text"
+                value={interviewLink}
+                onChange={(e) => setInterviewLink(e.target.value)}
+                className="border border-blue-300 rounded p-3 w-full focus:outline-none focus:border-blue-500 transition"
+              />
+            </div>
           )}
 
           {interviewMode === "offline" && (
@@ -171,6 +175,7 @@ const UpdateInterviewDetails = () => {
             </div>
           )}
 
+          {/* Date and Time Field */}
           <div className="mb-5">
             <label className="font-semibold">Interview Date & Time:</label>
             <input
@@ -182,6 +187,7 @@ const UpdateInterviewDetails = () => {
             />
           </div>
 
+          {/* Feedback Field */}
           <div className="mb-5">
             <label className="font-semibold">Feedback:</label>
             <textarea
@@ -191,6 +197,7 @@ const UpdateInterviewDetails = () => {
             />
           </div>
 
+          {/* Interviewers Fields */}
           <div className="mb-5">
             <label className="font-semibold">Interviewers:</label>
             {interviewers.map((interviewer, index) => (
@@ -207,23 +214,19 @@ const UpdateInterviewDetails = () => {
             ))}
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="bg-blue-600 text-white rounded p-3 hover:bg-blue-700 transition duration-200 w-full"
+            className="bg-blue-500 text-white font-semibold py-2 px-4 rounded w-full hover:bg-blue-600 transition"
           >
-            Update Interview Details
+            Update Interview
           </button>
-          <button
-            type="button"
-            onClick={handleClear}
-            className="bg-gray-300 text-black rounded p-3 hover:bg-gray-400 transition duration-200 w-full mt-3"
-          >
-            Clear Fields
-          </button>
+
+          {/* Success Message */}
+          {successMessage && (
+            <p className="text-green-500 mt-4">{successMessage}</p>
+          )}
         </form>
-        {successMessage && (
-          <p className="text-green-600 font-semibold mt-4">{successMessage}</p>
-        )}
       </div>
     </Layout>
   );

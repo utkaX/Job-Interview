@@ -7,7 +7,7 @@ const {
     getInterviewById,
     updateInterviewById,
     deleteInterviewById,
-    getInterviewsByAppliedJobId
+    getInterviewsByAppliedJobId,getShortlistedJobsByEmployerId
 } = require("../controller/interview"); 
 
 router.post("/create", createInterview); 
@@ -16,5 +16,6 @@ router.get("/:id", getInterviewById);
 router.put("/:id", updateInterviewById); 
 router.delete("/:id", deleteInterviewById);
 router.get("/appliedJob/:appliedJobId", getInterviewsByAppliedJobId); 
+router.get("/shortlistedJobs/:employerId", getShortlistedJobsByEmployerId);
 
 module.exports = router;
