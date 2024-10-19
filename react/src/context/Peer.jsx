@@ -4,7 +4,10 @@ const PeerContext = React.createContext(null);
 export const usePeer = () => React.useContext(PeerContext);
 
 export const PeerProvider = (props) => {
-  const [remoteStream, setRemotStream] = useState(null);
+  const [remoteStream, setRemoteStream] = useState(null);
+
+  // Initialize Peer Connection
+  
   const peer = useMemo(
     () =>
       new RTCPeerConnection({
@@ -20,12 +23,14 @@ export const PeerProvider = (props) => {
     []
   );
 
+  // Create Offer
   const createOffer = async () => {
     const offer = await peer.createOffer();
     await peer.setLocalDescription(offer);
     return offer;
   };
 
+  // Create Answer
   const createAnswer = async (offer) => {
     await peer.setRemoteDescription(offer);
     const answer = await peer.createAnswer();
@@ -33,30 +38,34 @@ export const PeerProvider = (props) => {
     return answer;
   };
 
-  const sendStream = async (stream) => {
+  // Send Stream (Attach tracks to peer)
+  const sendStream = (stream) => {
     const tracks = stream.getTracks();
-    for (const track of tracks) {
+    tracks.forEach((track) => {
       peer.addTrack(track, stream);
-    }
+    });
   };
 
+  // Set Remote Answer
   const setRemoteAns = async (ans) => {
     await peer.setRemoteDescription(ans);
   };
 
-  const handleTrackEvent = (ev)=>{
-    const streams = ev.streams;
-    setRemotStream(streams[0]);
-  }
-  
+  // Handle Track Event (Receiving remote streams)
+  const handleTrackEvent = (ev) => {
+    const [stream] = ev.streams;
+    setRemoteStream(stream);
+  };
+
+  // Add event listener for 'track'
   useEffect(() => {
     peer.addEventListener("track", handleTrackEvent);
-    
-    return ()=>{
-        peer.removeEventListener("track", handleTrackEvent);
-    }
-  }, [handleTrackEvent,peer,]);
 
+    return () => {
+      peer.removeEventListener("track", handleTrackEvent);
+      peer.close();  // Clean up the peer connection
+    };
+  }, [peer]);
 
   return (
     <PeerContext.Provider

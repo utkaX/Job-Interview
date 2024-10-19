@@ -6,7 +6,6 @@ const cookieParser = require("cookie-parser");
 const methodOverride = require("method-override");
 const path = require("path");
 
-
 const app = express();
 const port = 8080;
 
@@ -68,45 +67,62 @@ const server = app.listen(port, () => {
   console.log(`Express server running on port ${port}`);
 });
 
-
-
-
-
-
-const {Server} = require("socket.io");
+const { Server } = require("socket.io");
 
 const io = new Server({
-  cors:true,
+  cors: true,
 });
 
 const emailtoSocketMapping = new Map();
 const sockettoEmailMapping = new Map();
 
-io.on('connection',socket => {
-  console.log("New conection");
-  
-   socket.on('join-room',data =>{
-      const {roomId,email} = data;
-      console.log("user",email,"joined room",roomId);
-      
-      emailtoSocketMapping.set(email,socket.id);
-      sockettoEmailMapping.set(socket.id,email);
-      socket.join(roomId);
-      socket.emit("joined-room", {roomId})
-      socket.broadcast.to(roomId).emit("user-joined",{email});
-   })
-   socket.on('call-user',data =>{
-    const {email,offer} = data;
+io.on("connection", (socket) => {
+  console.log("New connection");
+
+  socket.on("join-room", (data) => {
+    const { roomId, email } = data;
+    console.log("User", email, "joined room", roomId);
+
+    emailtoSocketMapping.set(email, socket.id);
+    sockettoEmailMapping.set(socket.id, email);
+    socket.join(roomId);
+    socket.emit("joined-room", { roomId });
+    socket.broadcast.to(roomId).emit("user-joined", { email });
+  });
+
+  socket.on("call-user", (data) => {
+    const { email, offer } = data;
     const fromEmail = sockettoEmailMapping.get(socket.id);
     const socketId = emailtoSocketMapping.get(email);
-    socket.to(socketId).emit('incoming-call',{from:fromEmail,offer})
-   })
+    socket.to(socketId).emit("incoming-call", { from: fromEmail, offer });
+  });
 
-   socket.on('call-accepted',data => {
-    const {email,ans} = data;
+  socket.on("call-accepted", (data) => {
+    const { email, ans } = data;
     const socketId = emailtoSocketMapping.get(email);
-    socket.to(socketId).emit('call-accepted',{ans })
-   })
-}) 
+    socket.to(socketId).emit("call-accepted", { ans });
+  });
+
+  socket.on("disconnect", () => {
+    console.log("disconected");
+
+    const email = sockettoEmailMapping.get(socket.id);
+    if (email) {
+      console.log("User", email, "disconnected");
+
+      // Remove socket from mappings
+      emailtoSocketMapping.delete(email);
+      sockettoEmailMapping.delete(socket.id);
+
+      // Optionally, inform the room about the disconnection
+      const roomId = Array.from(socket.rooms).find(
+        (room) => room !== socket.id
+      ); // Get the room the user was in
+      if (roomId) {
+        socket.broadcast.to(roomId).emit("user-left", { email });
+      }
+    }
+  });
+});
 
 io.listen(8001);
