@@ -33,6 +33,7 @@ import UserProfile from "./components/Jobseeker/UserProfile";
 import InterviewRoom from "./components/InterviewRoom";
 import InterviewSchedule from "./components/Employer/InterviewSchedule"; // Fixed typo
 import SocketProvider from "./context/Socket";
+import PeerProvider from "./context/Peer";
 
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
@@ -117,9 +118,11 @@ function App() {
 function Main() {
   return (
     <SocketProvider>
+      <PeerProvider>
       <Router>
         <App />
       </Router>
+      </PeerProvider>
     </SocketProvider>
   );
 }

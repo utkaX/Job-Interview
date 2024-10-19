@@ -51,9 +51,6 @@ const SearchResults = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-semibold text-center my-8 text-blue-800">
-        Search Results
-      </h2>
       {loading && (
         <div className="flex justify-center">
           <FaSpinner className="animate-spin text-4xl" />

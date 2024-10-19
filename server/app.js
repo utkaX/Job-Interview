@@ -80,6 +80,7 @@ const io = new Server({
 });
 
 const emailtoSocketMapping = new Map();
+const sockettoEmailMapping = new Map();
 
 io.on('connection',socket => {
   console.log("New conection");
@@ -89,9 +90,22 @@ io.on('connection',socket => {
       console.log("user",email,"joined room",roomId);
       
       emailtoSocketMapping.set(email,socket.id);
+      sockettoEmailMapping.set(socket.id,email);
       socket.join(roomId);
       socket.emit("joined-room", {roomId})
       socket.broadcast.to(roomId).emit("user-joined",{email});
+   })
+   socket.on('call-user',data =>{
+    const {email,offer} = data;
+    const fromEmail = sockettoEmailMapping.get(socket.id);
+    const socketId = emailtoSocketMapping.get(email);
+    socket.to(socketId).emit('incoming-call',{from:fromEmail,offer})
+   })
+
+   socket.on('call-accepted',data => {
+    const {email,ans} = data;
+    const socketId = emailtoSocketMapping.get(email);
+    socket.to(socketId).emit('call-accepted',{ans })
    })
 }) 
 

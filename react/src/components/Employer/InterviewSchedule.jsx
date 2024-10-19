@@ -64,14 +64,15 @@ const InterviewSchedule = () => {
   }, [user]);
 
   const handleRoomJoined = ({ roomId }) => {
-    console.log("room joined ", roomId);
-
     navigate(`/interview?email=${user.email}&roomId=${roomId}`);
   };
 
   useEffect(() => {
     socket.on("joined-room", handleRoomJoined);
-  }, [socket]);
+    return () => {
+      socket.off("joined-room", handleRoomJoined);
+    };
+  }, [socket, handleRoomJoined]);
 
   const handleJoinInterview = (roomId) => {
     if (roomId) {

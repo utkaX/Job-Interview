@@ -51,7 +51,11 @@ const InterviewDetails = () => {
   };
   useEffect(() => {
     socket.on("joined-room", handleRoomJoined);
-  }, [socket]);
+    return ()=>{
+    socket.off('joined-room', handleRoomJoined);
+    }
+
+  }, [socket,handleRoomJoined]);
 
   const handleJoinInterview = () => {
     if (interviewDetails && interviewDetails.roomId) {
