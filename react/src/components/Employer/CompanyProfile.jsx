@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import Sidebar from "./Sidebar";
+import Layout from "./Layout";
 
 export default function CompanyProfile() {
   const { user } = useAuth(); // Assuming user has the ID
@@ -67,9 +68,9 @@ export default function CompanyProfile() {
   };
 
   return (
+    <Layout>
   <div className="flex flex-wrap" >
   <div className="flex">
-  <Sidebar />
   <div className="flex-1 p-8 flex justify-center items-center ml-40 mt-10">
   <div className="bg-white shadow-md rounded-lg p-6 max-w-3xl w-full">
     <h2 className="text-2xl font-semibold mb-6 text-center">Company Profile</h2>
@@ -206,7 +207,7 @@ export default function CompanyProfile() {
 </div>
 </div>
 </div>
-
+</Layout>
 
   );
 }

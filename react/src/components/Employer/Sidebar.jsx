@@ -43,14 +43,6 @@ const Sidebar = () => {
         </li>
         <li>
           <Link
-            to="#"
-            className="block p-2 rounded hover:bg-gray-700 transition"
-          >
-            Analytics
-          </Link>
-        </li>
-        <li>
-          <Link
             to="/employee-profile"
             className="block p-2 rounded hover:bg-gray-700 transition"
           >

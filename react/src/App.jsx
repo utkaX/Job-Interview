@@ -34,6 +34,7 @@ import InterviewRoom from "./components/InterviewRoom";
 import InterviewSchedule from "./components/Employer/InterviewSchedule"; // Fixed typo
 import SocketProvider from "./context/Socket";
 import PeerProvider from "./context/Peer";
+import ShowCompanyProfile from "./components/Employer/ShowCompanyProfile";
 
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
@@ -56,11 +57,12 @@ function App() {
     "/employee-profile",
     "/manage-jobs",
     "/job/",
-    "/applications", // Ensure consistent casing for paths
+    "/Applications", // Ensure consistent casing for paths
     "/jobCandidates/",
     "/candidateDetails/",
     "/update-interview-details/",
     "/interview-schedule",
+    "/companyprofile"
   ];
 
   const showMainNavbar = !hideNavAndFooter.some((route) =>
@@ -97,6 +99,8 @@ function App() {
         <Route path="/job/:id" element={<JobCardDetails />} />
         <Route path="/applications" element={<Applications />} />
         <Route path="/jobCandidates/:jobId" element={<JobCandidates />} />
+        <Route path="/companyprofile" element={<ShowCompanyProfile />} />
+
         <Route
           path="/candidateDetails/:candidateId"
           element={<CandidateDetails />}

@@ -76,16 +76,29 @@ exports.getEmployerByUserId = async (req, res) => {
     }
   };
 
-
-exports.updateEmployee= async (req, res) => {
+  exports.updateEmployeeProfile = async (req, res) => {
     try {
-        const employer = await Employer.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if (!employer) return res.status(404).json({ error: 'Employer not found' });
-        res.status(200).json(employer);
+      // Convert req.params.userId to ObjectId using 'new'
+      const userId = new mongoose.Types.ObjectId(req.params.userId);
+      console.log(userId)
+  
+      // Find employer by userId and update
+      const employer = await Employer.findOneAndUpdate(
+        { userId: userId },  // Query by ObjectId
+        req.body,            // Updated data
+        { new: true, runValidators: true } // Return updated document and run validators
+      );
+  
+      if (!employer) {
+        return res.status(404).json({ error: 'Employer not found' });
+      }
+  
+      res.status(200).json(employer); // Send updated employer data
     } catch (error) {
-        res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message }); // Error handling
     }
-}
+  };
+  
 
 exports.deleteEmployee=async (req, res) => {
     try {

@@ -6,7 +6,7 @@ const{
     createEmployee,
     getAllEmployee,
     getEmployerByCompanyName,
-    updateEmployee,
+    updateEmployeeProfile,
     getEmployerById,
     getEmployerByUserId,
     deleteEmployee,
@@ -18,7 +18,7 @@ router.post("/addEmployee",createEmployee)
 router.get("/getAllEmployee",getAllEmployee)
 router.get("getEmployeeByCompanyName/:companyName",getEmployerByCompanyName)
 router.get("/getEmployerByUserId/:id",getEmployerByUserId)
-router.put("/updateEmployee/:id",updateEmployee)
+router.put("/updateEmployeeProfile/:id",updateEmployeeProfile)
 router.delete("/deleteEmployeeById/:id",deleteEmployee)
 router.get('/:id', getEmployerById);
 router.get('/top-companies', getTopCompanies);
