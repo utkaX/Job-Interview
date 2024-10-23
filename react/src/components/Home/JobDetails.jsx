@@ -112,100 +112,130 @@ const JobDetails = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-4xl font-bold text-gray-900">
-            {jobDetails.title}
+            {jobDetails.title || "Job Title Not Available"}
           </h1>
-          <p className="text-gray-600 text-sm mb-2">
-            <Link
-              to={`/company/${encodeURIComponent(companyId)}`}
-              state={{ companyId: encodeURIComponent(companyId) }}
-              className="text-blue-500 hover:underline"
-            >
-              {company || "Unknown Company"}
-            </Link>
-          </p>
-          <p className="flex items-center space-x-2">
-            <FaMapMarkerAlt className="text-blue-500" />
-            <span>{jobDetails.location || "Bengaluru"}</span>
-          </p>
+          {company && (
+            <p className="text-gray-600 text-sm mb-2">
+              <Link
+                to={`/company/${encodeURIComponent(companyId)}`}
+                state={{ companyId: encodeURIComponent(companyId) }}
+                className="text-blue-500 hover:underline"
+              >
+                {company}
+              </Link>
+            </p>
+          )}
+          {jobDetails.location && (
+            <p className="flex items-center space-x-2">
+              <FaMapMarkerAlt className="text-blue-500" />
+              <span>{jobDetails.location}</span>
+            </p>
+          )}
         </div>
         <div>{isLoggedIn && <SaveJobButton jobId={JobId} />}</div>
       </div>
 
       {/* Job Details Overview */}
       <div className="bg-gray-100 p-6 rounded-lg mb-6 grid grid-cols-1 md:grid-cols-2 gap-6 shadow-md">
-        <div className="flex items-center space-x-3">
-          <FaSuitcase className="text-blue-500 text-lg" />
-          <p>
-            <strong className="text-blue-700">Experience:</strong>{" "}
-            {jobDetails.experience || "0-2 years"}
-          </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <FaMoneyBillWave className="text-green-500 text-lg" />
-          <p>
-            <strong className="text-blue-700">Salary:</strong> ₹{" "}
-            {formattedSalary}
-          </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <FaMapMarkerAlt className="text-red-500 text-lg" />
-          <p>
-            <strong className="text-blue-700">Location:</strong>{" "}
-            {jobDetails.location || "N/A"}
-          </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <p>
-            <strong className="text-blue-700">Posted Date:</strong>{" "}
-            {formattedDate}
-          </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <p>
-            <strong className="text-blue-700">Applicants:</strong>{" "}
-            {jobDetails.applicants || "1334"}
-          </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <p>
-            <strong className="text-blue-700">Openings:</strong>{" "}
-            {jobDetails.openings || "1"}
-          </p>
-        </div>
+        {jobDetails.experience && (
+          <div className="flex items-center space-x-3">
+            <FaSuitcase className="text-blue-500 text-lg" />
+            <p>
+              <strong className="text-blue-700">Experience:</strong>{" "}
+              {jobDetails.experience}
+            </p>
+          </div>
+        )}
+        {formattedSalary && (
+          <div className="flex items-center space-x-3">
+            <FaMoneyBillWave className="text-green-500 text-lg" />
+            <p>
+              <strong className="text-blue-700">Salary:</strong> ₹{" "}
+              {formattedSalary}
+            </p>
+          </div>
+        )}
+        {jobDetails.location && (
+          <div className="flex items-center space-x-3">
+            <FaMapMarkerAlt className="text-red-500 text-lg" />
+            <p>
+              <strong className="text-blue-700">Location:</strong>{" "}
+              {jobDetails.location}
+            </p>
+          </div>
+        )}
+        {formattedDate && (
+          <div className="flex items-center space-x-3">
+            <p>
+              <strong className="text-blue-700">Posted Date:</strong>{" "}
+              {formattedDate}
+            </p>
+          </div>
+        )}
+        {jobDetails.applicants && (
+          <div className="flex items-center space-x-3">
+            <p>
+              <strong className="text-blue-700">Applicants:</strong>{" "}
+              {jobDetails.applicants}
+            </p>
+          </div>
+        )}
+        {jobDetails.openings && (
+          <div className="flex items-center space-x-3">
+            <p>
+              <strong className="text-blue-700">Openings:</strong>{" "}
+              {jobDetails.openings}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Job Description Section */}
-      <div className="mb-6">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-          Job Description
-        </h2>
-        <p className="text-gray-800 leading-relaxed">
-          {jobDetails.description || "No description available."}
-        </p>
-      </div>
+      {jobDetails.description && (
+        <div className="mb-6">
+          <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+            Job Description
+          </h2>
+          <p className="text-gray-800 leading-relaxed">
+            {jobDetails.description}
+          </p>
+        </div>
+      )}
 
       {/* Key Information */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            Requirements
-          </h3>
-          <p>{requirements}</p>
-        </div>
-        <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">
-            Responsibilities
-          </h3>
-          <p>{responsibilities}</p>
-        </div>
-        <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">Benefits</h3>
-          <p>{benefits}</p>
-        </div>
-        <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">Job Tags</h3>
-          <p>{jobTags}</p>
-        </div>
+        {requirements && (
+          <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Requirements
+            </h3>
+            <p>{requirements}</p>
+          </div>
+        )}
+        {responsibilities && (
+          <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Responsibilities
+            </h3>
+            <p>{responsibilities}</p>
+          </div>
+        )}
+        {benefits && (
+          <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Benefits
+            </h3>
+            <p>{benefits}</p>
+          </div>
+        )}
+        {jobTags && (
+          <div className="bg-gray-50 p-4 rounded-lg shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Job Tags
+            </h3>
+            <p>{jobTags}</p>
+          </div>
+        )}
       </div>
 
       {/* Apply Button Section */}
