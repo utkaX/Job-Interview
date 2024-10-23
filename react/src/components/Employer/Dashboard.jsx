@@ -13,7 +13,7 @@ const Dashboard = () => {
   const [liveJobs, setLiveJobs] = useState(0); // State for live jobs count
   const [notLiveJobs, setNotLiveJobs] = useState(0); // State for not live jobs count
   const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [error, setError] = useState(''); // Error state
 
   useEffect(() => {
     const fetchTotalJobs = async () => {
@@ -23,7 +23,9 @@ const Dashboard = () => {
         );
 
         if (!companyResponse.ok) {
-          throw new Error("Failed to fetch company information.");
+          setError("Failed to fetch company information."); // Set error message instead of throwing an error
+          setLoading(false); // Stop loading
+          return; // Exit the function early
         }
         const companyData = await companyResponse.json();
 
@@ -32,7 +34,9 @@ const Dashboard = () => {
         );
 
         if (!jobsResponse.ok) {
-          throw new Error("Network response was not ok");
+          setError("You haven't posted any job yet!!"); // Set error message instead of throwing an error
+          setLoading(false); // Stop loading
+          return; // Exit the function early
         }
 
         const jobs = await jobsResponse.json();
@@ -45,7 +49,7 @@ const Dashboard = () => {
         setLiveJobs(liveCount); // Set live jobs count
         setNotLiveJobs(notLiveCount); // Set not live jobs count
       } catch (err) {
-        setError(err.message);
+        setError("An unexpected error occurred. Please try again later."); // Generic error message for unexpected errors
       } finally {
         setLoading(false);
       }
@@ -65,7 +69,9 @@ const Dashboard = () => {
   if (error) {
     return (
       <Layout>
-        <p className="text-red-500 text-center">Error: {error}</p>
+        <div className="bg-red-200 border border-red-400 text-red-800 px-4 py-2 rounded-lg mb-4 text-center">
+          <p>Error: {error}</p>
+        </div>
       </Layout>
     );
   }

@@ -90,12 +90,16 @@ const InterviewSchedule = () => {
           <h1>Loading interviews...</h1>
         ) : (
           <>
-            <h1 className="text-2xl font-bold">Interview Schedule</h1>
+           <div className="max-w-7xl mx-auto p-6">
+          <h2 className="text-4xl font-bold mb-6 text-center text-blue-600">
+          Interview Schedule
+          </h2>
+          </div>
             {interviews.length === 0 ? (
               <p>No interviews found for this employer.</p>
             ) : (
               <div className="mt-6">
-                {interviews.map((interview, index) => (
+                {interviews.map((interview, index) => ( 
                   <div key={index} className="bg-white p-4 mb-4 shadow rounded">
                     <p>
                       <strong>Interview ID:</strong> {interview._id}

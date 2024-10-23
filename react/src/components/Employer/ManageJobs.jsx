@@ -14,7 +14,6 @@ const ManageJobs = () => {
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [filteredJobs, setFilteredJobs] = useState([]); // State for filtered jobs
   const [companyId, setCompanyId] = useState(""); // State for company ID
-  console.log(user);
 
   useEffect(() => {
     const fetchCompanyAndJobs = async () => {
@@ -34,7 +33,7 @@ const ManageJobs = () => {
         );
 
         if (!jobsResponse.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("You haven't posted any job yet!!");
         }
 
         const jobs = await jobsResponse.json();
@@ -84,17 +83,27 @@ const ManageJobs = () => {
       setFilteredJobs(updatedJobs);
     } catch (error) {
       console.error(error);
-      alert("Failed to update job status.");
+      setError("Failed to update job status."); // Update error state with a custom message
     }
   };
 
-  if (loading)
+  if (loading) {
     return (
       <Layout>
         <p className="text-center text-lg">Loading...</p>
       </Layout>
     );
-  if (error) return <p className="text-red-500 text-center">Error: {error}</p>;
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <div className="bg-red-200 border border-red-400 text-red-800 px-4 py-2 rounded-lg mb-4 text-center">
+          <p>Error: {error}</p>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
