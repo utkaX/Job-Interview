@@ -44,7 +44,7 @@ const jobSchema = new Schema(
       default: Date.now,
     },
     Experience: {
-      type: Number, // or String, depending on your experience format
+      type: Number,
       required: true,
     },
 
