@@ -148,10 +148,12 @@ const PostJob = () => {
 
   return (
     <Layout>
-      <div className="flex-1 p-8 bg-gray-50">
-        <h2 className="text-4xl font-bold mb-6 text-center text-gray-800">
+       <div className="max-w-7xl mx-auto p-6">
+          <h2 className="text-4xl font-bold mb-6 text-center text-blue-600">
           Post a New Job
-        </h2>
+          </h2>
+          </div>
+      <div className="flex-1 p-8 bg-gray-50">
         <form
           onSubmit={handleSubmit}
           className="bg-white shadow-lg rounded-lg p-10 max-w-3xl mx-auto border border-gray-200"
