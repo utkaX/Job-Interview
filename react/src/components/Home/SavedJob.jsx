@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/authContext";
 import JobSearchCard from "./JobSearchCard";
 import { RingLoader } from "react-spinners";
+import AuthButtons from "./AuthButtons"; // Import your AuthButtons component
 
 const SavedJob = () => {
-  const { user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   const [savedJobs, setSavedJobs] = useState([]);
   const [jobSeeker, setJobSeeker] = useState(null);
   const [loading, setLoading] = useState(true);
 
-
-  // Fetch job seeker data
   const fetchJobSeeker = async () => {
-    if (!user) return; // If user is not logged in, exit early
     try {
       const response = await fetch(
         `http://localhost:8080/jobSeeker/getJobSeekerById/${user._id}`
@@ -29,7 +27,6 @@ const SavedJob = () => {
 
   // Fetch saved jobs
   const fetchSavedJobs = async () => {
-    if (!jobSeeker) return; // Only fetch saved jobs if jobSeeker is available
     try {
       const response = await fetch(
         `http://localhost:8080/jobSeeker/saved-jobs/${jobSeeker._id}`
@@ -52,7 +49,7 @@ const SavedJob = () => {
 
   useEffect(() => {
     if (jobSeeker) {
-      fetchSavedJobs(); // Fetch saved jobs only after jobSeeker is set
+      fetchSavedJobs();
     }
   }, [jobSeeker]); // Dependency on jobSeeker
 
@@ -88,26 +85,34 @@ const SavedJob = () => {
       <h2 className="text-3xl font-semibold mb-6 text-center">
         Your Saved Jobs
       </h2>
-      {savedJobs.length === 0 ? (
+      {!isLoggedIn ? ( // Check if user is logged in
         <div className="text-center">
-          <p className="text-lg text-gray-500">No saved jobs found.</p>
-          <p className="mt-2 text-sm text-gray-400">
-            Explore jobs and save your favorites!
-          </p>
+          <AuthButtons /> {/* Render Auth buttons if not logged in */}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {savedJobs.map((job) => (
-            <JobSearchCard key={job._id} job={job}>
-              <button
-                onClick={() => handleSaveToggle(job._id)}
-                className="mt-4 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
-              >
-                Unsave Job
-              </button>
-            </JobSearchCard>
-          ))}
-        </div>
+        <>
+          {savedJobs.length === 0 ? (
+            <div className="text-center">
+              <p className="text-lg text-gray-500">No saved jobs found.</p>
+              <p className="mt-2 text-sm text-gray-400">
+                Explore jobs and save your favorites!
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {savedJobs.map((job) => (
+                <JobSearchCard key={job._id} job={job}>
+                  <button
+                    onClick={() => handleSaveToggle(job._id)}
+                    className="mt-4 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 transition"
+                  >
+                    Unsave Job
+                  </button>
+                </JobSearchCard>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

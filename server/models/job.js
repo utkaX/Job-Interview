@@ -23,7 +23,6 @@ const jobSchema = new Schema(
     jobType: {
       type: Schema.Types.ObjectId,
       ref: "JobType",
-      required: true,
     },
     category: {
       type: String,
@@ -45,7 +44,6 @@ const jobSchema = new Schema(
     },
     Experience: {
       type: Number,
-      required: true,
     },
 
     benefits: [String], // List of job benefits

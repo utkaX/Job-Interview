@@ -14,7 +14,6 @@ const ManageJobs = () => {
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const [filteredJobs, setFilteredJobs] = useState([]); // State for filtered jobs
   const [companyId, setCompanyId] = useState(""); // State for company ID
-  console.log(user);
 
   useEffect(() => {
     const fetchCompanyAndJobs = async () => {
@@ -34,10 +33,14 @@ const ManageJobs = () => {
         );
 
         if (!jobsResponse.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Failed to fetch jobs.");
         }
 
         const jobs = await jobsResponse.json();
+        if (jobs.length === 0) {
+          throw new Error("No jobs found for this company.");
+        }
+
         setJobs(jobs);
         setFilteredJobs(jobs); // Initialize filteredJobs with all company jobs
       } catch (err) {
@@ -88,13 +91,21 @@ const ManageJobs = () => {
     }
   };
 
-  if (loading)
+  if (loading) {
     return (
       <Layout>
         <p className="text-center text-lg">Loading...</p>
       </Layout>
     );
-  if (error) return <p className="text-red-500 text-center">Error: {error}</p>;
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <p className="text-center text-lg text-gray-500">No Jobs You Have </p>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>

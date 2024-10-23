@@ -23,6 +23,15 @@ const InterviewRoom = () => {
   const queryParams = new URLSearchParams(location.search);
   const roomId = queryParams.get("roomId");
   const emailid = queryParams.get("email");
+  const userRole = queryParams.get("role");
+  let role  = "";
+  if(userRole === "interviewer"){
+    role = "Job Seeker"
+  }
+  else{
+    role = "Interviewer"
+  }
+  
 
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
@@ -117,7 +126,6 @@ const InterviewRoom = () => {
     getUserMediaStream();
   }, [getUserMediaStream]);
 
-  // Update remote video srcObject when a remote stream is available
   useEffect(() => {
     if (remoteStream && remoteVideoRef.current) {
       remoteVideoRef.current.srcObject = remoteStream;
@@ -132,69 +140,74 @@ const InterviewRoom = () => {
   }, [remoteStream]);
 
   return (
-    <div className="mt-4 text-center">
-      <h2 className="text-lg font-bold">Room ID: {roomId}</h2>
-      <h3 className="text-sm text-gray-600">Email: {emailid}</h3>
-      <h3>You are connected to {remoteEmailId}</h3>
+    <div className="flex flex-col items-center mt-4 p-4 bg-gray-100 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold text-gray-800">Room ID: {roomId}</h2>
+      <h3 className="text-md text-gray-600">Email: {emailid}</h3>
+      <h3 className="text-lg text-gray-700 my-2">
+        You are connected to {remoteEmailId}
+      </h3>
+
 
       {/* Buttons to start/stop video stream */}
       <div className="my-4">
         <button
           onClick={startStream}
           disabled={isStreaming}
-          className="px-4 py-2 bg-green-500 text-white rounded mr-2"
+          className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white rounded-md mr-2 transition"
         >
           Start Stream
         </button>
         <button
           onClick={stopStream}
           disabled={!isStreaming}
-          className="px-4 py-2 bg-red-500 text-white rounded"
+          className="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-md transition"
         >
           Stop Stream
         </button>
       </div>
 
-      {/* Local Video Stream */}
-      <div>
-        <h3>Your Stream</h3>
-        <video
-          ref={localVideoRef}
-          autoPlay
-          playsInline
-          muted
-          style={{ width: "600px", height: "400px", border: "1px solid black" }}
-        />
-      </div>
-
-      {/* Remote Video Stream */}
-      <div>
-        <h3>Remote Stream</h3>
-        {isRemoteStreamActive ? (
+      {/* Video Streams Container */}
+      <div className="flex space-x-4">
+        {/* Local Video Stream */}
+        <div>
+          <h3 className="text-lg font-semibold">Your Stream</h3>
           <video
-            ref={remoteVideoRef}
+            ref={localVideoRef}
             autoPlay
             playsInline
-            style={{
-              width: "600px",
-              height: "400px",
-              border: "1px solid black",
-            }}
+            muted
+            className="border border-gray-400 rounded-md shadow-md"
+            style={{ width: "600px", height: "400px" }}
           />
-        ) : (
-          <div
-            style={{
-              width: "600px",
-              height: "400px",
-              backgroundColor: "black",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <h4 className="text-white">Remote Stream Ended</h4>
-          </div>
-        )}
+        </div>
+
+        {/* Remote Video Stream */}
+        <div>
+          <h3 className="text-lg font-semibold">{remoteEmailId} ({role} Stream)</h3>
+          {isRemoteStreamActive ? (
+            <video
+              ref={remoteVideoRef}
+              autoPlay
+              playsInline
+              className="border border-gray-400 rounded-md shadow-md"
+              style={{ width: "600px", height: "400px" }}
+            />
+          ) : (
+            <div
+              className="border border-gray-400 rounded-md shadow-md"
+              style={{
+                width: "600px",
+                height: "400px",
+                backgroundColor: "black",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <h4 className="text-white">Remote Stream Ended</h4>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

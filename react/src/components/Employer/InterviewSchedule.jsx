@@ -64,7 +64,10 @@ const InterviewSchedule = () => {
   }, [user]);
 
   const handleRoomJoined = ({ roomId }) => {
-    navigate(`/interview?email=${user.email}&roomId=${roomId}`);
+    const userRole = "interviewer";
+    navigate(
+      `/interview?email=${user.email}&roomId=${roomId}&role=${userRole}`
+    );
   };
 
   useEffect(() => {

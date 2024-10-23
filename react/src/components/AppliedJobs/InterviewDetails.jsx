@@ -47,15 +47,18 @@ const InterviewDetails = () => {
   }, [appliedJob]);
 
   const handleRoomJoined = ({ roomId }) => {
-    navigate(`/interview?email=${user.email}&roomId=${roomId}`);
+    const userRole = "jobSeeker";
+
+    navigate(
+      `/interview?email=${user.email}&roomId=${roomId}&role=${userRole}`
+    );
   };
   useEffect(() => {
     socket.on("joined-room", handleRoomJoined);
-    return ()=>{
-    socket.off('joined-room', handleRoomJoined);
-    }
-
-  }, [socket,handleRoomJoined]);
+    return () => {
+      socket.off("joined-room", handleRoomJoined);
+    };
+  }, [socket, handleRoomJoined]);
 
   const handleJoinInterview = () => {
     if (interviewDetails && interviewDetails.roomId) {
@@ -88,86 +91,106 @@ const InterviewDetails = () => {
         Interview Details for Application ID: {appliedJob._id}
       </h2>
 
-      <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
-        <FaCalendarAlt className="text-blue-500 mr-3" size={24} />
-        <div>
-          <p className="text-md font-semibold">Interview Date:</p>
-          <p className="text-lg text-gray-700">
-            {new Date(interviewDetails.interviewDateTime).toLocaleString()}
-          </p>
-        </div>
-      </div>
-
-      <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
-        <FaMapMarkerAlt className="text-blue-500 mr-3" size={24} />
-        <div>
-          <p className="text-md font-semibold">Location:</p>
-          <p className="text-lg text-gray-700">
-            {interviewDetails.location || "Online"}
-          </p>
-        </div>
-      </div>
-
-      <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
-        <FaClipboardList className="text-blue-500 mr-3" size={24} />
-        <div>
-          <p className="text-md font-semibold">Interview Type:</p>
-          <p className="text-lg text-gray-700">
-            {interviewDetails.interviewMode || "Unknown"}
-          </p>
-        </div>
-      </div>
-
-      {interviewDetails.interviewMode === "online" && (
+      {/* Interview Date */}
+      {interviewDetails.interviewDateTime && (
         <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
-          <FaLink className="text-blue-500 mr-3" size={24} />
+          <FaCalendarAlt className="text-blue-500 mr-3" size={24} />
           <div>
-            <p className="text-md font-semibold">Interview Link:</p>
-            <a
-              href={interviewDetails.interviewLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:bg-blue-100 hover:underline px-2 py-1 rounded transition duration-200"
-            >
-              {interviewDetails.interviewLink}
-            </a>
+            <p className="text-md font-semibold">Interview Date:</p>
+            <p className="text-lg text-gray-700">
+              {new Date(interviewDetails.interviewDateTime).toLocaleString()}
+            </p>
           </div>
         </div>
       )}
 
-      <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
-        <FaClipboardList className="text-blue-500 mr-3" size={24} />
-        <div>
-          <p className="text-md font-semibold">Instructions:</p>
-          <p className="text-lg text-gray-700">
-            {interviewDetails.instructions ||
-              "No specific instructions provided"}
-          </p>
+      {/* Location */}
+      {interviewDetails.location && (
+        <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
+          <FaMapMarkerAlt className="text-blue-500 mr-3" size={24} />
+          <div>
+            <p className="text-md font-semibold">Location:</p>
+            <p className="text-lg text-gray-700">
+              {interviewDetails.location || "Online"}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
-        <FaUser className="text-blue-500 mr-3" size={24} />
-        <div>
-          <p className="text-md font-semibold">Interviewers:</p>
-          <p className="text-lg text-gray-700">
-            {interviewDetails.interviewers.length > 0
-              ? interviewDetails.interviewers.join(", ")
-              : "No interviewers assigned"}
-          </p>
+      {/* Interview Type */}
+      {interviewDetails.interviewMode && (
+        <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
+          <FaClipboardList className="text-blue-500 mr-3" size={24} />
+          <div>
+            <p className="text-md font-semibold">Interview Type:</p>
+            <p className="text-lg text-gray-700">
+              {interviewDetails.interviewMode || "Unknown"}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
-        <FaClipboardList className="text-blue-500 mr-3" size={24} />
-        <div>
-          <p className="text-md font-semibold">Feedback:</p>
-          <p className="text-lg text-gray-700">
-            {interviewDetails.feedback || "No feedback provided"}
-          </p>
+      {/* Interview Link */}
+      {interviewDetails.interviewMode === "online" &&
+        interviewDetails.interviewLink && (
+          <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
+            <FaLink className="text-blue-500 mr-3" size={24} />
+            <div>
+              <p className="text-md font-semibold">Interview Link:</p>
+              <a
+                href={interviewDetails.interviewLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:bg-blue-100 hover:underline px-2 py-1 rounded transition duration-200"
+              >
+                {interviewDetails.interviewLink}
+              </a>
+            </div>
+          </div>
+        )}
+
+      {/* Instructions */}
+      {interviewDetails.instructions && (
+        <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
+          <FaClipboardList className="text-blue-500 mr-3" size={24} />
+          <div>
+            <p className="text-md font-semibold">Instructions:</p>
+            <p className="text-lg text-gray-700">
+              {interviewDetails.instructions ||
+                "No specific instructions provided"}
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
+      {/* Interviewers */}
+      {interviewDetails.interviewers &&
+        interviewDetails.interviewers.length > 0 && (
+          <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
+            <FaUser className="text-blue-500 mr-3" size={24} />
+            <div>
+              <p className="text-md font-semibold">Interviewers:</p>
+              <p className="text-lg text-gray-700">
+                {interviewDetails.interviewers.join(", ")}
+              </p>
+            </div>
+          </div>
+        )}
+
+      {/* Feedback */}
+      {interviewDetails.feedback && (
+        <div className="mb-6 flex items-center p-4 border-l-4 border-blue-500 bg-white shadow-md rounded-md">
+          <FaClipboardList className="text-blue-500 mr-3" size={24} />
+          <div>
+            <p className="text-md font-semibold">Feedback:</p>
+            <p className="text-lg text-gray-700">
+              {interviewDetails.feedback || "No feedback provided"}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Join Interview Button */}
       {interviewDetails.interviewMode === "online" && (
         <button
           className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"

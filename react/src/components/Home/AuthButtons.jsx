@@ -6,7 +6,11 @@ const AuthButtons = ({ isLoggedIn }) => {
 
   // Handle button clicks for navigation
   const handleLoginClick = () => {
-    navigate("/login"); // Navigate to the login page
+    navigate(
+      `/login?redirectTo=${encodeURIComponent(
+        location.pathname + location.search
+      )}`
+    );
   };
 
   const handleSignUpClick = () => {

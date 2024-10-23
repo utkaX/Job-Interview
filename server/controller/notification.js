@@ -57,14 +57,28 @@ exports.searchByJobSeekerId = async (req, res) => {
     const jobSeekerId = req.params.jobSeekerId; // Extract job seeker ID from request parameters
 
     try {
+        // Fetch notifications along with job details
         const notifications = await Notification.find({ jobSeekerId })
-            .sort({ timestamp: -1 }); // You can adjust the sorting as needed
+            .sort({ timestamp: -1 })
+            .populate({
+                path: 'jobId', // Assuming jobId references the Job schema
+                select: 'employerId companyName' // Only fetch employerId and companyName
+            });
 
         if (!notifications || notifications.length === 0) {
             return res.status(404).json({ message: 'No notifications found for this job seeker.' });
         }
 
-        return res.status(200).json(notifications); // Return the notifications array
+        // Map through notifications to include employerId and companyName
+        const responseNotifications = notifications.map(notification => {
+            return {
+                ...notification._doc, // Include all existing notification fields
+                employerId: notification.jobId.employerId, // Add employerId
+                companyName: notification.jobId.companyName // Add companyName
+            };
+        });
+
+        return res.status(200).json(responseNotifications); // Return the modified notifications array
     } catch (error) {
         console.error("Error fetching notifications:", error);
         return res.status(500).json({ message: 'Internal server error', error: error.message });
