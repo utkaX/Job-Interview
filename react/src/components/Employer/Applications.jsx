@@ -76,7 +76,9 @@ const Applications = () => {
 
   return (
     <Layout>
-      <h2 className="text-xl font-bold mb-4">Your Jobs</h2>
+      <h1 className="text-5xl font-extrabold text-blue-900 mb-16 text-center">
+        Applications
+      </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {jobs.map((job) => (
           // Include employerId in the URL

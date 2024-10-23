@@ -35,6 +35,8 @@ import InterviewSchedule from "./components/Employer/InterviewSchedule"; // Fixe
 import SocketProvider from "./context/Socket";
 import PeerProvider from "./context/Peer";
 import ShowCompanyProfile from "./components/Employer/ShowCompanyProfile";
+import Analytics from "./components/Employer/Analytics";
+import Jobs from "./components/Employer/Jobs";
 
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
@@ -62,7 +64,9 @@ function App() {
     "/candidateDetails/",
     "/update-interview-details/",
     "/interview-schedule",
-    "/companyprofile"
+    "/companyprofile",
+    "/analytics",
+    "/jobs"
   ];
 
   const showMainNavbar = !hideNavAndFooter.some((route) =>
@@ -100,6 +104,9 @@ function App() {
         <Route path="/applications" element={<Applications />} />
         <Route path="/jobCandidates/:jobId" element={<JobCandidates />} />
         <Route path="/companyprofile" element={<ShowCompanyProfile />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/jobs" element={<Jobs />} />
+
 
         <Route
           path="/candidateDetails/:candidateId"

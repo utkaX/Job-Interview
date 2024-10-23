@@ -78,9 +78,7 @@ exports.getEmployerByUserId = async (req, res) => {
 
   exports.updateEmployeeProfile = async (req, res) => {
     try {
-      // Convert req.params.userId to ObjectId using 'new'
-      const userId = new mongoose.Types.ObjectId(req.params.userId);
-      console.log(userId)
+      const userId = new mongoose.Types.ObjectId(req.params.id);
   
       // Find employer by userId and update
       const employer = await Employer.findOneAndUpdate(

@@ -45,7 +45,7 @@ exports.getJobsByEmployerId = async (req, res) => {
   const employerId  = req.params.id; // Extract employerId from request parameters
 
     // Find jobs that match the provided employerId
-    const jobs = await Job.find({ employerId: new mongoose.Types.ObjectId(employerId) });
+    const jobs = await Job.find({ employerId:new mongoose.Types.ObjectId(employerId) });
     // If no jobs are found, send a 404 response
     if (!jobs || jobs.length === 0) {
       return res.status(404).json({ message: "No jobs found for this employer." });

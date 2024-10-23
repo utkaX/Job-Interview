@@ -95,7 +95,7 @@ const CandidateInfo = ({ candidate, onStatusUpdate }) => {
         Update Status
       </button>
 
-      <div className="text-xs text-gray-500 mt-4">
+      {/* <div className="text-xs text-gray-500 mt-4">
         <p>
           <strong>ID:</strong> <span>{candidate._id}</span>
         </p>
@@ -122,7 +122,7 @@ const CandidateInfo = ({ candidate, onStatusUpdate }) => {
           <strong>Updated At:</strong>{" "}
           <span>{new Date(candidate.updatedAt).toLocaleString()}</span>
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };

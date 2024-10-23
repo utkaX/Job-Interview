@@ -86,7 +86,7 @@ export default function EmployerNavbar() {
           </li>
           <li>
             <Link
-              to="#"
+              to="/jobs"
               className="navButton text-lg font-semibold"
             >
               Jobs
