@@ -1,3 +1,4 @@
+require("dotenv").config(); 
 const express = require("express");
 const http = require("http");
 const mongoose = require("mongoose");
@@ -24,11 +25,9 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Connect to MongoDB
 async function main() {
-  await mongoose.connect(
-    "mongodb+srv://gurjarkaran03022004:uiMrlvFtyky53Uog@career-craft.yxphn.mongodb.net/job-interview"
-  );
+  const dbUri = process.env.DB_URI; 
+  await mongoose.connect(dbUri);
 }
 
 main()
@@ -104,7 +103,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("disconected");
+    console.log("disconnected");
 
     const email = sockettoEmailMapping.get(socket.id);
     if (email) {
