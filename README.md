@@ -40,6 +40,10 @@ Create a .env file and add the following environment variables:
 DB_URI=your-mongo-db-uri
 JWT_SECRET=your-jwt-secret
 PORT=5000
+EMAIL_USER="" #email address for the send mail
+EMAIL_PASS= "" password generate by the gmail services
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
 ```
 Run the backend
 ```bash
