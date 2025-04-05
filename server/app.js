@@ -11,12 +11,9 @@ const app = express();
 const port =process.env.PORT || 8000; // Use environment variable for port
 
 // CORS options
+// Replace your current corsOptions with this
 const corsOptions = {
-  origin: [
-    "https://career-craft-client.vercel.app",  // Remove trailing slash
-    "http://localhost:3000",                   // Add localhost for development
-    "http://localhost:5173"                    // Add Vite's default port
-  ],
+  origin: '*',  // Allow requests from any origin
   methods: ["GET", "PUT", "POST", "DELETE", "PATCH", "HEAD", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   credentials: true,
