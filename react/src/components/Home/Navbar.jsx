@@ -6,7 +6,7 @@ import { useAuth } from "../../context/authContext";
 import config from "../../utils/config";
 
 export default function Navbar() {
-  const Logo = "https://i.imgur.com/4Q0v1gM.png"; // Replace with your actual logo path
+  const Logo = "https://i.ibb.co/VbSYYbp/Logo.png"; // Replace with your actual logo path
   const { isLoggedIn, logout, user } = useAuth(); // Get the user and logout from auth context
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0); // State for notification count
