@@ -21,7 +21,7 @@ app.use(cookieParser());
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    "https://your-production-frontend-url.com", // Add your production frontend URL
+    "career-craft-7yhqwmfml-karangurjar16s-projects.vercel.app", // Add your production frontend URL
   ],
   methods: "GET,PUT,POST,DELETE,PATCH,HEAD",
   credentials: true,
@@ -76,15 +76,7 @@ const server = app.listen(port, () => {
 
 const { Server } = require("socket.io");
 
-const io = new Server(server, {
-  cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://your-production-frontend-url.com", // Add your production frontend URL
-    ],
-    credentials: true,
-  },
-});
+const io = new Server(server);
 
 const emailtoSocketMapping = new Map();
 const sockettoEmailMapping = new Map();
