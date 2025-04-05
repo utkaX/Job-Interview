@@ -3,7 +3,7 @@ import Layout from "./Layout";
 import { useAuth } from "../../context/authContext";
 import { useNavigate } from "react-router-dom"; // Use this to navigate
 import { useSocket } from "../../context/Socket";
-
+import config from "../../utils/config";
 const InterviewSchedule = () => {
   const { user } = useAuth(); // Destructure user from useAuth
   const [employer, setEmployer] = useState(null); // State to store employer data
@@ -17,7 +17,7 @@ const InterviewSchedule = () => {
   const fetchEmployerId = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/employer/getEmployerByUserId/${user._id}`
+        `${config.baseUrl}/employer/getEmployerByUserId/${user._id}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch employer information");
@@ -35,7 +35,7 @@ const InterviewSchedule = () => {
   const fetchInterviews = async (employerId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/interview/shortlistedJobs/${employerId}`
+        `${config.baseUrl}/interview/shortlistedJobs/${employerId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch interviews");

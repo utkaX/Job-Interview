@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth } from "../../context/authContext";
+import config from "../../utils/config";
 
 
 const ChangePassword = ({
@@ -22,7 +23,7 @@ const ChangePassword = ({
    
     try {
       const response = await fetch(
-        `http://localhost:8080/users/updatePasswordById/${user._id}`,
+        `${config.baseUrl}/users/updatePasswordById/${user._id}`,
         {
           method: "PUT",
           headers: {

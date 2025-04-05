@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/authContext";
+import config from "../utils/config";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -19,7 +20,7 @@ function Login() {
     setError("");
     setLoading(true);
     try {
-      const loginResponse = await fetch("http://localhost:8080/auth/login", {
+      const loginResponse = await fetch(`${config.baseUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,7 +81,7 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-          </div>
+          </div> 
 
           {/* Password Input */}
           <div>

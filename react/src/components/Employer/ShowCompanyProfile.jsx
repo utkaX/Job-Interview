@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/authContext"; // Adjust the path as needed
 import Layout from "./Layout";
-
+import config from "../../utils/config";
 
 const ShowCompanyProfile = () => {
   const [employer, setEmployer] = useState(null);
@@ -12,7 +12,7 @@ const ShowCompanyProfile = () => {
   useEffect(() => {
     const fetchEmployerDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/employer/getEmployerByUserId/${user._id}`);
+        const response = await fetch(`${config.baseUrl}/employer/getEmployerByUserId/${user._id}`);
         const data = await response.json();
         setEmployer(data);
         setUpdatedEmployer(data);
@@ -35,7 +35,7 @@ const ShowCompanyProfile = () => {
   const handleUpdateSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/employer/updateEmployeeProfile/${user._id}`, {
+      const response = await fetch(`${config.baseUrl}/employer/updateEmployeeProfile/${user._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

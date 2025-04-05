@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Layout from "./Layout";
-
+import config from "../../utils/config";
 const JobCandidates = () => {
   const { jobId } = useParams(); // Get jobId from the URL
   const [candidates, setCandidates] = useState([]);
@@ -12,7 +12,7 @@ const JobCandidates = () => {
   const fetchCandidates = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/appliedJob/getAppliedJob/${jobId}`
+        `${config.baseUrl}/appliedJob/getAppliedJob/${jobId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch candidates.");

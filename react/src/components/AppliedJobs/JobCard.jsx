@@ -8,7 +8,7 @@ import {
   FaTimesCircle,
   FaSpinner,
 } from "react-icons/fa";
-
+import config from "../../utils/config";
 const JobCard = ({ appliedJob }) => {
   const [jobDetails, setJobDetails] = useState(null);
   const [employerDetails, setEmployerDetails] = useState(null);
@@ -22,7 +22,7 @@ const JobCard = ({ appliedJob }) => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:8080/jobs/getJobById/${jobId}`
+          `${config.baseUrl}/jobs/getJobById/${jobId}`
         );
         if (!response.ok) {
           throw new Error("Error fetching job details");
@@ -31,7 +31,7 @@ const JobCard = ({ appliedJob }) => {
         setJobDetails(data);
 
         const jobTypeResponse = await fetch(
-          `http://localhost:8080/jobtype/getJobTypeById/${data.jobType}`
+          `${config.baseUrl}/jobtype/getJobTypeById/${data.jobType}`
         );
         if (jobTypeResponse.ok) {
           const jobTypeData = await jobTypeResponse.json();
@@ -53,7 +53,7 @@ const JobCard = ({ appliedJob }) => {
     if (!jobDetails || !jobDetails.employerId) return;
     try {
       const response = await fetch(
-        `http://localhost:8080/employer/${jobDetails.employerId}`
+        `${config.baseUrl}/employer/${jobDetails.employerId}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");

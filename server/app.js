@@ -8,7 +8,7 @@ const methodOverride = require("method-override");
 const path = require("path");
 
 const app = express();
-const port = 8080;
+const port =process.env.PORT || 8000; // Use environment variable for port
 
 // Middleware setup
 app.use(methodOverride("_method"));
@@ -19,7 +19,10 @@ app.use(cookieParser());
 
 // CORS options
 const corsOptions = {
-  origin: "http://localhost:5173", // Change this to your client URL
+  origin: [
+    "http://localhost:5173",
+    "https://your-production-frontend-url.com", // Add your production frontend URL
+  ],
   methods: "GET,PUT,POST,DELETE,PATCH,HEAD",
   credentials: true,
 };
@@ -61,6 +64,11 @@ app.use("/interview", interviewRoutes);
 app.use("/jobtype", jobTypeRoutes);
 app.use("/notification", notificationRoutes);
 
+// Add Hello World route
+app.get('/helloworld', (req, res) => {
+  res.send('Hello World!');
+});
+
 // Start the Express server
 const server = app.listen(port, () => {
   console.log(`Express server running on port ${port}`);
@@ -68,8 +76,14 @@ const server = app.listen(port, () => {
 
 const { Server } = require("socket.io");
 
-const io = new Server({
-  cors: true,
+const io = new Server(server, {
+  cors: {
+    origin: [
+      "http://localhost:5173",
+      "https://your-production-frontend-url.com", // Add your production frontend URL
+    ],
+    credentials: true,
+  },
 });
 
 const emailtoSocketMapping = new Map();
@@ -123,5 +137,3 @@ io.on("connection", (socket) => {
     }
   });
 });
-
-io.listen(8001);

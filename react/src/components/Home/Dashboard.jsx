@@ -5,6 +5,7 @@ import TopCompanies from "./TopCompanies";
 import RecentJobs from "./RecentJobs";
 import LoadingSpinner from "./LoadingSpinner";
 import QuoteCarousel from "./QuoteCarousel";
+import config from "../../utils/config";
 
 const Dashboard = () => {
   const [jobs, setJobs] = useState([]);
@@ -20,12 +21,12 @@ const Dashboard = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await fetch("http://localhost:8080/jobs/live");
+      const response = await fetch(`${config.baseUrl}/jobs/live`);
       const data = await response.json();
       const jobsWithEmployer = await Promise.all(
         data.map(async (job) => {
           const employerResponse = await fetch(
-            `http://localhost:8080/employer/${job.employerId}`
+            `${config.baseUrl}/employer/${job.employerId}`
           );
           const employerData = await employerResponse.json();
           return {
@@ -45,7 +46,7 @@ const Dashboard = () => {
   const fetchTopCompanies = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/employer/getAllEmployee"
+        `${config.baseUrl}/employer/getAllEmployee`
       );
       const data = await response.json();
       setTopCompanies(data);

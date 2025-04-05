@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { FaMapMarkerAlt, FaSuitcase, FaMoneyBillWave } from "react-icons/fa";
 import { useAuth } from "../../context/authContext";
 import SaveJobButton from "./SaveJobButton";
+import config from "../../utils/config";
 
 const JobDetails = () => {
   const { JobId } = useParams();
@@ -31,7 +32,7 @@ const JobDetails = () => {
   const fetchJobDetails = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/jobs/getJobById/${JobId}`
+        `${config.baseUrl}/jobs/getJobById/${JobId}`
       );
       if (!response.ok) throw new Error("Failed to fetch job details");
       const details = await response.json();

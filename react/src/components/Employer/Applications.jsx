@@ -3,7 +3,7 @@ import { useAuth } from "../../context/authContext"; // Importing Auth Context
 import { Link } from "react-router-dom"; // Import Link for navigation
 import ApplicationCard from "./ApplicationCard"; // Importing ApplicationCard component
 import Layout from "./Layout"; // Import Layout for consistent page structure
-
+import config from "../../utils/config";
 const Applications = () => {
   const { user } = useAuth(); // Destructure user from AuthContext
   const [employer, setEmployer] = useState(null); // State to hold employer data
@@ -15,7 +15,7 @@ const Applications = () => {
   const fetchEmployerId = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/employer/getEmployerByUserId/${user._id}`
+        `${config.baseUrl}/employer/getEmployerByUserId/${user._id}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch employer information");
@@ -32,7 +32,7 @@ const Applications = () => {
   const fetchJobs = async (employerId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/jobs/company/${employerId}`
+        `${config.baseUrl}/jobs/company/${employerId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch jobs");

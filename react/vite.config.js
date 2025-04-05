@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     hot: true,
     proxy:{
-      '/api':'http://localhost:8080'
+      '/api':'${config.baseUrl}'
     }
   },
   build: {

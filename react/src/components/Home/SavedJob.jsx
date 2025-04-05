@@ -3,6 +3,7 @@ import { useAuth } from "../../context/authContext";
 import JobSearchCard from "./JobSearchCard";
 import { RingLoader } from "react-spinners";
 import AuthButtons from "./AuthButtons"; // Import your AuthButtons component
+import config from "../../utils/config";
 
 const SavedJob = () => {
   const { user, isLoggedIn } = useAuth();
@@ -13,7 +14,7 @@ const SavedJob = () => {
   const fetchJobSeeker = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/jobSeeker/getJobSeekerById/${user._id}`
+        `${config.baseUrl}/jobSeeker/getJobSeekerById/${user._id}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -29,7 +30,7 @@ const SavedJob = () => {
   const fetchSavedJobs = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/jobSeeker/saved-jobs/${jobSeeker._id}`
+        `${config.baseUrl}/jobSeeker/saved-jobs/${jobSeeker._id}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -57,7 +58,7 @@ const SavedJob = () => {
   const handleSaveToggle = async (jobId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/jobSeeker/toggle-save-job/${jobId}`,
+        `${config.baseUrl}/jobSeeker/toggle-save-job/${jobId}`,
         {
           method: "PUT",
         }

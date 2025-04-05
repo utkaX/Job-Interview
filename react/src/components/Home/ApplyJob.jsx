@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/authContext";
 import { useNavigate, useLocation } from "react-router-dom";
+import config from "../../utils/config";
 
 const ApplyJob = () => {
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ const ApplyJob = () => {
   const fetchJobSeeker = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/jobSeeker/getJobSeekerById/${userId}`
+        `${config.baseUrl}/jobSeeker/getJobSeekerById/${userId}`
       );
       if (!response.ok) throw new Error("Failed to fetch job seeker");
       const data = await response.json();
@@ -64,7 +65,7 @@ const ApplyJob = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/appliedJob/createApplyJob",
+        `${config.baseUrl}/appliedJob/createApplyJob`,
         {
           method: "POST",
           headers: {

@@ -10,6 +10,7 @@ import {
 import { useAuth } from "../../context/authContext"; // Import useAuth to access user details
 
 import { useSocket } from "../../context/Socket";
+import config from "../../utils/config";
 
 const InterviewDetails = () => {
   const { socket } = useSocket();
@@ -29,7 +30,7 @@ const InterviewDetails = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8080/interview/appliedJob/${appliedJob._id}`
+          `${config.baseUrl}/interview/appliedJob/${appliedJob._id}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch interview details");

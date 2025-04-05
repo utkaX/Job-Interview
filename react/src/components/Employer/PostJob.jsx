@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/authContext";
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
-
+import config from "../../utils/config";
 const PostJob = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -26,7 +26,7 @@ const PostJob = () => {
   const fetchEmployerId = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/employer/getEmployerByUserId/${userId}`
+        `${config.baseUrl}/employer/getEmployerByUserId/${userId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch employer data");
@@ -64,7 +64,7 @@ const PostJob = () => {
   const fetchJobTypeId = async (jobTypeTitle) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/jobtype/getJobTypeByTitle/${jobTypeTitle}`
+        `${config.baseUrl}/jobtype/getJobTypeByTitle/${jobTypeTitle}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch job type");
@@ -80,7 +80,7 @@ const PostJob = () => {
   const notifyJobSeekers = async (jobId, jobTitle) => {
     try {
       const response = await fetch(
-        "http://localhost:8080/notification/createForJob/",
+        `${config.baseUrl}/notification/createForJob/`,
         {
           method: "POST",
           headers: {
@@ -117,7 +117,7 @@ const PostJob = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:8080/jobs/addJob", {
+        const response = await fetch(`${config.baseUrl}/jobs/addJob`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

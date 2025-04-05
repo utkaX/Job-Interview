@@ -4,6 +4,7 @@ import { FaBell, FaBookmark } from "react-icons/fa"; // Notification and Saved J
 import "../../index.css";
 import Logo from "../../common/Logo.png";
 import { useAuth } from "../../context/authContext";
+import config from "../../utils/config";
 
 export default function Navbar() {
   const { isLoggedIn, logout, user } = useAuth(); // Get the user and logout from auth context
@@ -59,7 +60,7 @@ export default function Navbar() {
     if (isLoggedIn) {
       // Fetch notifications count from your API if user is logged in
       const fetchNotificationsCount = async () => {
-        const response = await fetch(`http://localhost:8080/notification/getCount/${user._id}`);
+        const response = await fetch(`${config.baseUrl}/notification/getCount/${user._id}`);
         if (response.ok) {
           const data = await response.json();
           setNotificationCount(data.count); // Assuming API returns { count: number }

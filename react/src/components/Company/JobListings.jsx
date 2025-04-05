@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import JobCard from "../Home/JobCard";
-
+import config from "../../utils/config";
 export default function JobListings({ companyId, company }) {
   const [jobs, setJobs] = useState([]); // State to hold job listings
   const [loading, setLoading] = useState(true); // State to manage loading state
@@ -10,7 +10,7 @@ export default function JobListings({ companyId, company }) {
     const fetchJobs = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/jobs/getJobsByEmployerId/${company._id}` // Adjust API endpoint as necessary
+          `${config.baseUrl}/jobs/getJobsByEmployerId/${company._id}` // Adjust API endpoint as necessary
         );
         if (!response.ok) {
           throw new Error("Failed to fetch jobs");
