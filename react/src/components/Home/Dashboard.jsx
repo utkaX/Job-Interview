@@ -95,8 +95,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    // Added responsive classes for container
-    <div className="container mx-auto px-4 py-4 sm:py-8">
+    <div className="container mx-auto px-4 py-8">
       <QuoteCarousel />
 
       <SearchBar
@@ -113,22 +112,15 @@ const Dashboard = () => {
       {loading ? (
         <LoadingSpinner />
       ) : (
-        // Added responsive classes for content layout
-        <div className="flex flex-col space-y-6 md:space-y-8">
-          {/* TopCompanies section with mobile-first responsive design */}
-          <div className="w-full overflow-x-auto">
-            <TopCompanies
-              topCompanies={topCompanies}
-              scroll={scroll}
-              scrollContainerRef={scrollContainerRef}
-            />
-          </div>
+        <>
+          <TopCompanies
+            topCompanies={topCompanies}
+            scroll={scroll}
+            scrollContainerRef={scrollContainerRef}
+          />
 
-          {/* RecentJobs section with mobile-first responsive design */}
-          <div className="w-full">
-            <RecentJobs jobs={jobs} />
-          </div>
-        </div>
+          <RecentJobs jobs={jobs} />
+        </>
       )}
     </div>
   );
