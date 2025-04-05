@@ -3,48 +3,42 @@ import { Link } from "react-router-dom";
 
 const TopCompanies = ({ topCompanies, scroll, scrollContainerRef }) => {
   return (
-    <div>
-      <h2 className="text-2xl font-semibold text-center my-8 text-blue-800 mt-20">
-        Top Companies
-      </h2>
-      <div className="relative flex items-center">
-        {/* Left Scroll Button */}
-        <button
-          onClick={() => scroll("left")}
-          className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700"
-        >
-          <FaChevronLeft />
-        </button>
-
-        {/* Company List */}
+    <div className="mb-8">
+      <h2 className="text-2xl font-bold mb-4 px-4">Top Companies</h2>
+      <div className="relative">
         <div
           ref={scrollContainerRef}
-          className="top-companies overflow-x-auto flex space-x-4 py-4 hide-scrollbar"
-          style={{ scrollBehavior: "smooth", whiteSpace: "nowrap" }}
+          className="flex overflow-x-auto gap-4 px-4 pb-4 snap-x snap-mandatory hide-scrollbar"
         >
-          {topCompanies.length > 0 ? (
-            topCompanies.map((company, index) => (
-              <Link
-                to={`/company/${encodeURIComponent(company._id)}`}
-                state={{ companyId: encodeURIComponent(company._id) }}
-                key={index}
-                className="flex-none bg-blue-100 px-4 py-2 rounded-lg shadow-sm text-center text-blue-700 font-semibold hover:bg-blue-200 transition"
-                style={{ minWidth: "200px" }}
-              >
-                {company.companyName}
-              </Link>
-            ))
-          ) : (
-            <p className="text-gray-500">No companies found.</p>
-          )}
+          {topCompanies.map((company) => (
+            <div
+              key={company._id}
+              className="flex-none w-64 md:w-72 snap-center"
+            >
+              <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <img
+                  src={company.logo || "default-company-logo.png"}
+                  alt={company.companyName}
+                  className="w-16 h-16 md:w-20 md:h-20 object-contain mb-4"
+                />
+                <h3 className="font-semibold text-lg mb-2">{company.companyName}</h3>
+                <p className="text-gray-600 text-sm mb-2">{company.industry}</p>
+                <p className="text-gray-500 text-sm">{company.location}</p>
+              </div>
+            </div>
+          ))}
         </div>
-
-        {/* Right Scroll Button */}
         <button
-          onClick={() => scroll("right")}
-          className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700"
+          onClick={() => scroll('left')}
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md hover:bg-white"
         >
-          <FaChevronRight />
+          ←
+        </button>
+        <button
+          onClick={() => scroll('right')}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white/80 p-2 rounded-full shadow-md hover:bg-white"
+        >
+          →
         </button>
       </div>
     </div>

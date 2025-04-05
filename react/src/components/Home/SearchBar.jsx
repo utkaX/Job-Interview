@@ -1,63 +1,56 @@
 import { FaSearch, FaCaretDown, FaMapMarkerAlt } from "react-icons/fa";
 
-const SearchBar = ({ searchJob, setSearchJob, experienceYears, setExperienceYears, searchLocation, setSearchLocation, handleSearch, error }) => {
+const SearchBar = ({ 
+  searchJob, 
+  setSearchJob,
+  experienceYears,
+  setExperienceYears,
+  searchLocation,
+  setSearchLocation,
+  handleSearch,
+  error 
+}) => {
   return (
-    <div className={`rounded-full mb-0 flex items-center justify-between border shadow-md p-2 w-full sm:w-2/3 mx-auto ${error ? "border-red-500" : "border-gray-300"}`}>
-      <div className="relative flex-grow mx-2">
-        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-          <FaSearch />
+    <div className="bg-white p-4 md:p-6 rounded-lg shadow-md mb-8">
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex-1">
+          <input
+            type="text"
+            placeholder="Search jobs..."
+            value={searchJob}
+            onChange={(e) => setSearchJob(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
-        <input
-          type="text"
-          value={searchJob}
-          onChange={(e) => setSearchJob(e.target.value)}
-          className={`pl-10 p-3 w-full text-gray-700 focus:outline-none ${error ? "border-red-500" : ""}`}
-          placeholder="Enter Skills/Designation/Companies"
-        />
-      </div>
+        
+        <div className="flex-1">
+          <input
+            type="text"
+            placeholder="Location..."
+            value={searchLocation}
+            onChange={(e) => setSearchLocation(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-      <span className="text-gray-400">|</span>
+        <div className="flex-1">
+          <input
+            type="text"
+            placeholder="Experience (years)..."
+            value={experienceYears}
+            onChange={(e) => setExperienceYears(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
 
-      <div className="relative flex-grow mx-2">
-        <select
-          value={experienceYears}
-          onChange={(e) => setExperienceYears(e.target.value)}
-          className="p-3 w-full text-gray-700 focus:outline-none appearance-none"
+        <button
+          onClick={handleSearch}
+          className="w-full md:w-auto px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
-          <option value="">Select Experience</option>
-          {["Freshers", "1 year", "2 years", "3 years", "4 years", "5 years"].map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-        <div className="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
-          <FaCaretDown />
-        </div>
+          Search
+        </button>
       </div>
-
-      <span className="text-gray-400">|</span>
-
-      <div className="relative flex-grow mx-2">
-        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-          <FaMapMarkerAlt />
-        </div>
-        <input
-          type="text"
-          value={searchLocation}
-          onChange={(e) => setSearchLocation(e.target.value)}
-          className="p-3 pl-10 w-full text-gray-700 focus:outline-none"
-          placeholder="Location"
-        />
-      </div>
-
-      <button
-        onClick={handleSearch}
-        className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-3 px-4 ml-2 flex items-center"
-      >
-        <FaSearch className="mr-2" />
-        Search
-      </button>
+      {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
   );
 };
