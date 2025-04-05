@@ -20,7 +20,8 @@ app.use(cookieParser());
 // CORS options
 const corsOptions = {
   origin: [
-    "https://career-craft-client.vercel.app/", // Add your production frontend URL
+    "https://career-craft-client.vercel.app/",
+    "*" // Add your production frontend URL
   ],
   methods: "GET,PUT,POST,DELETE,PATCH,HEAD",
   credentials: true,
