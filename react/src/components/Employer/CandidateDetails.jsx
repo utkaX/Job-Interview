@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Layout from "./Layout";
 import config from "../../utils/config";
+
+
 const JobCandidates = () => {
   const { jobId } = useParams(); // Get jobId from the URL
   const [candidates, setCandidates] = useState([]);

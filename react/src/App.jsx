@@ -5,8 +5,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import Dashboard from "./components/Home/Dashboard";
-import Signup from "./auth/signup";
-import Login from "./auth/login";
+
 import AddProfile from "./components/Jobseeker/AddProfile";
 import Notifications from "./components/Home/Notifications";
 import Footer from "./components/Home/Footer";
@@ -27,7 +26,6 @@ import SavedJob from "./components/Home/SavedJob";
 import UpdateProfile from "./components/Jobseeker/UpdateProfile";
 import Applications from "./components/Employer/Applications";
 import JobCandidates from "./components/Employer/JobCandidates";
-import CandidateDetails from "./components/Employer/candidateDetails";
 import UpdateInterviewDetails from "./components/Employer/UpdateInterviewDetails";
 import UserProfile from "./components/Jobseeker/UserProfile";
 import InterviewRoom from "./components/InterviewRoom";
@@ -37,6 +35,8 @@ import PeerProvider from "./context/Peer";
 import ShowCompanyProfile from "./components/Employer/ShowCompanyProfile";
 import Analytics from "./components/Employer/Analytics";
 import Jobs from "./components/Employer/Jobs";
+import Signup from "./Auth/Signup";
+import Login from "./Auth/login";
 
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
@@ -106,12 +106,6 @@ function App() {
         <Route path="/companyprofile" element={<ShowCompanyProfile />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/jobs" element={<Jobs />} />
-
-
-        <Route
-          path="/candidateDetails/:candidateId"
-          element={<CandidateDetails />}
-        />
         <Route
           path="/update-interview-details/:id"
           element={<UpdateInterviewDetails />}
