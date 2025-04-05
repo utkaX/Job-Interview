@@ -20,8 +20,7 @@ app.use(cookieParser());
 // CORS options
 const corsOptions = {
   origin: [
-    "http://localhost:5173",
-    "career-craft-7yhqwmfml-karangurjar16s-projects.vercel.app", // Add your production frontend URL
+    "https://career-craft-client.vercel.app/", // Add your production frontend URL
   ],
   methods: "GET,PUT,POST,DELETE,PATCH,HEAD",
   credentials: true,
