@@ -10,23 +10,29 @@ const path = require("path");
 const app = express();
 const port =process.env.PORT || 8000; // Use environment variable for port
 
+// CORS options
+const corsOptions = {
+  origin: [
+    "https://career-craft-client.vercel.app",  // Remove trailing slash
+    "http://localhost:3000",                   // Add localhost for development
+    "http://localhost:5173"                    // Add Vite's default port
+  ],
+  methods: ["GET", "PUT", "POST", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+// Apply CORS before other middleware
+app.use(cors(corsOptions));
+
 // Middleware setup
 app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(cookieParser());
-
-// CORS options
-const corsOptions = {
-  origin: [
-    "https://career-craft-client.vercel.app/",
-    "*" // Add your production frontend URL
-  ],
-  methods: "GET,PUT,POST,DELETE,PATCH,HEAD",
-  credentials: true,
-};
-app.use(cors(corsOptions));
 
 async function main() {
   const dbUri = process.env.DB_URI; 
