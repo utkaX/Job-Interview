@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/authContext";
 import NotificationItem from "./NotificationItem"; // Ensure correct import
 import AuthButtons from "./AuthButtons"; // Import your AuthButtons component
+import config from "../../utils/config";
 
 const Notifications = () => {
   const { user } = useAuth();
@@ -14,7 +15,7 @@ const Notifications = () => {
   const fetchJobSeeker = async (userId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/jobSeeker/getJobSeekerById/${userId}`
+        `${config.baseUrl}/jobSeeker/getJobSeekerById/${userId}`
       ); // Use userId parameter
       if (!response.ok) throw new Error("Failed to fetch job seeker");
       const data = await response.json();
@@ -38,7 +39,7 @@ const Notifications = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8080/notification/searchByJobSeekerId/${jobSeeker._id}` // Use jobSeeker ID
+          `${config.baseUrl}/notification/searchByJobSeekerId/${jobSeeker._id}` // Use jobSeeker ID
         );
         if (!response.ok) {
           throw new Error("Failed to fetch notifications");
@@ -58,7 +59,7 @@ const Notifications = () => {
 
   const deleteNotification = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8080/notification/${id}`, {
+      const response = await fetch(`${config.baseUrl}/notification/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {

@@ -5,6 +5,7 @@ import ChangePassword from "./ChangePassword";
 import UpdatePersonalInfo from "./UpdatePersonalInfo";
 import UpdateExperience from "./UpdateExperience";
 import UpdateEducation from "./UpdateEducation";
+import config from "../../utils/config";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -32,7 +33,7 @@ const UserProfile = () => {
     const fetchProfile = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/jobSeeker/getJobSeekerByUserId/${user._id}`
+          `${config.baseUrl}/jobSeeker/getJobSeekerByUserId/${user._id}`
         );
         const data = await response.json();
 
@@ -69,7 +70,7 @@ const UserProfile = () => {
         ...(newPassword && { password: newPassword }), // Only include password if it's updated
       };
 
-      const response = await fetch(`http://localhost:8080/jobSeeker/updateJobSeekerById/${user._id}`, {
+      const response = await fetch(`${config.baseUrl}/jobSeeker/updateJobSeekerById/${user._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -1,3 +1,4 @@
+require("dotenv").config(); 
 const express = require("express");
 const http = require("http");
 const mongoose = require("mongoose");
@@ -7,7 +8,21 @@ const methodOverride = require("method-override");
 const path = require("path");
 
 const app = express();
-const port = 8080;
+const port =process.env.PORT || 8000; // Use environment variable for port
+
+// CORS options
+// Replace your current corsOptions with this
+const corsOptions = {
+  origin: '*',  // Allow requests from any origin
+  methods: ["GET", "PUT", "POST", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
+
+// Apply CORS before other middleware
+app.use(cors(corsOptions));
 
 // Middleware setup
 app.use(methodOverride("_method"));
@@ -16,19 +31,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS options
-const corsOptions = {
-  origin: "http://localhost:5173", // Change this to your client URL
-  methods: "GET,PUT,POST,DELETE,PATCH,HEAD",
-  credentials: true,
-};
-app.use(cors(corsOptions));
-
-// Connect to MongoDB
 async function main() {
-  await mongoose.connect(
-    "mongodb+srv://gurjarkaran03022004:uiMrlvFtyky53Uog@career-craft.yxphn.mongodb.net/job-interview"
-  );
+  const dbUri = process.env.DB_URI; 
+  await mongoose.connect(dbUri);
 }
 
 main()
@@ -62,6 +67,11 @@ app.use("/interview", interviewRoutes);
 app.use("/jobtype", jobTypeRoutes);
 app.use("/notification", notificationRoutes);
 
+// Add Hello World route
+app.get('/helloworld', (req, res) => {
+  res.send('Hello World!');
+});
+
 // Start the Express server
 const server = app.listen(port, () => {
   console.log(`Express server running on port ${port}`);
@@ -69,9 +79,7 @@ const server = app.listen(port, () => {
 
 const { Server } = require("socket.io");
 
-const io = new Server({
-  cors: true,
-});
+const io = new Server(server);
 
 const emailtoSocketMapping = new Map();
 const sockettoEmailMapping = new Map();
@@ -104,7 +112,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("disconected");
+    console.log("disconnected");
 
     const email = sockettoEmailMapping.get(socket.id);
     if (email) {
@@ -124,5 +132,3 @@ io.on("connection", (socket) => {
     }
   });
 });
-
-io.listen(8001);

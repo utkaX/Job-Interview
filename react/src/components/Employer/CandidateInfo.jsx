@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-
+import config from "../../utils/config";
 const CandidateInfo = ({ candidate, onStatusUpdate }) => {
   const [status, setStatus] = useState(candidate.status);
   const [isButtonEnabled, setIsButtonEnabled] = useState(false);
@@ -130,7 +130,7 @@ const CandidateInfo = ({ candidate, onStatusUpdate }) => {
 // Function to handle status update API call
 const onStatusUpdate = async (appliedJobId, status) => {
   const response = await fetch(
-    `http://localhost:8080/appliedJob/update/${appliedJobId}`,
+    `${config.baseUrl}/appliedJob/update/${appliedJobId}`,
     {
       method: "PUT",
       headers: {

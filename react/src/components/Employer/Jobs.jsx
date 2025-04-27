@@ -4,7 +4,7 @@ import JobCard from "./JobCard"; // Import the JobCard component
 import { Link } from "react-router-dom"; // Import Link
 import { FaSearch } from "react-icons/fa"; // Import search icon
 import Layout from "./Layout";
-
+import config from "../../utils/config";
 const Jobs = () => {
   const { user } = useAuth();
   const [jobs, setJobs] = useState([]);
@@ -17,7 +17,7 @@ const Jobs = () => {
     const fetchCompanyAndJobs = async () => {
       try {
         const companyResponse = await fetch(
-          `http://localhost:8080/employer/getEmployerByUserId/${user._id}`
+          `${config.baseUrl}/employer/getEmployerByUserId/${user._id}`
         );
 
         if (!companyResponse.ok) {
@@ -26,7 +26,7 @@ const Jobs = () => {
         const companyData = await companyResponse.json();
 
         const jobsResponse = await fetch(
-          `http://localhost:8080/jobs/getJobsByEmployerId/${companyData._id}`
+          `${config.baseUrl}/jobs/getJobsByEmployerId/${companyData._id}`
         );
 
         if (!jobsResponse.ok) {

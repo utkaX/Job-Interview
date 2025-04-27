@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/authContext";
+import config from "../../utils/config";
 
 const UpdateProfile = () => {
   const [profile, setProfile] = useState({});
@@ -9,7 +10,7 @@ const UpdateProfile = () => {
     const fetchProfileData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/jobSeeker/getJobSeekerByUserId/${user._id}`
+          `${config.baseUrl}/jobSeeker/getJobSeekerByUserId/${user._id}`
         );
         if (!response.ok) throw new Error("Failed to fetch job seeker");
         const data = await response.json();

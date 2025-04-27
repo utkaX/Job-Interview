@@ -2,7 +2,7 @@
   "name": "job-interview",
   "version": "1.0.0",
   "description": "",
-  "main": "index.html",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js"
@@ -11,7 +11,6 @@
     "type": "git",
     "url": "Job-Interview"
   },
-  "author": "utsav kaneriya",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",

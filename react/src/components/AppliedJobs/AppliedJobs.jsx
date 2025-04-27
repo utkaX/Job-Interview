@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import JobCard from "./JobCard";
 import { useAuth } from "../../context/authContext";
 import AuthButtons from "../Home/AuthButtons"; // Import the AuthButtons component
+import config from "../../utils/config";
 
 const AppliedJobs = () => {
   const { user } = useAuth();
@@ -13,7 +14,7 @@ const AppliedJobs = () => {
     if (!user) return; // If user is not logged in, exit early
     try {
       const response = await fetch(
-        `http://localhost:8080/jobSeeker/getJobSeekerById/${user._id}`
+        `${config.baseUrl}/jobSeeker/getJobSeekerById/${user._id}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -29,7 +30,7 @@ const AppliedJobs = () => {
   const fetchAppliedJobs = async (jobSeekerId) => {
     try {
       const response = await fetch(
-        `http://localhost:8080/appliedJob/apliedjobforjs/${jobSeekerId}`
+        `${config.baseUrl}/appliedJob/apliedjobforjs/${jobSeekerId}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch applied jobs");

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Layout from "./Layout";
 import { useAuth } from "../../context/authContext";
-
+import config from "../../utils/config";
 const UpdateInterviewDetails = () => {
   const { id } = useParams(); // Getting the job ID from URL
   const { user } = useAuth(); // Getting user from context
@@ -42,7 +42,7 @@ const UpdateInterviewDetails = () => {
       if (user && user._id) {
         try {
           const response = await fetch(
-            `http://localhost:8080/employer/getEmployerByUserId/${user._id}`
+            `${config.baseUrl}/employer/getEmployerByUserId/${user._id}`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch employer ID");
@@ -83,7 +83,7 @@ const UpdateInterviewDetails = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/interview/create", {
+      const response = await fetch(`${config.baseUrl}/interview/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

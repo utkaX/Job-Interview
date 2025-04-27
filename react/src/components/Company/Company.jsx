@@ -4,7 +4,7 @@ import CompanyTabs from "./CompanyTabs";
 import CompanyAbout from "./CompanyAbout";
 import JobListings from "./JobListings";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import config from "../../utils/config";
 export default function Company() {
   const [employees, setEmployees] = useState();
   const [selectedTab, setSelectedTab] = useState("overview");
@@ -16,7 +16,7 @@ export default function Company() {
   const fetchEmployees = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/employer/${companyId}`
+        `${config.baseUrl}/employer/${companyId}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");

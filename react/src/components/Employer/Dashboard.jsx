@@ -3,7 +3,7 @@ import Layout from "./Layout"; // Layout contains Navbar, Sidebar, and Footer
 import { useAuth } from "../../context/authContext"; // Import the auth context
 import { Pie } from "react-chartjs-2"; // Import the Pie chart component
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"; // Import required components from Chart.js
-
+import config from "../../utils/config";
 // Register the necessary components for Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -23,7 +23,7 @@ const Dashboard = () => {
 
       try {
         const companyResponse = await fetch(
-          `http://localhost:8080/employer/getEmployerByUserId/${user._id}`
+          `${config.baseUrl}/employer/getEmployerByUserId/${user._id}`
         );
 
         if (!companyResponse.ok) {
@@ -35,7 +35,7 @@ const Dashboard = () => {
         const companyData = await companyResponse.json();
 
         const jobsResponse = await fetch(
-          `http://localhost:8080/jobs/getJobsByEmployerId/${companyData._id}`
+          `${config.baseUrl}/jobs/getJobsByEmployerId/${companyData._id}`
         );
 
         if (!jobsResponse.ok) {

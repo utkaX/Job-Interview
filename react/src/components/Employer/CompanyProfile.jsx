@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom"; // Use Navigate as a component, not
 import { useAuth } from "../../context/authContext";
 import Sidebar from "./Sidebar";
 import Layout from "./Layout";
-
+import config from "../../utils/config";
 export default function CompanyProfile() {
   const { user } = useAuth(); // Assuming user has the ID
 
@@ -48,7 +48,7 @@ export default function CompanyProfile() {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/employer/addEmployee",
+       `${config.baseUrl}/employer/addEmployee`,
         {
           method: "POST",
           headers: {

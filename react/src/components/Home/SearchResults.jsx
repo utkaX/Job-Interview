@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import JobSearchCard from "./JobSearchCard";
 import { FaSpinner } from "react-icons/fa";
+import config from "../../utils/config";
 
 const SearchResults = () => {
   const [jobs, setJobs] = useState([]);
@@ -24,7 +25,7 @@ const SearchResults = () => {
     const fetchSearchResults = async () => {
       try {
         const queryParams = getQueryParams();
-        let apiUrl = `http://localhost:8080/jobs/search?`;
+        let apiUrl = `${config.baseUrl}/jobs/search?`;
 
         if (queryParams.keyword) apiUrl += `keyword=${encodeURIComponent(queryParams.keyword)}&`;
         if (queryParams.location) apiUrl += `location=${encodeURIComponent(queryParams.location)}&`;

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
+import config from "../utils/config";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -57,20 +58,21 @@ const Signup = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(config.baseUrl);
     e.preventDefault();
     setErrors({});
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:8080/auth/sendOTP", {
+        const response = await fetch(`${config.baseUrl}/auth/sendOTP`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ email: formData.email }),
         });
-
+        console.log(response);
         const data = await response.json();
         if (data.success) {
           console.log("OTP sent successfully");
@@ -96,7 +98,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8080/auth/signup", {
+      const response = await fetch(`${config.baseUrl}/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -115,7 +117,7 @@ const Signup = () => {
       }
 
       setOtpSuccess("OTP verified successfully!");
-      const loginResponse = await fetch("http://localhost:8080/auth/login", {
+      const loginResponse = await fetch(`${config.baseUrl}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

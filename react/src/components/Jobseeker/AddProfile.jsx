@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import config from "../../utils/config";
 
 import ProfileStep1 from "./ProfileStep1";
 import ProfileStep2 from "./ProfileStep2";
@@ -61,7 +62,7 @@ const AddProfile = () => {
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/jobSeeker/addjobseeker",
+        `${config.baseUrl}/jobSeeker/addjobseeker`,
         {
           method: "POST",
           headers: {

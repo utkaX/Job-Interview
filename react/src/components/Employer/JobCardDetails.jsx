@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Layout from './Layout';
-
+import config from "../../utils/config";
 const JobCardDetails = () => {
   const { id } = useParams(); // Get job ID from the URL params
   const [jobDetails, setJobDetails] = useState(null); // State to hold job details
@@ -15,7 +15,7 @@ const JobCardDetails = () => {
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/jobs/getJobById/${id}`);
+        const response = await fetch(`${config.baseUrl}/jobs/getJobById/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch job details');
         }
@@ -24,7 +24,7 @@ const JobCardDetails = () => {
         setUpdatedJobDetails(data); // Initialize updated details
 
         // Fetch job type by jobType ID
-        const jobTypeResponse = await fetch(`http://localhost:8080/jobtype/getJobTypeById/${data.jobType}`);
+        const jobTypeResponse = await fetch(`${config.baseUrl}/jobtype/getJobTypeById/${data.jobType}`);
         if (!jobTypeResponse.ok) {
           throw new Error('Failed to fetch job type');
         }
@@ -58,7 +58,7 @@ const JobCardDetails = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:8080/jobs/updateJobById/${id}`, {
+      const response = await fetch(`${config.baseUrl}/jobs/updateJobById/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

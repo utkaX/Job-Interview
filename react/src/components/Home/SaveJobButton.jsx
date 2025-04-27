@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaBookmark } from "react-icons/fa";
 import { useAuth } from "../../context/authContext";
+import config from "../../utils/config";
 
 const SaveJobButton = ({ jobId }) => {
   const { user, isLoggedIn } = useAuth();
@@ -11,7 +12,7 @@ const SaveJobButton = ({ jobId }) => {
     if (!user) return;
     try {
       const response = await fetch(
-        `http://localhost:8080/jobSeeker/getJobSeekerById/${user._id}`
+        `${config.baseUrl}/jobSeeker/getJobSeekerById/${user._id}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -27,7 +28,7 @@ const SaveJobButton = ({ jobId }) => {
     if (!jobSeeker) return;
     try {
       const response = await fetch(
-        `http://localhost:8080/jobSeeker/saved-job/${jobSeeker._id}/${jobId}`
+        `${config.baseUrl}/jobSeeker/saved-job/${jobSeeker._id}/${jobId}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -55,8 +56,8 @@ const SaveJobButton = ({ jobId }) => {
 
     const method = isJobSaved ? "DELETE" : "POST"; // Determine method based on saved status
     const url = isJobSaved
-      ? `http://localhost:8080/jobSeeker/remove-saved-job`
-      : `http://localhost:8080/jobSeeker/save-job`; // Set URL based on action
+      ? `${config.baseUrl}/jobSeeker/remove-saved-job`
+      : `${config.baseUrl}/jobSeeker/save-job`; // Set URL based on action
 
     try {
       const response = await fetch(url, {
