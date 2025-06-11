@@ -83,17 +83,21 @@ Build Job-Interview from source:
    git clone https://github.com/utkaX/Job-Interview
    
 2. Navigate to the project directory:
+   ```bash
    cd Job-Interview
 
    
 4. Install the dependencies:
+   ```bash
    npm install
 
-5. Configure Environment Variables:
+6. Configure Environment Variables:
+    ```bash
 Create a .env file in the root and add necessary variables.
 
-6. Run project with:
+7. Run project with:
 Using npm:
+  ```bash
     npm start
 
 
