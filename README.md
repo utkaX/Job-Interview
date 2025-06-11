@@ -93,11 +93,11 @@ Build Job-Interview from source:
 
 6. Configure Environment Variables:
    
-Create a .env file in the root and add necessary variables.
+    Create a .env file in the root and add necessary variables.
 
 8. Run project with:
    
-  Using npm:
+      Using npm:
    ```bash
       npm start
 
