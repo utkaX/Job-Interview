@@ -10,7 +10,6 @@ _Empowering Careers Through Seamless Opportunities and Connections_
 
 ![Express](https://img.shields.io/badge/Express-black?logo=express&logoColor=white)
 ![JSON](https://img.shields.io/badge/JSON-black?logo=json&logoColor=white)
-![Markdown](https://img.shields.io/badge/Markdown-black?logo=markdown&logoColor=white)
 ![Socket.io](https://img.shields.io/badge/Socket.io-black?logo=socket.io&logoColor=white)
 ![npm](https://img.shields.io/badge/npm-red?logo=npm&logoColor=white)
 ![Autoprefixer](https://img.shields.io/badge/Autoprefixer-red)
