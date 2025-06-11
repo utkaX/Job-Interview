@@ -18,13 +18,10 @@ _Empowering Careers Through Seamless Opportunities and Connections_
 ![PostCSS](https://img.shields.io/badge/PostCSS-orange?logo=postcss)
 ![ENV](https://img.shields.io/badge/.env-yellowgreen)
 ![JavaScript](https://img.shields.io/badge/JavaScript-yellow?logo=javascript)
-![EJS](https://img.shields.io/badge/EJS-lightgreen)
 ![Nodemon](https://img.shields.io/badge/Nodemon-green?logo=nodemon)
 ![MongoDB](https://img.shields.io/badge/MongoDB-brightgreen?logo=mongodb)
 ![React](https://img.shields.io/badge/React-blue?logo=react)
 ![Vite](https://img.shields.io/badge/Vite-blueviolet?logo=vite)
-![ESLint](https://img.shields.io/badge/ESLint-purple?logo=eslint)
-![Swiper](https://img.shields.io/badge/Swiper-blueviolet)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-purple?logo=bootstrap)
 ![Chart.js](https://img.shields.io/badge/Chart.js-pink)
 
